@@ -21,7 +21,8 @@ export default function App() {
                 <h1 className="text-3xl font-bold underline">
                     Hello world!
                 </h1>
-                <Button className="bg-orange-500">Click me</Button>
+                <Button className="bg-orange-700 me-2">Click me</Button>   
+                <Button className="bg-blue-700">Bonjour</Button>
             </div>
         </>
     )
