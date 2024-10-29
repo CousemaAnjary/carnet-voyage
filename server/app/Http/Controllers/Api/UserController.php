@@ -13,9 +13,9 @@ class UserController extends Controller
     public function signUp(Request $request){
 
         $credentials = $request->validate([
-            'name' => 'required|unique:users',
-            'email' => 'required|unique:users',
-            'password' => 'required',
+            'name' => 'required|string|unique:users',
+            'email' => 'required|string|unique:users',
+            'password' => 'required|string',
         ]);
 
         $credentials['password'] = Hash::make($credentials['password']);

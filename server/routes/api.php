@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\TravelController;
 use App\Http\Controllers\Api\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +21,15 @@ Route::post('/auth', [UserController::class, 'auth']);
 Route::get('/unauth', [UserController::class, 'unauth'])->name('api.unauth');
 
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::get('/test', function () {
-        return response()->json(['message' => 'You are authenticated']);
+        return response()->json([
+            'message' => 'You are authenticated',
+            'user' => Auth::user(),
+        ]);
+    });
+
+    Route::prefix('/travel')->group(function() {
+        Route::post('/', [TravelController::class, 'create']);
     });
 });
