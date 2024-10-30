@@ -30,6 +30,14 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('/travel')->group(function() {
-        Route::post('/', [TravelController::class, 'create']);
+        Route::get('/', [TravelController::class, 'getUserTravels']);
+        Route::post('/create', [TravelController::class, 'create']);
+        Route::patch('/close/{id}', [TravelController::class, 'close']);
+        Route::patch('/rename/{id}', [TravelController::class, 'rename']);
+        Route::delete('/cancel/{id}', [TravelController::class, 'cancel']);
+
+        Route::prefix('/content')->group(function(){
+
+        });
     });
 });

@@ -13,6 +13,7 @@ class Travel extends Model
     protected $table = 'travels';
 
     protected $fillable = [
+        'name',
         'user_id',
         'country',
         'city',
