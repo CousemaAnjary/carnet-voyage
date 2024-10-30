@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\TravelController;
+use App\Http\Controllers\Api\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,28 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/signup', [UserController::class, 'signUp']);
+Route::post('/auth', [UserController::class, 'auth']);
+Route::get('/unauth', [UserController::class, 'unauth'])->name('api.unauth');
+
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/test', function () {
+        return response()->json([
+            'message' => 'You are authenticated',
+            'user' => Auth::user(),
+        ]);
+    });
+
+    Route::prefix('/travel')->group(function() {
+        Route::get('/', [TravelController::class, 'getUserTravels']);
+        Route::post('/create', [TravelController::class, 'create']);
+        Route::patch('/close/{id}', [TravelController::class, 'close']);
+        Route::patch('/rename/{id}', [TravelController::class, 'rename']);
+        Route::delete('/cancel/{id}', [TravelController::class, 'cancel']);
+
+        Route::prefix('/content')->group(function(){
+
+        });
+    });
 });
