@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TravelContentController extends Controller
 {
@@ -17,16 +18,27 @@ class TravelContentController extends Controller
         try {
             $validatedData = $request->validate($rules);
 
+            $user_id = Auth::id();
+            $travel_id = $validatedData["travel_id"];
+
             $images = $request->file('img');
-            foreach ($images as $image) {
-                // Sauvegarder le fichier
-                $path = $image->store('uploads', 'public');
+
+            if (!$images || count($images) === 0) {
+                return response()->json(['error' => 'No images found in the request'], 422);
             }
-    
-            return response()->json(['message' => 'Contents uploaded successfully'], 201);
+            
+            foreach ($images as $image) {
+                $path = $image->store("users/{$user_id}/travel_{$travel_id}", 'public');
+            }
+
+            return response()->json(['message' => 'Contents saved successfully'], 201);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
+            // Return validation errors
             return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            // Handle any other exceptions
+            return response()->json(['error' => 'File upload failed: ' . $e->getMessage()], 500);
         }
     }
 
