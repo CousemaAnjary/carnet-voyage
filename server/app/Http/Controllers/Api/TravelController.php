@@ -35,10 +35,10 @@ class TravelController extends Controller
         }
 
         try {
-            $credentials = $request->validate($rules);
-            $credentials['user_id'] = $user_id;
+            $validatedData = $request->validate($rules);
+            $validatedData['user_id'] = $user_id;
 
-            Travel::create($credentials);
+            Travel::create($validatedData);
 
             return response()->json(['message' => 'Travel created successfully'], 201);
             
@@ -84,11 +84,12 @@ class TravelController extends Controller
     }
 
     public function rename(Request $request, string $id) {
+        $rule = [
+            'new_name' => 'required|string',
+        ];
 
         try {
-            $credentials = $request->validate([
-                'new_name'=> 'required|string',
-            ]);
+            $validatedData = $request->validate($rule);
     
             $user_id = Auth::user()->id;
 
@@ -98,7 +99,7 @@ class TravelController extends Controller
                 return response()->json(['message' => 'Travel not found'], 404);
             }
 
-            $travel->name = $credentials['new_name'];
+            $travel->name = $validatedData['new_name'];
 
             $travel->save();
 
