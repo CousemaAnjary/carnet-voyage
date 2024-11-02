@@ -1,8 +1,7 @@
 
 // Le type des données pour l'inscription (register)
 export type RegisterType = {
-    last_name: string
-    first_name: string
+    name: string
     email: string
     password: string
 }

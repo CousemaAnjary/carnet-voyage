@@ -11,8 +11,7 @@ import { FcGoogle } from "react-icons/fc";
 
 // Définir le schéma de validation avec Zod
 const formSchema = z.object({
-    last_name: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
-    first_name: z.string().min(2, { message: "Le prénom doit contenir au moins 2 caractères" }),
+   name: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
     email: z.string().email({ message: "Adresse e-mail invalide" }),
     password: z.string().min(8, { message: "Le mot de passe doit contenir au moins 8 caractères" }),
 });
@@ -23,8 +22,7 @@ export default function RegisterForm() {
     const form = useForm<RegisterType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            last_name: "",
-            first_name: "",
+            name: "",
             email: "",
             password: "",
         },
@@ -34,7 +32,6 @@ export default function RegisterForm() {
         try {
             const response = await register(data);
             if (response) {
-                localStorage.setItem("success", response.messageSuccess);
                 navigate('/login');
             }
         } catch (error) {
@@ -57,7 +54,7 @@ export default function RegisterForm() {
                                 <div>
                                     <FormField
                                         control={form.control}
-                                        name="last_name"
+                                        name="name"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormControl>
