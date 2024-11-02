@@ -1,8 +1,4 @@
-import { ImageType } from "./Dossier";
-
-interface ImageProps {
-    image: ImageType;
-}
+import { ImageProps } from "../typeScript/VoyageType"
 
 export default function Image({ image }: ImageProps) {
     return (
