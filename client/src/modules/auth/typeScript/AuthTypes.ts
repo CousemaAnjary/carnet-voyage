@@ -5,7 +5,6 @@ export type RegisterType = {
     first_name: string
     email: string
     password: string
-    image?: File
 }
 
 // Le type des données pour la connexion (login)
