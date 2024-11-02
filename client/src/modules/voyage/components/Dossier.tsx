@@ -1,7 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { DossierProps } from "../typeScript/VoyageType";
-import { FaFolder, FaPlus } from "react-icons/fa";
-import { useDropzone } from "react-dropzone";
+import { FaFolder } from "react-icons/fa";
+import ContenuDossier from "./ContenuDossier";
 
 interface ImageType {
     src: string;
@@ -43,17 +43,6 @@ export default function Dossier({ dossier }: DossierProps) {
     const fermerDossier = () => {
         setOuvert(false);
     };
-
-    // Gestion du glisser-déposer des images
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        const newImages = acceptedFiles.map((file) => ({
-            src: URL.createObjectURL(file),
-            alt: file.name,
-        }));
-        setImages((prevImages) => [...prevImages, ...newImages]);
-    }, []);
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: "image/*" });
 
     // Ajouter une image manuellement via un input file
     const ajouterImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,40 +86,12 @@ export default function Dossier({ dossier }: DossierProps) {
 
             {/* Affichage du contenu du dossier lorsque ouvert */}
             {ouvert && (
-                <div className="absolute inset-0 z-10 bg-white p-4 rounded-lg shadow-xl flex flex-col items-center">
-                    <button onClick={fermerDossier} className="text-sm text-blue-500 hover:underline mb-4">
-                        Fermer
-                    </button>
-                    <h3 className="text-lg font-semibold text-center mb-4">{nom}</h3>
-
-                    {/* Zone de glisser-déposer */}
-                    <div
-                        {...getRootProps()}
-                        className={`w-full p-4 border-2 border-dashed rounded-lg text-center ${
-                            isDragActive ? "border-blue-500" : "border-gray-300"
-                        }`}
-                    >
-                        <input {...getInputProps()} />
-                        {isDragActive ? (
-                            <p>Déposez vos images ici...</p>
-                        ) : (
-                            <p>Glissez-déposez des images ici, ou cliquez pour sélectionner des fichiers</p>
-                        )}
-                    </div>
-
-                    {/* Affichage des images dans le dossier */}
-                    <div className="grid grid-cols-3 gap-2 mt-4">
-                        {images.map((image, index) => (
-                            <img key={index} src={image.src} alt={image.alt} className="w-24 h-24 object-cover rounded" />
-                        ))}
-                    </div>
-
-                    {/* Bouton pour ajouter une image via input */}
-                    <label className="mt-4 cursor-pointer text-blue-500 hover:underline">
-                        <FaPlus className="inline mr-1" /> Ajouter une image
-                        <input type="file" multiple onChange={ajouterImage} className="hidden" accept="image/*" />
-                    </label>
-                </div>
+                <ContenuDossier
+                    nom={nom}
+                    images={images}
+                    fermerDossier={fermerDossier}
+                    ajouterImage={ajouterImage}
+                />
             )}
         </div>
     );
