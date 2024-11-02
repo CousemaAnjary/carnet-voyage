@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Travel;
 use App\Models\TravelContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,7 +72,17 @@ class TravelContentController extends Controller
     }
 
     public function getContents(string $travel_id) {
+        $user_id = Auth::id();
 
+        $travel = \App\Models\Travel::find($travel_id);
+
+        if($travel->user_id != $user_id) {
+            return response()->json(["message" => "Unauthorized operation'"], 401);
+        }
+
+        $travel_contents = TravelContent::where('travel_id', $travel_id)->get();
+
+        return $travel_contents;
     }
 
     public function get(string $id) {
