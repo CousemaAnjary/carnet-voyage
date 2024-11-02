@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\TravelContentController;
 use App\Http\Controllers\Api\TravelController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/cancel/{id}', [TravelController::class, 'cancel']);
 
         Route::prefix('/content')->group(function(){
-
+            Route::post('/upload', [TravelContentController::class, 'upload']);
         });
     });
 });

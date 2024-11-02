@@ -9,6 +9,8 @@ class TravelContent extends Model
 {
     use HasFactory;
 
+    protected $table = 'travelContents';
+
     protected $fillable = [
         'img_url',
         'title',
