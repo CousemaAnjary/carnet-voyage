@@ -10,7 +10,7 @@ export default function Voyage() {
     const creerDossier = () => {
         const nouveauDossier: DossierType = { id: Date.now(), nom: "Nouveau Dossier", images: [] };
         setDossiers([...dossiers, nouveauDossier]);
-    };
+    }
 
     return (
         <div className="relative min-h-screen p-4 bg-gray-100">
