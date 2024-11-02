@@ -1,5 +1,5 @@
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { LoginType } from "../typeScript/AuthTypes";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc"
+import { useAuth } from "@/core/contexts/AuthContext";
 
 
 // Définir le schéma de validation avec Zod
@@ -20,6 +21,8 @@ export default function LoginForm() {
     /**
      * ! STATE (état, données) de l'application
      */
+    const { login } = useAuth()
+    const navigate = useNavigate()
     const form = useForm<LoginType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -31,7 +34,19 @@ export default function LoginForm() {
     /**
      * ! COMPORTEMENT (méthodes, fonctions) de l'application
      */
+    const handleLogin = async (data: LoginType): Promise<void> => {
+        try {
+            // Envoi des données au serveur (API) pour l'authentification
+            const response = await login(data)
 
+            //  Enregistrement du message de succès dans le stockage local
+            localStorage.setItem("success", response.messageSuccess)
+            navigate('/administration')
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     /**
      * ! AFFICHAGE (render) de l'application
@@ -48,7 +63,7 @@ export default function LoginForm() {
                                 Connexion
                             </label>
                             <Form {...form}>
-                                <form method="#" action="#" className="mt-10">
+                                <form className="mt-5" onSubmit={form.handleSubmit(handleLogin)}>
                                     <div>
                                         <FormField
                                             control={form.control}
