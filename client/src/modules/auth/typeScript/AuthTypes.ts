@@ -15,8 +15,7 @@ export type LoginType = {
 // Le type de données de l'utilisateur
 export type UserType = {
     id: string
-    first_name: string
-    last_name: string
+    name: string
     email: string
     image?: string
 }
