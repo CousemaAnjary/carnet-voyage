@@ -6,7 +6,7 @@ import { LoginResponseType, LoginType, RegisterResponseType, RegisterType } from
 export const register = async (dataRegister: RegisterType): Promise<RegisterResponseType> => {
     try {
         // Appel à l'API pour inscrire un utilisateur
-        const response = await api.post('/register', dataRegister)
+        const response = await api.post('/signup', dataRegister)
         return response.data // Retourner les données de la réponse de l'API
 
     } catch (error) {
@@ -19,7 +19,7 @@ export const register = async (dataRegister: RegisterType): Promise<RegisterResp
 export const login = async (dataLogin: LoginType): Promise<LoginResponseType> => {
     try {
         // Appel à l'API pour connecter un utilisateur
-        const response = await api.post('/login', dataLogin)
+        const response = await api.post('/auth', dataLogin)
         return response.data // Retourner les données de la réponse de l'API
 
     } catch (error) {
