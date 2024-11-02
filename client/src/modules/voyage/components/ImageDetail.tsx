@@ -1,36 +1,62 @@
 import { useState, useEffect } from "react";
 
-interface ImageType {
+interface imageType {
     src: string;
     alt: string;
     description?: string;
-    location?: { latitude: number; longitude: number };
+    location?: { city: string; country: string };
 }
 
 interface ImageDetailProps {
-    image: ImageType;
+    image: imageType;
     onClose: () => void;
-    onSave: (updatedImage: ImageType) => void;
+    onSave: (updatedImage: imageType) => void;
 }
 
 export default function ImageDetail({ image, onClose, onSave }: ImageDetailProps) {
     const [description, setDescription] = useState(image.description || "");
     const [location, setLocation] = useState(image.location);
+    const [loadingLocation, setLoadingLocation] = useState(false);
 
-    // Récupérer la localisation actuelle
     useEffect(() => {
         if (!location) {
+            setLoadingLocation(true);
             navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setLocation({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                    });
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    const fetchedLocation = await getLocationName(latitude, longitude);
+                    setLocation(fetchedLocation);
+                    setLoadingLocation(false);
                 },
-                (error) => console.error("Erreur de géolocalisation:", error)
+                (error) => {
+                    console.error("Erreur de géolocalisation:", error);
+                    setLoadingLocation(false);
+                }
             );
         }
     }, [location]);
+
+    const getLocationName = async (latitude: number, longitude: number) => {
+        try {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+            );
+            const data = await response.json();
+            return {
+                city:
+                    data.address.city ||
+                    data.address.town ||
+                    data.address.village ||
+                    data.address.hamlet ||
+                    data.address.county ||
+                    "Ville inconnue",
+                country: data.address.country || "Pays inconnu",
+            };
+        } catch (error) {
+            console.error("Erreur de géocodage:", error);
+            return { city: "Ville inconnue", country: "Pays inconnu" };
+        }
+    };
 
     const handleSave = () => {
         const updatedImage = { ...image, description, location };
@@ -54,11 +80,16 @@ export default function ImageDetail({ image, onClose, onSave }: ImageDetailProps
                         placeholder="Ajouter une description..."
                     />
                 </div>
-                {location && (
-                    <div className="mt-4 text-sm text-gray-600">
-                        <p>Latitude: {location.latitude}</p>
-                        <p>Longitude: {location.longitude}</p>
-                    </div>
+                {loadingLocation ? (
+                    <p className="mt-4 text-sm text-gray-600">Obtention de la localisation...</p>
+                ) : (
+                    location && (
+                        <div className="mt-4 text-sm text-gray-600">
+                     
+                            <p>Ville : {location.city}</p>
+                            <p>Pays : {location.country}</p>
+                        </div>
+                    )
                 )}
                 <button onClick={handleSave} className="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
                     Enregistrer

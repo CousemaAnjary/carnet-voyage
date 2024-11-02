@@ -66,6 +66,7 @@ export default function ContenuDossier({ nom, images, fermerDossier, ajouterImag
                     onSave={handleImageSave}
                 />
             )}
+
         </div>
     );
 }
