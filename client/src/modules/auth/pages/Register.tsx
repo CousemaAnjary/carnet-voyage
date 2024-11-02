@@ -1,3 +1,5 @@
+import RegisterForm from "../components/RegisterForm";
+
 export default function Register() {
     /**
      * ! STATE (état, données) de l'application
@@ -19,9 +21,7 @@ export default function Register() {
 
                 {/* Contenu */}
                 <main>
-                    <section className="flex justify-center items-center min-h-[79vh] mt-5 ">
-
-                    </section>
+                    <RegisterForm />
                 </main>
 
                 {/* Pied de page */}
