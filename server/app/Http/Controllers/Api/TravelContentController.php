@@ -11,14 +11,19 @@ use Illuminate\Support\Facades\Validator;
 class TravelContentController extends Controller
 {
     public function upload(Request $request) {
+        $user_id = Auth::id();
+
         $rules = [
             'travel_id' => [
                 'required',
                 'exists:travels,id',
-                function ($attribute, $value, $fail) {
+                function ($attribute, $value, $fail) use ($user_id) {
                     $travel = \App\Models\Travel::find($value);
                     if ($travel && !is_null($travel->ended_at)) {
                         $fail('The selected travel has already ended.');
+                    }
+                    if($travel && $travel->user_id != $user_id) {
+                        $fail('Unauthorized operation');
                     }
                 },
             ],
@@ -34,7 +39,6 @@ class TravelContentController extends Controller
             }
             
             $contents = [];
-            $user_id = Auth::id();
             $travel_id = $validatedData["travel_id"];
             foreach ($images as $image) {
                 $path = $image->store("users/{$user_id}/travel_{$travel_id}", 'public');
