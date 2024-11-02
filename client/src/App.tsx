@@ -1,5 +1,5 @@
-import { Button } from "./components/ui/button"
 import { Route, Routes } from "react-router-dom"
+import Login from "./modules/auth/pages/Login"
 
 
 export default function App() {
@@ -19,7 +19,7 @@ export default function App() {
     return (
         <>
             <Routes>
-                <Route path="/" element={<Button>Click me</Button>} />
+                <Route path="/" element={<Login />} />
             </Routes>
         </>
     )
