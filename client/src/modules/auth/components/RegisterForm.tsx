@@ -95,6 +95,7 @@ export default function RegisterForm() {
                                             <FormItem>
                                                 <FormControl>
                                                     <Input {...field}
+                                                    type="password"
                                                         placeholder="Mot de passe"
                                                         className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-md hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                     />
