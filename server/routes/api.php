@@ -37,8 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/rename/{id}', [TravelController::class, 'rename']);
         Route::delete('/cancel/{id}', [TravelController::class, 'cancel']);
 
+        Route::get('/{id}/content', [TravelContentController::class, 'getTravelContent']);
         Route::prefix('/content')->group(function(){
             Route::post('/upload', [TravelContentController::class, 'upload']);
+            Route::delete('/delete/{id}', [TravelContentController::class, 'delete']);
+            Route::patch('/edit/{id}', [TravelContentController::class, 'edit']);
         });
     });
 });

@@ -13,8 +13,7 @@ class TravelContent extends Model
 
     protected $fillable = [
         'img_url',
-        'title',
-        'comment',
+        'description',
         'location',
         'taken_at',
     ];
