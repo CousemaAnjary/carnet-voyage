@@ -11,7 +11,7 @@ import { login as loginService, logout as logoutService } from '@/modules/auth/s
 const AuthContext = createContext<AuthContextType>({
     isAuthenticated: false,
     user: null,
-    login: async () => ({ token: '', user: { id: '', first_name: '', last_name: '', email: '' }, messageSuccess: '' }),
+    login: async () => ({ token: '', user: { id: '', name: '', email: '' }, messageSuccess: '' }),
     logout: async () => { }
 })
 

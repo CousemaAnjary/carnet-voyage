@@ -29,7 +29,7 @@ export default function LoginForm() {
         try {
             const response = await login(data);
             localStorage.setItem("success", response.messageSuccess);
-            navigate('/administration');
+            navigate('/dashboard');
         } catch (error) {
             console.error(error);
         }
