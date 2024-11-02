@@ -1,7 +1,8 @@
 import Navbar from "../components/Navbar";
 import BoutonAjouter from "../components/BoutonAjouter";
-import Dossier, { DossierType } from "../components/Dossier";
+import Dossier from "../components/Dossier";
 import { useState } from "react";
+import { DossierType } from "../typeScript/VoyageType";
 
 export default function Voyage() {
     const [dossiers, setDossiers] = useState<DossierType[]>([]);

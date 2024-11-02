@@ -16,19 +16,19 @@ export default function Dossier({ dossier }: DossierProps) {
 
     // Renommer le dossier
     const renommerDossier = (e: React.FocusEvent<HTMLInputElement>) => {
-        setNom(e.target.value);
-        setEnEdition(false);
-    };
+        setNom(e.target.value)
+        setEnEdition(false)
+    }
 
     // Ouvrir le dossier pour afficher toutes les images
     const ouvrirDossier = () => {
-        setOuvert(true);
-    };
+        setOuvert(true)
+    }
 
     // Fermer le dossier
     const fermerDossier = () => {
-        setOuvert(false);
-    };
+        setOuvert(false)
+    }
 
     /**
      * ! AFFICHAGE (render) de l'application
