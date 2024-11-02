@@ -21,9 +21,7 @@ export default function Login() {
 
                 {/* Contenu */}
                 <main>
-                    <section className="flex justify-center items-center min-h-[79vh] mt-5 ">
                     <LoginForm />
-                    </section>
                 </main>
 
                 {/* Pied de page */}
