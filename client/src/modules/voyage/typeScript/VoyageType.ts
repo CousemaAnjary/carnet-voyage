@@ -20,5 +20,7 @@ export interface ImageProps {
 }
 
 export interface DossierModalProps {
-    onSave: (dossierData: DossierType) => void;
+    onSave: (dossierData:DossierType) => void;
+    onClose: () => void;
+    open: boolean;
 }
