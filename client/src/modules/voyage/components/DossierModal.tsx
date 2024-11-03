@@ -1,4 +1,3 @@
-
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { DossierModalProps, DossierType } from "../typeScript/VoyageType";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -6,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+
 
 
 // Définir le schéma de validation avec Zod
@@ -35,8 +35,13 @@ export default function DossierModal({ onSave, onClose, open }: DossierModalProp
      * ! COMPORTEMENT (méthodes, fonctions) de l'application
      */
     const handleSubmit = async (): Promise<void> => {
+
+        // Données a envoyer au serveur
+        const dossierData = form.getValues()
+
         try {
-            onSave({nom , ville, pays, dateDebut })
+            onSave(dossierData);
+            onClose();
 
         } catch (error) {
             // Afficher l'erreur dans la console
@@ -60,7 +65,7 @@ export default function DossierModal({ onSave, onClose, open }: DossierModalProp
                                     name="name"
                                     render={({ field }) => (
                                         <FormItem>
-                
+
                                             <FormControl>
                                                 <Input {...field}
                                                     placeholder="Nom du dossier"
@@ -79,7 +84,7 @@ export default function DossierModal({ onSave, onClose, open }: DossierModalProp
                                     name="city"
                                     render={({ field }) => (
                                         <FormItem>
-            
+
                                             <FormControl>
                                                 <Input {...field}
                                                     placeholder="Ville"
@@ -137,7 +142,7 @@ export default function DossierModal({ onSave, onClose, open }: DossierModalProp
                             <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">
                                 Annuler
                             </button>
-                            <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white rounded">
+                            <button className="px-4 py-2 bg-blue-500 text-white rounded">
                                 Enregistrer
                             </button>
                         </div>

@@ -20,7 +20,7 @@ export interface ImageProps {
 }
 
 export interface DossierModalProps {
-    onSave: (dossierData: { nom: string; ville: string; pays: string; dateDebut: string }) => void;
+    onSave: (dossierData:DossierType) => void;
     onClose: () => void;
     open: boolean;
 }

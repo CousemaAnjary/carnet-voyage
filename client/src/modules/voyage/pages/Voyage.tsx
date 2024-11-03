@@ -13,15 +13,7 @@ export default function Voyage() {
         setIsModalOpen(true);
     };
 
-    const handleSaveDossier = (dossierData: { name: string; city: string; country: string;  beginning_at: string }) => {
-        const nouveauDossier: DossierType = {
-            id: Date.now(),
-            nom: dossierData.nom,
-            ville: dossierData.ville,
-            pays: dossierData.pays,
-            dateDebut: dossierData.dateDebut,
-            images: [],
-        };
+    const handleSaveDossier = (nouveauDossier: DossierType) => {
         setDossiers([...dossiers, nouveauDossier]);
         setIsModalOpen(false);
     };
