@@ -1,23 +1,23 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { DossierModalProps, DossierType } from "../typeScript/VoyageType";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-
+import { z } from "zod"
+import { FaPlus } from "react-icons/fa"
+import { useForm } from "react-hook-form"
+import { Input } from "@/components/ui/input"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { DossierModalProps, DossierType } from "../typeScript/VoyageType"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 
 // Définir le schéma de validation avec Zod
 const formSchema = z.object({
     name: z.string().min(2, { message: "Le nom est obligatoire" }),
-    city: z.string().min(2, { message: "La ville doit contenir au moins 2 caractères" }),
-    country: z.string().min(2, { message: "Le pays doit contenir au moins 2 caractères" }),
+    city: z.string().min(2, { message: "La ville est obligatoire" }),
+    country: z.string().min(2, { message: "Le pays est obligatoire" }),
     beginning_at: z.date(),
 })
 
 
-export default function DossierModal({ onSave, onClose, open }: DossierModalProps) {
+export default function DossierModal({ onSave }: DossierModalProps) {
     /**
      * ! STATE (état, données) de l'application
      */
@@ -41,7 +41,6 @@ export default function DossierModal({ onSave, onClose, open }: DossierModalProp
 
         try {
             onSave(dossierData);
-            onClose();
 
         } catch (error) {
             // Afficher l'erreur dans la console
@@ -50,7 +49,14 @@ export default function DossierModal({ onSave, onClose, open }: DossierModalProp
     }
 
     return (
-        <Dialog open={open} onOpenChange={onClose}>
+        <Dialog>
+            <DialogTrigger asChild>
+                <button
+                    className="fixed bottom-5 right-5 bg-blue-500 text-white rounded-full p-4 shadow-lg focus:outline-none hover:bg-blue-600 transition"
+                >
+                    <FaPlus size={24} />
+                </button>
+            </DialogTrigger>
             <DialogContent className="w-full max-w-md">
                 <DialogHeader>
                     <DialogTitle>Créer un Nouveau Dossier</DialogTitle>
@@ -137,19 +143,19 @@ export default function DossierModal({ onSave, onClose, open }: DossierModalProp
                             </div>
                         </div>
 
-
-                        <div className="flex justify-end space-x-2 mt-4">
-                            <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">
-                                Annuler
-                            </button>
-                            <button className="px-4 py-2 bg-blue-500 text-white rounded">
+                        <DialogFooter className="flex justify-end space-x-2 mt-4">
+                            <DialogClose asChild>
+                                <button type="button" className="px-4 py-2 bg-gray-300 rounded">
+                                    Annuler
+                                </button>
+                            </DialogClose>
+                            <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
                                 Enregistrer
                             </button>
-                        </div>
+                        </DialogFooter>
                     </form>
                 </Form>
-
             </DialogContent>
         </Dialog>
-    );
+    )
 }

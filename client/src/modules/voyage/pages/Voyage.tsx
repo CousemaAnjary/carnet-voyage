@@ -1,21 +1,16 @@
 import Navbar from "../components/Navbar";
 import BoutonAjouter from "../components/BoutonAjouter";
 import Dossier from "../components/Dossier";
-import DossierModal from "../components/DossierModal";
 import { useState } from "react";
+import DossierModal from "../components/DossierModal";
 import { DossierType } from "../typeScript/VoyageType";
 
 export default function Voyage() {
     const [dossiers, setDossiers] = useState<DossierType[]>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const creerDossier = () => {
-        setIsModalOpen(true);
-    };
-
+    // Fonction pour ajouter un nouveau dossier à la liste
     const handleSaveDossier = (nouveauDossier: DossierType) => {
-        setDossiers([...dossiers, nouveauDossier]);
-        setIsModalOpen(false);
+        setDossiers((prevDossiers) => [...prevDossiers, nouveauDossier]);
     };
 
     return (
@@ -24,19 +19,15 @@ export default function Voyage() {
                 <Navbar />
             </header>
 
-            <main className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
-                {dossiers.map((dossier) => (
-                    <Dossier key={dossier.id} dossier={dossier} />
-                ))}
+            <main className="mt-10">
+                <Dossier dossiers={dossiers} />
             </main>
 
-            <BoutonAjouter onClick={creerDossier} />
 
-            <DossierModal
-                open={isModalOpen}
-                onSave={handleSaveDossier}
-                onClose={() => setIsModalOpen(false)}
-            />
+            {/* Modal pour ajouter un nouveau dossier */}
+            <DossierModal onSave={handleSaveDossier} />
+
+
         </div>
     );
 }
