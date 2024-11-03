@@ -1,4 +1,10 @@
-import { Button } from "./components/ui/button"
+import { Route, Routes } from "react-router-dom"
+import Login from "./modules/auth/pages/Login"
+import Register from "./modules/auth/pages/Register"
+import { AuthProvider } from "./core/contexts/AuthContext"
+import PublicRoutes from "./routes/PublicRoutes"
+import PrivateRoutes from "./routes/PrivateRoutes"
+import Voyage from "./modules/voyage/pages/Voyage"
 
 
 export default function App() {
@@ -17,13 +23,22 @@ export default function App() {
      */
     return (
         <>
-            <div className="text-center">
-                <h1 className="text-3xl font-bold underline">
-                    Hello world!
-                </h1>
-                <Button className="bg-orange-700 me-2">Click me</Button>   
-                <Button className="bg-blue-700">Bonjour</Button>
-            </div>
+            <AuthProvider>
+                <Routes>
+                    {/* Public Routes */}
+                    <Route element={<PublicRoutes />}>
+                        <Route path="/" element={<Login />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                    </Route>
+
+                    {/* Protected Routes */}
+                    <Route element={<PrivateRoutes />}>
+                        <Route path="/dashboard" element={<Voyage />} />
+                    </Route>
+                </Routes>
+            </AuthProvider>
+
         </>
     )
 }
