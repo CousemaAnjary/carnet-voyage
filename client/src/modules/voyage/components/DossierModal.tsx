@@ -40,7 +40,7 @@ export default function DossierModal({ onSave }: DossierModalProps) {
         const dossierData = form.getValues()
 
         try {
-            onSave(dossierData);
+            onSave(dossierData)
 
         } catch (error) {
             // Afficher l'erreur dans la console
