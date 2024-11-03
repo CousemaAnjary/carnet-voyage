@@ -1,62 +1,150 @@
-import { useState } from "react";
 
-interface DossierModalProps {
-    onSave: (dossierData: { nom: string; ville: string; pays: string; dateDebut: string }) => void;
-    onClose: () => void;
-}
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { DossierModalProps, DossierType } from "../typeScript/VoyageType";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-export default function DossierModal({ onSave, onClose }: DossierModalProps) {
-    const [nom, setNom] = useState("");
-    const [ville, setVille] = useState("");
-    const [pays, setPays] = useState("");
-    const [dateDebut, setDateDebut] = useState("");
 
-    const handleSubmit = () => {
-        onSave({ nom, ville, pays, dateDebut });
-        onClose();
-    };
+// Définir le schéma de validation avec Zod
+const formSchema = z.object({
+    name: z.string().min(2, { message: "Le nom est obligatoire" }),
+    city: z.string().min(2, { message: "La ville doit contenir au moins 2 caractères" }),
+    country: z.string().min(2, { message: "Le pays doit contenir au moins 2 caractères" }),
+    beginning_at: z.date(),
+})
+
+
+export default function DossierModal({ onSave, onClose, open }: DossierModalProps) {
+    /**
+     * ! STATE (état, données) de l'application
+     */
+    const form = useForm<DossierType>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+            city: "",
+            country: "",
+            beginning_at: new Date(),
+        },
+    })
+
+    /**
+     * ! COMPORTEMENT (méthodes, fonctions) de l'application
+     */
+    const handleSubmit = async (): Promise<void> => {
+        try {
+            onSave({nom , ville, pays, dateDebut })
+
+        } catch (error) {
+            // Afficher l'erreur dans la console
+            console.error(error)
+        }
+    }
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-                <h2 className="text-xl font-semibold mb-4">Créer un Nouveau Dossier</h2>
-                <input
-                    type="text"
-                    placeholder="Nom du dossier"
-                    value={nom}
-                    onChange={(e) => setNom(e.target.value)}
-                    className="w-full p-2 border rounded mb-2"
-                />
-                <input
-                    type="text"
-                    placeholder="Ville"
-                    value={ville}
-                    onChange={(e) => setVille(e.target.value)}
-                    className="w-full p-2 border rounded mb-2"
-                />
-                <input
-                    type="text"
-                    placeholder="Pays"
-                    value={pays}
-                    onChange={(e) => setPays(e.target.value)}
-                    className="w-full p-2 border rounded mb-2"
-                />
-                <input
-                    type="date"
-                    placeholder="Date de début"
-                    value={dateDebut}
-                    onChange={(e) => setDateDebut(e.target.value)}
-                    className="w-full p-2 border rounded mb-4"
-                />
-                <div className="flex justify-end space-x-2">
-                    <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">
-                        Annuler
-                    </button>
-                    <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white rounded">
-                        Enregistrer
-                    </button>
-                </div>
-            </div>
-        </div>
+        <Dialog open={open} onOpenChange={onClose}>
+            <DialogContent className="w-full max-w-md">
+                <DialogHeader>
+                    <DialogTitle>Créer un Nouveau Dossier</DialogTitle>
+                    <DialogDescription>Veuillez remplir les informations du dossier ci-dessous.</DialogDescription>
+                </DialogHeader>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(handleSubmit)}>
+                        <div className="space-y-4">
+                            <div>
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                
+                                            <FormControl>
+                                                <Input {...field}
+                                                    placeholder="Nom du dossier"
+                                                    className="w-full p-2 border rounded"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+
+                            <div>
+                                <FormField
+                                    control={form.control}
+                                    name="city"
+                                    render={({ field }) => (
+                                        <FormItem>
+            
+                                            <FormControl>
+                                                <Input {...field}
+                                                    placeholder="Ville"
+                                                    className="w-full p-2 border rounded"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div>
+                                <FormField
+                                    control={form.control}
+                                    name="country"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Input {...field}
+                                                    placeholder="Pays"
+                                                    className="w-full p-2 border rounded"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div>
+                                <FormField
+                                    control={form.control}
+                                    name="beginning_at"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Date de début</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    type="date"
+                                                    placeholder="Date de début"
+                                                    className="w-full p-2 border rounded"
+                                                    value={field.value ? (field.value as Date).toISOString().split("T")[0] : ""}
+                                                    onChange={(e) => field.onChange(new Date(e.target.value))}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+
+
+                        <div className="flex justify-end space-x-2 mt-4">
+                            <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">
+                                Annuler
+                            </button>
+                            <button onClick={handleSubmit} className="px-4 py-2 bg-blue-500 text-white rounded">
+                                Enregistrer
+                            </button>
+                        </div>
+                    </form>
+                </Form>
+
+            </DialogContent>
+        </Dialog>
     );
 }

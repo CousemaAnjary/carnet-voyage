@@ -4,9 +4,11 @@ export interface ImageType {
 }
 
 export interface DossierType {
-    id: number;
-    nom: string;
-    images: ImageType[];
+    id: string;
+    name: string;
+    city: string;
+    country: string;
+    beginning_at: Date;
 }
 
 export interface DossierProps {
@@ -15,4 +17,10 @@ export interface DossierProps {
 
 export interface ImageProps {
     image: ImageType;
+}
+
+export interface DossierModalProps {
+    onSave: (dossierData: { nom: string; ville: string; pays: string; dateDebut: string }) => void;
+    onClose: () => void;
+    open: boolean;
 }

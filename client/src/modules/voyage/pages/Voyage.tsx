@@ -13,7 +13,7 @@ export default function Voyage() {
         setIsModalOpen(true);
     };
 
-    const handleSaveDossier = (dossierData: { nom: string; ville: string; pays: string; dateDebut: string }) => {
+    const handleSaveDossier = (dossierData: { name: string; city: string; country: string;  beginning_at: string }) => {
         const nouveauDossier: DossierType = {
             id: Date.now(),
             nom: dossierData.nom,
@@ -23,6 +23,7 @@ export default function Voyage() {
             images: [],
         };
         setDossiers([...dossiers, nouveauDossier]);
+        setIsModalOpen(false);
     };
 
     return (
@@ -39,12 +40,11 @@ export default function Voyage() {
 
             <BoutonAjouter onClick={creerDossier} />
 
-            {isModalOpen && (
-                <DossierModal
-                    onSave={handleSaveDossier}
-                    onClose={() => setIsModalOpen(false)}
-                />
-            )}
+            <DossierModal
+                open={isModalOpen}
+                onSave={handleSaveDossier}
+                onClose={() => setIsModalOpen(false)}
+            />
         </div>
     );
 }
