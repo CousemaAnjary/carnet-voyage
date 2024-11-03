@@ -15,15 +15,18 @@ export default function Navbar() {
      * ! AFFICHAGE (render) de l'application
      */
     return (
-        <>
-            <nav className="container-fluid relative z-10 bg-white h-16 border-b flex justify-between items-center">
-                <div className="logo ms-20 max-lg:ms-8">
-                    <h1 className="font-medium font-mono max-lg:hidden">Carnet-Voyage</h1>
-                </div>
-                <div className="flex justify-end space-x-3 me-10">
-                    <UserDropdownMenu />
-                </div>
-            </nav>
-        </>
-    )
+        <nav className="container-fluid relative z-10 bg-white h-16 border-b flex justify-between items-center px-4 lg:px-8">
+            {/* Logo */}
+            <div className="logo">
+                <h1 className="font-medium font-mono text-lg lg:text-xl">
+                    Carnet-Voyage
+                </h1>
+            </div>
+
+            {/* User Menu */}
+            <div className="flex justify-end items-center space-x-3">
+                <UserDropdownMenu />
+            </div>
+        </nav>
+    );
 }
