@@ -4,11 +4,12 @@ export interface ImageType {
 }
 
 export interface DossierType {
-    id: string;
-    name: string;
-    city: string;
-    country: string;
-    beginning_at: Date;
+    id: number;                // Identifiant unique du dossier
+    name: string;              // Nom du dossier
+    city: string;              // Ville associée au dossier
+    country: string;           // Pays associé au dossier
+    beginning_at: string;      // Date de début du voyage sous forme de chaîne (format: AAAA-MM-JJ)
+    images: ImageType[];       // Liste des images associées au dossier
 }
 
 export interface DossierProps {

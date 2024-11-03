@@ -1,50 +1,51 @@
-import Navbar from "../components/Navbar";
-import BoutonAjouter from "../components/BoutonAjouter";
-import Dossier from "../components/Dossier";
-import DossierModal from "../components/DossierModal";
-import { useState } from "react";
-import { DossierType } from "../typeScript/VoyageType";
+// src/pages/Voyage.tsx
+import React, { useState } from 'react';
+import Navbar from '../components/Navbar';
 
-export default function Voyage() {
-    const [dossiers, setDossiers] = useState<DossierType[]>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+import DossierModal from '../components/DossierModal';
+import { DossierType } from '../typeScript/VoyageType';
 
-    const creerDossier = () => {
-        setIsModalOpen(true);
+const Voyage: React.FC = () => {
+    const [folders, setFolders] = useState<DossierType[]>([]);
+
+    // Fonction pour gérer l'ajout d'un nouveau dossier
+    const handleSaveFolder = (folderData: DossierType) => {
+        setFolders([...folders, folderData]);
     };
 
-    const handleSaveDossier = (dossierData: { nom: string; ville: string; pays: string; dateDebut: string }) => {
-        const nouveauDossier: DossierType = {
-            id: Date.now(),
-            nom: dossierData.nom,
-            ville: dossierData.ville,
-            pays: dossierData.pays,
-            dateDebut: dossierData.dateDebut,
-            images: [],
-        };
-        setDossiers([...dossiers, nouveauDossier]);
+    const renameFolder = (id: number, newName: string) => {
+        setFolders(folders.map(folder => 
+            folder.id === id ? { ...folder, name: newName } : folder
+        ));
+    };
+
+    const addImageToFolder = (id: number, newImages: { src: string; alt: string }[]) => {
+        setFolders(folders.map(folder => 
+            folder.id === id ? { ...folder, images: [...folder.images, ...newImages] } : folder
+        ));
     };
 
     return (
         <div className="relative min-h-screen p-4 bg-gray-100">
-            <header>
-                <Navbar />
-            </header>
+            {/* Barre de navigation */}
+            <Navbar />
 
+            {/* Liste des dossiers */}
             <main className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-10">
-                {dossiers.map((dossier) => (
-                    <Dossier key={dossier.id} dossier={dossier} />
+                {folders.map((folder) => (
+                    <Folder 
+                        key={folder.id} 
+                        folder={folder} 
+                        onRename={renameFolder} 
+                        onAddImage={addImageToFolder} 
+                    />
                 ))}
             </main>
 
-            <BoutonAjouter onClick={creerDossier} />
-
-            {isModalOpen && (
-                <DossierModal
-                    onSave={handleSaveDossier}
-                    onClose={() => setIsModalOpen(false)}
-                />
-            )}
+            {/* Modal de création de dossier avec son propre déclencheur */}
+            <DossierModal onSave={handleSaveFolder} />
         </div>
     );
-}
+};
+
+export default Voyage;
