@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DossierProps } from "../typeScript/VoyageType";
-import { FaFolder } from "react-icons/fa";
 import ContenuDossier from "./ContenuDossier";
+import iconV from "../../../assets/images/iconV.png";
 
 interface ImageType {
     src: string;
@@ -63,7 +63,7 @@ export default function Dossier({ dossier }: DossierProps) {
         <div className="flex flex-col items-center cursor-pointer">
             {/* Icône du dossier pour l'ouverture */}
             <div onClick={ouvrirDossier}>
-                <FaFolder size={120} className="text-yellow-500" />
+            <img src={iconV} alt="Dossier" className="w-24 h-24" />
             </div>
 
             {/* Nom du dossier en dessous, double-clic pour renommer */}
