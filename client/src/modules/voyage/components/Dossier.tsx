@@ -12,7 +12,7 @@ export default function Dossier({ dossier }: DossierProps) {
     /**
      * ! STATE (état, données) de l'application
      */
-    const [nom, setNom] = useState(dossier.nom);
+    const [nom, setNom] = useState(dossier.name);
     const [enEdition, setEnEdition] = useState(false);
     const [ouvert, setOuvert] = useState(false); // État pour savoir si le dossier est ouvert ou non
     const [images, setImages] = useState<ImageType[]>([
