@@ -1,8 +1,8 @@
 export interface FolderType {
     id: string;
     name: string;
-    city: string | null;       // Permettre la valeur `null`
-    country: string | null;    // Permettre la valeur `null`
-    beginning_at: Date;
+    city: string | null;
+    country: string | null;
+    beginning_at: Date | string; // Allow both Date and string
     user_id?: string;
 }

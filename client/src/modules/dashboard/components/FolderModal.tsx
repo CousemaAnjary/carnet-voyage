@@ -1,20 +1,18 @@
-import { z } from 'zod'
-import Folder from './Folder'
-import { useState } from 'react'
-import { FaPlus } from 'react-icons/fa'
-import { useForm } from 'react-hook-form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FolderType } from '../typeScript/FolderType'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { addFolder } from '../Service'
-import { useAuth } from '@/core/contexts/AuthContext'
+import { z } from 'zod';
+import Folder from './Folder';
+import { useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FolderType } from '../typeScript/FolderType';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { addFolder } from '../Service';
+import { useAuth } from '@/core/contexts/AuthContext';
 
-
-
-// Définir le schéma de validation avec Zod
+// Define validation schema with Zod
 const formSchema = z.object({
     name: z.string().min(2, { message: "Le nom est obligatoire" }),
     city: z.string().min(2, { message: "La ville est obligatoire" }),
@@ -23,11 +21,9 @@ const formSchema = z.object({
 });
 
 export default function FolderModal() {
-
     const { user } = useAuth();
-    // État pour stocker les informations des dossiers
-    const [folders, setFolders] = useState<FolderType[]>([])
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
+    const [folders, setFolders] = useState<FolderType[]>([]);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const form = useForm<FolderType>({
         resolver: zodResolver(formSchema),
@@ -37,27 +33,22 @@ export default function FolderModal() {
             country: '',
             beginning_at: new Date(),
         },
-    })
+    });
 
     const handleSubmit = async (data: FolderType) => {
+        const tempId = `temp-${Date.now()}`;
 
-        // ID temporaire pour le dossier
-        const tempId = `temp-${Date.now()}`
-
-        // Données à envoyer au serveur
+        // Prepare folder data for server with beginning_at as a string
         const folderData = {
+            ...data,
             id: tempId,
-            name: data.name,
-            city: data.city || "",      // Chaîne vide si `city` est absent
-            country: data.country || "", // Chaîne vide si `country` est absent
-            beginning_at: new Date(data.beginning_at), // Conversion en Date
+            beginning_at: data.beginning_at instanceof Date ? data.beginning_at.toISOString().split("T")[0] : data.beginning_at, // Convert Date to 'YYYY-MM-DD'
             user_id: user?.id,
         };
 
-        setFolders((prevFolders) => [...prevFolders, data])
-        form.reset() // Réinitialiser le formulaire après soumission
-        setIsDialogOpen(false) // Fermer le dialogue après la soumission
-
+        setFolders((prevFolders) => [...prevFolders, { ...data, id: tempId }]);
+        form.reset();
+        setIsDialogOpen(false);
 
         try {
             await addFolder(folderData);
@@ -65,8 +56,7 @@ export default function FolderModal() {
         } catch (error) {
             console.log("Erreur lors de la création du dossier.", error);
         }
-
-    }
+    };
 
     return (
         <>
@@ -134,7 +124,7 @@ export default function FolderModal() {
                                                     {...field}
                                                     type="date"
                                                     className="w-full p-2 border rounded"
-                                                    value={field.value ? field.value.toISOString().split("T")[0] : ""}
+                                                    value={field.value instanceof Date ? field.value.toISOString().split("T")[0] : field.value}
                                                     onChange={(e) => field.onChange(new Date(e.target.value))}
                                                 />
                                             </FormControl>
@@ -143,18 +133,18 @@ export default function FolderModal() {
                                     )}
                                 />
                             </div>
-                            <DialogFooter className="flex justify-end  mt-4 gap-2">
+                            <DialogFooter className="flex justify-end mt-4 gap-2">
                                 <DialogClose asChild>
                                     <Button type="button" variant={'outline'}>Annuler</Button>
                                 </DialogClose>
-                                <Button type="submit" className="bg-blue-600 MT-">Enregistrer</Button>
+                                <Button type="submit" className="bg-blue-600">Enregistrer</Button>
                             </DialogFooter>
                         </form>
                     </Form>
                 </DialogContent>
             </Dialog>
 
-            {/* Afficher chaque dossier sous forme de composant Folder */}
+            {/* Display each folder as Folder component */}
             {folders.map((folder, index) => (
                 <Folder key={index} folder={folder} />
             ))}
