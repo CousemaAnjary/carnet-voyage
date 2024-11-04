@@ -18,12 +18,12 @@ export default function Folder({ folder }: FolderProps) {
     const [enEdition, setEnEdition] = useState(false);
     const [ouvert, setOuvert] = useState(false);
     const [images, setImages] = useState<ImageType[]>([
-        { src: "https://via.placeholder.com/100", alt: "Image 1" },
-        { src: "https://via.placeholder.com/100", alt: "Image 2" },
-        { src: "https://via.placeholder.com/100", alt: "Image 3" },
-        { src: "https://via.placeholder.com/100", alt: "Image 4" },
-        { src: "https://via.placeholder.com/100", alt: "Image 5" },
-        { src: "https://via.placeholder.com/100", alt: "Image 6" },
+        { src: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=100&h=100&fit=crop", alt: "Forest Image" },
+        { src: "https://images.unsplash.com/photo-1527549993586-dff825b37782?w=100&h=100&fit=crop", alt: "Mountain Image" },
+        { src: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=100&h=100&fit=crop", alt: "Beach Image" },
+        { src: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=100&h=100&fit=crop", alt: "City Image" },
+        { src: "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?w=100&h=100&fit=crop", alt: "River Image" },
+        { src: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=100&h=100&fit=crop", alt: "Desert Image" }
     ]);
 
     // Renommer le dossier
