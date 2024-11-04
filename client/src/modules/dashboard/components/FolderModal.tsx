@@ -14,7 +14,7 @@ const formSchema = z.object({
     city: z.string().min(2, { message: "La ville est obligatoire" }),
     country: z.string().min(2, { message: "Le pays est obligatoire" }),
     beginning_at: z.date(),
-});
+})
 
 export default function FolderModal() {
     const form = useForm<FolderType>({
@@ -25,7 +25,7 @@ export default function FolderModal() {
             country: '',
             beginning_at: new Date(),
         },
-    });
+    })
 
     const handleSubmit = () => {
         // Votre logique pour enregistrer les données du formulaire
