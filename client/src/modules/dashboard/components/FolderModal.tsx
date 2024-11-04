@@ -20,6 +20,7 @@ const formSchema = z.object({
 export default function FolderModal() {
     // État pour stocker les informations des dossiers
     const [folders, setFolders] = useState<FolderType[]>([]);
+    const [isDialogOpen, setIsDialogOpen] = useState(false); // État pour gérer l'ouverture/fermeture du dialogue
 
     const form = useForm<FolderType>({
         resolver: zodResolver(formSchema),
@@ -34,13 +35,18 @@ export default function FolderModal() {
     const handleSubmit = (data: FolderType) => {
         // Ajouter les données du formulaire à l’état
         setFolders((prevFolders) => [...prevFolders, data]);
+        setIsDialogOpen(false); // Fermer le dialogue après la soumission
+        form.reset(); // Réinitialiser le formulaire après soumission
     };
 
     return (
         <>
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                    <button className="fixed bottom-5 right-5 bg-blue-500 text-white rounded-full p-4 shadow-lg focus:outline-none hover:bg-blue-600 transition">
+                    <button
+                        className="fixed bottom-5 right-5 bg-blue-500 text-white rounded-full p-4 shadow-lg focus:outline-none hover:bg-blue-600 transition"
+                        onClick={() => setIsDialogOpen(true)}
+                    >
                         <FaPlus size={24} />
                     </button>
                 </DialogTrigger>
