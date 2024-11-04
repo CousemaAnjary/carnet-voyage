@@ -38,13 +38,17 @@ export default function FolderModal() {
     const handleSubmit = async (data: FolderType) => {
         const tempId = `temp-${Date.now()}`;
 
-        // Prepare folder data for server with beginning_at as a string
         const folderData = {
-            ...data,
-            id: tempId,
-            beginning_at: data.beginning_at instanceof Date ? data.beginning_at.toISOString().split("T")[0] : data.beginning_at, // Convert Date to 'YYYY-MM-DD'
+            id: tempId, // Optional, if auto-generated, it can be removed
+            name: data.name,
+            city: data.city || null,
+            country: data.country || null,
+            beginning_at: data.beginning_at instanceof Date
+                ? data.beginning_at.toISOString().split("T")[0]
+                : data.beginning_at, // Ensure it's in 'YYYY-MM-DD' format
             user_id: user?.id,
         };
+
 
         setFolders((prevFolders) => [...prevFolders, { ...data, id: tempId }]);
         form.reset();
