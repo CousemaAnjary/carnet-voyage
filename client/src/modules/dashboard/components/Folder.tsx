@@ -47,7 +47,7 @@ export default function Folder({ folder }: FolderProps) {
     };
 
     return (
-        <div className="flex flex-col items-center cursor-pointer">
+        <div className="flex flex-col items-center cursor-pointer mt-10">
             <div onClick={ouvrirDossier}>
                 <img src={iconV} alt="Dossier" className="w-24 h-24" />
             </div>
