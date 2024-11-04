@@ -4,7 +4,8 @@ import Register from "./modules/auth/pages/Register"
 import { AuthProvider } from "./core/contexts/AuthContext"
 import PublicRoutes from "./routes/PublicRoutes"
 import PrivateRoutes from "./routes/PrivateRoutes"
-import Voyage from "./modules/voyage/pages/Voyage"
+import Voyage from "./modules/dashboard/pages/Voyage"
+
 
 
 export default function App() {
