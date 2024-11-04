@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar"
 
+
 export default function Voyage() {
     /**
      * ! STATE (état, données) de l'application
