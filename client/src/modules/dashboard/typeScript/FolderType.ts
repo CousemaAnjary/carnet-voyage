@@ -6,4 +6,5 @@ export interface FolderType {
     city: string;              // Ville associée au dossier
     country: string;           // Pays associé au dossier
     beginning_at: Date;      // Date de début du voyage sous forme de chaîne (format: AAAA-MM-JJ)
+    user_id: string;           // Identifiant de l'utilisateur propriétaire du dossier
 }

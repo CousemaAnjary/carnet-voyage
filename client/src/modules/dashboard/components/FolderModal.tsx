@@ -45,6 +45,7 @@ export default function FolderModal() {
             city: data.city,
             country: data.country,
             beginning_at: data.beginning_at,
+            user_id: "",
         }
 
         setFolders((prevFolders) => [...prevFolders, data])
