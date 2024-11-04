@@ -13,10 +13,9 @@ export const getFolders = async () => {
 }
 
 // Ajouter un dossier
-
 export const addFolder = async (folderData: FolderType) => {
     try {
-        const response = await api.post('/folders', folderData)
+        const response = await api.post('/travel/create', folderData)
         return response.data
     } catch (error) {
         console.log(error)

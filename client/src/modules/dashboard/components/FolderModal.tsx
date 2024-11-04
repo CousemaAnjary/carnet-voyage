@@ -10,6 +10,7 @@ import { FolderType } from '../typeScript/FolderType'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { addFolder } from '../Service'
+import { useAuth } from '@/core/contexts/AuthContext'
 
 
 
@@ -22,6 +23,8 @@ const formSchema = z.object({
 });
 
 export default function FolderModal() {
+
+    const { user } = useAuth();
     // État pour stocker les informations des dossiers
     const [folders, setFolders] = useState<FolderType[]>([])
     const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -45,7 +48,7 @@ export default function FolderModal() {
             city: data.city,
             country: data.country,
             beginning_at: data.beginning_at,
-            user_id: "",
+            user_id: user?.id,
         }
 
         setFolders((prevFolders) => [...prevFolders, data])
