@@ -1,3 +1,4 @@
+import FolderModal from "../components/FolderModal"
 import Navbar from "../components/Navbar"
 
 
@@ -26,6 +27,8 @@ export default function Voyage() {
                 {/* Contenu de la page */}
                 <main>
                     <h1 className="text-2xl font-semibold text-gray-800">Voyage</h1>
+                    {/* Modal de création de dossier avec son propre déclencheur */}
+                    <FolderModal />
                 </main>
             </div>
         </>
