@@ -4,11 +4,13 @@ import { useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FolderType } from '../typeScript/FolderType'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+import { addFolder } from '../Service'
+
 
 
 // Définir le schéma de validation avec Zod
@@ -34,11 +36,28 @@ export default function FolderModal() {
         },
     })
 
-    const handleSubmit = (data: FolderType) => {
-        // Ajouter les données du formulaire à l’état
-        setFolders((prevFolders) => [...prevFolders, data]);
-        setIsDialogOpen(false); // Fermer le dialogue après la soumission
-        form.reset(); // Réinitialiser le formulaire après soumission
+    const handleSubmit = async (data: FolderType) => {
+
+        // Données à envoyer au serveur
+        const folderData = {
+            id: "",
+            name: data.name,
+            city: data.city,
+            country: data.country,
+            beginning_at: data.beginning_at,
+        }
+
+        setFolders((prevFolders) => [...prevFolders, data])
+        form.reset() // Réinitialiser le formulaire après soumission
+        setIsDialogOpen(false) // Fermer le dialogue après la soumission
+
+
+        try {
+            await addFolder(folderData)
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (

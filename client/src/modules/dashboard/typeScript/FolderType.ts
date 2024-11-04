@@ -1,7 +1,7 @@
 
 
 export interface FolderType {
-    id: number;                // Identifiant unique du dossier
+    id: string;                // Identifiant unique du dossier
     name: string;              // Nom du dossier
     city: string;              // Ville associée au dossier
     country: string;           // Pays associé au dossier
