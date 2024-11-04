@@ -19,7 +19,14 @@ export default function Voyage() {
         <>
             <div className="relative min-h-screen p-4 bg-gray-100">
                 {/* Barre de navigation */}
-                <Navbar />
+                <header>
+                    <Navbar />
+                </header>
+
+                {/* Contenu de la page */}
+                <main>
+                    <h1 className="text-2xl font-semibold text-gray-800">Voyage</h1>
+                </main>
             </div>
         </>
     )
