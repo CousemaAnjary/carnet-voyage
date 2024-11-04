@@ -1,12 +1,13 @@
-import { z } from 'zod'
-import { FaPlus } from 'react-icons/fa'
-import { useForm } from 'react-hook-form'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FolderType } from '../typeScript/FolderType'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-
+import { z } from 'zod';
+import { FaPlus } from 'react-icons/fa';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FolderType } from '../typeScript/FolderType';
+import Folder from './Folder';
+import { useState } from 'react';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 // Définir le schéma de validation avec Zod
 const formSchema = z.object({
@@ -14,9 +15,12 @@ const formSchema = z.object({
     city: z.string().min(2, { message: "La ville est obligatoire" }),
     country: z.string().min(2, { message: "Le pays est obligatoire" }),
     beginning_at: z.date(),
-})
+});
 
 export default function FolderModal() {
+    // État pour stocker les informations des dossiers
+    const [folders, setFolders] = useState<FolderType[]>([]);
+
     const form = useForm<FolderType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -25,11 +29,12 @@ export default function FolderModal() {
             country: '',
             beginning_at: new Date(),
         },
-    })
+    });
 
-    const handleSubmit = () => {
-        // Votre logique pour enregistrer les données du formulaire
-    }
+    const handleSubmit = (data: FolderType) => {
+        // Ajouter les données du formulaire à l’état
+        setFolders((prevFolders) => [...prevFolders, data]);
+    };
 
     return (
         <>
@@ -105,18 +110,19 @@ export default function FolderModal() {
                             </div>
                             <DialogFooter className="flex justify-end space-x-2 mt-4">
                                 <DialogClose asChild>
-                                    <button type="button" className="px-4 py-2 bg-gray-300 rounded">
-                                        Annuler
-                                    </button>
+                                    <button type="button" className="px-4 py-2 bg-gray-300 rounded">Annuler</button>
                                 </DialogClose>
-                                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
-                                    Enregistrer
-                                </button>
+                                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">Enregistrer</button>
                             </DialogFooter>
                         </form>
                     </Form>
                 </DialogContent>
             </Dialog>
+
+            {/* Afficher chaque dossier sous forme de composant Folder */}
+            {folders.map((folder, index) => (
+                <Folder key={index} folder={folder} />
+            ))}
         </>
     );
 }

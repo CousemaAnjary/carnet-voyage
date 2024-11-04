@@ -1,4 +1,3 @@
-import Folder from "../components/Folder"
 import FolderModal from "../components/FolderModal"
 import Navbar from "../components/Navbar"
 
@@ -27,7 +26,6 @@ export default function Voyage() {
 
                 {/* Contenu de la page */}
                 <main className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <Folder />
                     {/* Modal de création de dossier avec son propre déclencheur */}
                     <FolderModal />
                 </main>
