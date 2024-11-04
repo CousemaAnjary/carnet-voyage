@@ -41,15 +41,18 @@ export default function FolderModal() {
 
     const handleSubmit = async (data: FolderType) => {
 
+        // ID temporaire pour le dossier
+        const tempId = `temp-${Date.now()}`
+
         // Données à envoyer au serveur
         const folderData = {
-            id: "",
+            id: tempId,
             name: data.name,
-            city: data.city,
-            country: data.country,
-            beginning_at: data.beginning_at,
+            city: data.city || "",      // Chaîne vide si `city` est absent
+            country: data.country || "", // Chaîne vide si `country` est absent
+            beginning_at: new Date(data.beginning_at), // Conversion en Date
             user_id: user?.id,
-        }
+        };
 
         setFolders((prevFolders) => [...prevFolders, data])
         form.reset() // Réinitialiser le formulaire après soumission
@@ -57,11 +60,12 @@ export default function FolderModal() {
 
 
         try {
-            await addFolder(folderData)
-
+            await addFolder(folderData);
+            console.log("Dossier créé avec succès.");
         } catch (error) {
-            console.log(error)
+            console.log("Erreur lors de la création du dossier.", error);
         }
+
     }
 
     return (
@@ -101,7 +105,7 @@ export default function FolderModal() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <Input {...field} placeholder="Ville" className="w-full p-2 border rounded" />
+                                                <Input {...field} placeholder="Ville" className="w-full p-2 border rounded" value={field.value || ""} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -113,7 +117,7 @@ export default function FolderModal() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <Input {...field} placeholder="Pays" className="w-full p-2 border rounded" />
+                                                <Input {...field} placeholder="Pays" className="w-full p-2 border rounded" value={field.value || ""} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

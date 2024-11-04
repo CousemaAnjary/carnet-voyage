@@ -1,10 +1,8 @@
-
-
 export interface FolderType {
-    id: string;                // Identifiant unique du dossier
-    name: string;              // Nom du dossier
-    city: string;              // Ville associée au dossier
-    country: string;           // Pays associé au dossier
-    beginning_at: Date;      // Date de début du voyage sous forme de chaîne (format: AAAA-MM-JJ)
-    user_id?: string;           // Identifiant de l'utilisateur propriétaire du dossier
+    id: string;
+    name: string;
+    city: string | null;       // Permettre la valeur `null`
+    country: string | null;    // Permettre la valeur `null`
+    beginning_at: Date;
+    user_id?: string;
 }
