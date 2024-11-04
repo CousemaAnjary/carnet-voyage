@@ -39,15 +39,9 @@ export default function FolderModal() {
         const tempId = `temp-${Date.now()}`;
 
         const folderData = {
-            id: tempId, // Optional, if auto-generated, it can be removed
-            name: data.name,
-            city: data.city || null,
-            country: data.country || null,
-            beginning_at: data.beginning_at instanceof Date
-                ? data.beginning_at.toISOString().split("T")[0]
-                : data.beginning_at, // Ensure it's in 'YYYY-MM-DD' format
+            ...data,
             user_id: user?.id,
-        };
+        }
 
 
         setFolders((prevFolders) => [...prevFolders, { ...data, id: tempId }]);
@@ -56,7 +50,7 @@ export default function FolderModal() {
 
         try {
             await addFolder(folderData);
-            console.log("Dossier créé avec succès.");
+
         } catch (error) {
             console.log("Erreur lors de la création du dossier.", error);
         }
