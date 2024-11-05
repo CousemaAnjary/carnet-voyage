@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('travels', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
             $table->string('name')->unique();
             $table->string('country')->nullable();
             $table->string('city')->nullable();
             $table->date('beginning_at');
             $table->date('ended_at')->nullable();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
