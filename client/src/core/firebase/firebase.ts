@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { doc, DocumentData, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { LoginType, RegisterType } from "@/modules/auth/typeScript/AuthTypes";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIRE_BASE_API_KEY,
@@ -25,24 +26,40 @@ const firestore = getFirestore(app);
 export async function signInWithGoogle()  {
   const provider = new GoogleAuthProvider();
   const res = await signInWithPopup(auth, provider);
-  const user = {
-    name : res.user.displayName,
-    email : res.user.email,
-    password: res.user.uid,
+
+  const userName = res.user.displayName;
+  const userEmail = res.user.email;
+  const userPassword = res.user.uid;
+
+  if(userName && userEmail && userPassword) {
+    const user : RegisterType = {
+      name :  userName,
+      email :  userEmail,
+      password:  userPassword,
+    }
+    return user;
   }
   
-  return user;
+  return null;
 }
 
 export async function loginWithGoogle() {
   const provider = new GoogleAuthProvider();
   const res = await signInWithPopup(auth, provider);
-  const user = {
-    email : res.user.email,
-    password: res.user.uid,
+
+  const userEmail = res.user.email;
+  const userPassword = res.user.uid;
+
+  if(userEmail && userPassword) {
+    const user : LoginType = {
+      email : userEmail,
+      password: userPassword,
+    }
+
+    return user;
   }
   
-  return user;
+  return null;
 }
 
 // Query Firestore
