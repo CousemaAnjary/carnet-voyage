@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { doc, DocumentData, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { LoginType, RegisterType } from "@/modules/auth/typeScript/AuthTypes";
 
