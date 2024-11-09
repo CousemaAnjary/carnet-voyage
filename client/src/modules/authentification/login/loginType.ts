@@ -1,11 +1,3 @@
-
-// Le type des données pour l'inscription (register)
-export type RegisterType = {
-    name: string
-    email: string
-    password: string
-}
-
 // Le type des données pour la connexion (login)
 export type LoginType = {
     email: string
@@ -27,12 +19,6 @@ export type LoginResponseType = {
     messageSuccess: string
 }
 
-// Le type de la réponse API pour l'inscription (register)
-export type RegisterResponseType = {
-    user: UserType
-    messageSuccess: string
-}
-
 // Le type pour le contexte d'authentification
 export type AuthContextType = {
     isAuthenticated: boolean
@@ -40,4 +26,3 @@ export type AuthContextType = {
     login: (data: LoginType) => Promise<LoginResponseType>
     logout: () => Promise<void>
 }
-

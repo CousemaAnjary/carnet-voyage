@@ -16,5 +16,5 @@ export default function PublicRoutes() {
     /**
      * ! AFFICHAGE (render) de l'application
      */
-    return isAuthenticated ? <Navigate to="/dashboard" /> : <Outlet />
+    return isAuthenticated ? <Navigate to="/carnet-voyage" /> : <Outlet />
 }

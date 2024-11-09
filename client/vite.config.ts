@@ -18,9 +18,9 @@ export default defineConfig({
     },
 
     manifest: {
-      name: 'client',
-      short_name: 'client',
-      description: 'client',
+      name: 'carnet-voyage',
+      short_name: 'carnet-voyage',
+      description: 'carnet-voyage',
       theme_color: '#ffffff',
     },
 

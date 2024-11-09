@@ -1,25 +1,13 @@
 import api from "@/core/services/apiConfig"
-import { LoginResponseType, LoginType, RegisterResponseType, RegisterType } from "../typeScript/AuthTypes"
+import { LoginResponseType, LoginType } from "./loginType"
 
 
-// Inscription d'un utilisateur
-export const register = async (dataRegister: RegisterType): Promise<RegisterResponseType> => {
-    try {
-        // Appel à l'API pour inscrire un utilisateur
-        const response = await api.post('/signup', dataRegister)
-        return response.data // Retourner les données de la réponse de l'API
-
-    } catch (error) {
-        console.log(error)
-        throw error // Gérer les erreurs API (serveur)
-    }
-}
 
 // Connexion d'un utilisateur
 export const login = async (dataLogin: LoginType): Promise<LoginResponseType> => {
     try {
         // Appel à l'API pour connecter un utilisateur
-        const response = await api.post('/auth', dataLogin)
+        const response = await api.post('/login', dataLogin)
         return response.data // Retourner les données de la réponse de l'API
 
     } catch (error) {

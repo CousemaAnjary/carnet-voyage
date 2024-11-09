@@ -1,41 +1,68 @@
 import { z } from 'zod';
-import Folder from './Folder';
-import { useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FolderType } from '../typeScript/FolderType';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { addFolder } from '../Service';
 import { useAuth } from '@/core/contexts/AuthContext';
+import { folderVoyageType } from '../carnetVoyageType';
+import { addFolderVoyage, getFoldersVoyage } from '../carnetVoyageService';
+import FolderVoyage from './FolderVoyage';
 
 // Define validation schema with Zod
 const formSchema = z.object({
     name: z.string().min(2, { message: "Le nom est obligatoire" }),
     city: z.string().min(2, { message: "La ville est obligatoire" }),
     country: z.string().min(2, { message: "Le pays est obligatoire" }),
-    beginning_at: z.date(),
+    beginning_at: z.string(),
 });
 
-export default function FolderModal() {
+export default function FolderVoyageModal() {
+    /**
+  * ! STATE (état, données) de l'application
+  */
     const { user } = useAuth();
-    const [folders, setFolders] = useState<FolderType[]>([]);
+    const [foldersVoyage, setFoldersVoyage] = useState<folderVoyageType[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const form = useForm<FolderType>({
+    const form = useForm<folderVoyageType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
             city: '',
             country: '',
-            beginning_at: new Date(),
+            beginning_at: new Date().toISOString().split('T')[0],
         },
     });
 
-    const handleSubmit = async (data: FolderType) => {
+
+    /**
+     * ! COMPORTEMENT (méthodes, fonctions) de l'application
+     */
+
+    // Récupérer la liste des dossiers de voyage
+    useEffect(() => {
+        const fetchFoldersVoyage = async () => {
+            try {
+                const foldersVoyage = await getFoldersVoyage();
+                setFoldersVoyage(foldersVoyage)
+
+            } catch (error) {
+                console.log("Erreur lors de la récupération des dossiers de voyage.", error);
+            }
+        }
+
+        fetchFoldersVoyage();
+    }, []);
+
+
+
+    // Ajouter un dossier de voyage dans la base de données
+    const handleSubmit = async (data: folderVoyageType) => {
         const tempId = `temp-${Date.now()}`;
 
         const folderData = {
@@ -43,19 +70,22 @@ export default function FolderModal() {
             user_id: user?.id,
         }
 
-
-        setFolders((prevFolders) => [...prevFolders, { ...data, id: tempId }]);
+        setFoldersVoyage((prevFolders) => [...prevFolders, { ...data, id: tempId }]);
         form.reset();
         setIsDialogOpen(false);
 
         try {
-            await addFolder(folderData);
+            await addFolderVoyage(folderData);
+            console.log('Données envoyées :', folderData);
 
         } catch (error) {
             console.log("Erreur lors de la création du dossier.", error);
         }
     };
 
+    /**
+     * ! AFFICHAGE (render) de l'application
+     */
     return (
         <>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -93,7 +123,7 @@ export default function FolderModal() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <Input {...field} placeholder="Ville" className="w-full p-2 border rounded" value={field.value || ""} />
+                                                <Input {...field} placeholder="Ville" className="w-full p-2 border rounded" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -105,7 +135,7 @@ export default function FolderModal() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <Input {...field} placeholder="Pays" className="w-full p-2 border rounded" value={field.value || ""} />
+                                                <Input {...field} placeholder="Pays" className="w-full p-2 border rounded" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -122,8 +152,7 @@ export default function FolderModal() {
                                                     {...field}
                                                     type="date"
                                                     className="w-full p-2 border rounded"
-                                                    value={field.value instanceof Date ? field.value.toISOString().split("T")[0] : field.value}
-                                                    onChange={(e) => field.onChange(new Date(e.target.value))}
+
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -143,9 +172,16 @@ export default function FolderModal() {
             </Dialog>
 
             {/* Display each folder as Folder component */}
-            {folders.map((folder, index) => (
-                <Folder key={index} folder={folder} />
-            ))}
+            <div className="flex flex-wrap mx-auto  mt-6">
+                {foldersVoyage.map((folderVoyage, index) => (
+                    <div
+                        key={index}
+                        className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex justify-center"
+                    >
+                        <FolderVoyage folderVoyage={folderVoyage} />
+                    </div>
+                ))}
+            </div>
         </>
     );
 }
