@@ -1,6 +1,7 @@
 
 // le type de données pour un carnet de voyage
 export type folderVoyageType = {
+    id: number
     name: string
     city: string
     country: string

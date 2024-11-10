@@ -5,20 +5,13 @@ import { addImage, getImages } from "../carnetVoyageService";
 import { useParams } from "react-router-dom";
 import ImageDetail from "../components/ImageDetail";
 import { ImageType } from "../carnetVoyageType";
-// Import the ImageDetail component
 
 
-export default function CarnetVoyageContent() {
-    /**
-     * ! STATE (état, données) de l'application
-     */
+export default function Voyage() {
     const [images, setImages] = useState<string[]>([]);
     const [selectedImage, setSelectedImage] = useState<ImageType | null>(null); // State for the selected image
     const { id } = useParams(); // Récupère l'ID du dossier de voyage depuis l'URL
 
-    /**
-     * ! COMPORTEMENT (méthodes, fonctions) de l'application
-     */
     useEffect(() => {
         const fetchImages = async () => {
             try {

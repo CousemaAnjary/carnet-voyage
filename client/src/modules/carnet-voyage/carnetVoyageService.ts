@@ -27,7 +27,7 @@ export const addFolderVoyage = async (folderVoyageData: folderVoyageType) => {
 // Ajouter une image dans un dossier de voyage
 export const addImage = async (imageData: FormData) => {
     try {
-        const response = await api.post('/folderVoyageContent/store', imageData)
+        const response = await api.post('/travel/store', imageData)
         return response.data
     } catch (error) {
         console.log(error)
