@@ -7,7 +7,7 @@ import { LoginResponseType, LoginType } from "./loginType"
 export const login = async (dataLogin: LoginType): Promise<LoginResponseType> => {
     try {
         // Appel à l'API pour connecter un utilisateur
-        const response = await api.post('/login', dataLogin)
+        const response = await api.post('/auth', dataLogin)
         return response.data // Retourner les données de la réponse de l'API
 
     } catch (error) {
