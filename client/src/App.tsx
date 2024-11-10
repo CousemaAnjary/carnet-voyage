@@ -8,6 +8,7 @@ import CarnetVoyage from "./modules/carnet-voyage/pages/CarnetVoyage"
 import CarnetVoyageContent from "./modules/carnet-voyage/pages/CarnetVoyageContent"
 import { useContext, useEffect } from "react"
 import { NetworkContext } from "./core/contexts/NetworkContext"
+import PWABadge from "./components/pwa/PWABadge"
 
 export default function App() {
   const { online} = useContext(NetworkContext);
@@ -18,6 +19,7 @@ export default function App() {
 
   return (
     <>
+      <PWABadge />
       <AuthProvider>
         <Routes>
           {/* Public Routes */}
