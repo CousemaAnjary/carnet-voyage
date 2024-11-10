@@ -6,22 +6,16 @@ import Login from "./modules/authentification/login/pages/Login"
 import Register from "./modules/authentification/register/pages/Register"
 import CarnetVoyage from "./modules/carnet-voyage/pages/CarnetVoyage"
 import CarnetVoyageContent from "./modules/carnet-voyage/pages/CarnetVoyageContent"
-
+import { useContext, useEffect } from "react"
+import { NetworkContext } from "./core/contexts/NetworkContext"
 
 export default function App() {
-  /**
-   * ! STATE (état, données) de l'application
-   */
+  const { online} = useContext(NetworkContext);
 
+  useEffect(() => {
+    console.log(online);
+  }, [online])
 
-  /**
-   * ! COMPORTEMENT (méthodes, fonctions) de l'application
-   */
-
-
-  /**
-   * ! AFFICHAGE (render) de l'application
-   */
   return (
     <>
       <AuthProvider>
