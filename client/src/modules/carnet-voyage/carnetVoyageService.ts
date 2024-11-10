@@ -16,7 +16,7 @@ export const getFoldersVoyage = async () => {
 // Ajouter un dossier de voyage dans la base de données
 export const addFolderVoyage = async (folderVoyageData: folderVoyageType) => {
     try {
-        const response = await api.post('/create', folderVoyageData)
+        const response = await api.post('/travel/create', folderVoyageData)
         return response.data
     } catch (error) {
         console.log(error)

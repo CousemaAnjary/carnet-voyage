@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useAuth } from '@/core/contexts/AuthContext';
 import { folderVoyageType } from '../carnetVoyageType';
 import { addFolderVoyage, getFoldersVoyage } from '../carnetVoyageService';
 import FolderVoyage from './FolderVoyage';
@@ -25,7 +24,7 @@ export default function FolderVoyageModal() {
     /**
   * ! STATE (état, données) de l'application
   */
-    const { user } = useAuth();
+
     const [foldersVoyage, setFoldersVoyage] = useState<folderVoyageType[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -67,7 +66,6 @@ export default function FolderVoyageModal() {
 
         const folderData = {
             ...data,
-            user_id: user?.id,
         }
 
         setFoldersVoyage((prevFolders) => [...prevFolders, { ...data, id: tempId }]);
