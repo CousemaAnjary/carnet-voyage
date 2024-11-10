@@ -4,6 +4,7 @@ import { getFoldersVoyage } from "../carnetVoyageService";
 import { folderVoyageType } from "../carnetVoyageType";
 import iconV from "../../../assets/images/iconV.png"
 import { useNavigate } from "react-router-dom";
+import VoyageFormModal from "../components/VoyageFormModal";
 
 export default function ListVoyages() {
     const navigate = useNavigate()
@@ -47,9 +48,12 @@ export default function ListVoyages() {
                         ))}
                     </div>
                 ) : (
-                    <div className="">Rien</div>
+                    <div className="">
+                        Rien
+                    </div>
                 )
             }
+            <VoyageFormModal/>
         </Layout>
     )
 }
