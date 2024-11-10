@@ -6,7 +6,7 @@ export type folderVoyageType = {
     city: string
     country: string
     beginning_at: string
-    user_id?: string
+    ended_at?: string 
 }
 
 // les propriétés attendues par le composant FolderVoyage

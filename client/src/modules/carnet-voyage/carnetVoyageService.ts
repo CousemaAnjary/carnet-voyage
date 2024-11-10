@@ -5,8 +5,8 @@ import { folderVoyageType, ImageType } from "./carnetVoyageType"
 // Récupérer la liste des dossiers de voyage
 export const getFoldersVoyage = async () => {
     try {
-        const response = await api.get('/folderVoyage/index')
-        return response.data.folderVoyages
+        const response = await api.get('/travel')
+        return response.data.travels
     } catch (error) {
         console.log(error)
         throw error
@@ -16,7 +16,7 @@ export const getFoldersVoyage = async () => {
 // Ajouter un dossier de voyage dans la base de données
 export const addFolderVoyage = async (folderVoyageData: folderVoyageType) => {
     try {
-        const response = await api.post('/folderVoyage/store', folderVoyageData)
+        const response = await api.post('/create', folderVoyageData)
         return response.data
     } catch (error) {
         console.log(error)
