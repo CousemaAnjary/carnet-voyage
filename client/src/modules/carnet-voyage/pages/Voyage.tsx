@@ -3,22 +3,23 @@ import Layout from "@/components/dashboad/Layout";
 import { getContents } from "../carnetVoyageService";
 import { useParams } from "react-router-dom";
 import ImageDetail from "../components/ImageDetail";
-import { ImageType } from "../carnetVoyageType";
+import { ImageType, Photos } from "../carnetVoyageType";
 import ContentsUploader from "../components/ContentsUploader";
 
 
 export default function Voyage() {
-    const [images, setImages] = useState<string[]>([]);
+    const [contents, setContents] = useState<Photos[]>([]);
     const [selectedImage, setSelectedImage] = useState<ImageType | null>(null); // State for the selected image
     const { id } = useParams() || null; // Récupère l'ID du dossier de voyage depuis l'URL
 
     useEffect(() => {
         const fetchContent = async () => {
             try {
-                const content = await getContents(id as string);
-                setImages(content);
+                if(!id) throw new Error("ID du dossier de voyage non trouvé.");
+                const content = await getContents(id);
+                setContents(content);
             } catch (err) {
-                console.error("Erreur lors de la récupération des images.", err);
+                console.error(err);
             }
         };
         if (id) {
@@ -27,9 +28,9 @@ export default function Voyage() {
     }, [id]);
 
     // Handle image click to open the ImageDetail
-    const handleImageClick = (imageSrc: string) => {
-        setSelectedImage({ src: imageSrc, alt: "Image Details" });
-    };
+    // const handleImageClick = (imageSrc: string) => {
+    //     setSelectedImage({ src: imageSrc, alt: "Image Details" });
+    // };
 
     // Handle closing the ImageDetail
     const handleCloseDetail = () => {
@@ -56,14 +57,15 @@ export default function Voyage() {
 
                 {/* Affichage des images en grille */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {Array.isArray(images) && images.map((image, index) => (
+                    {contents.map((photo) => (
                         <div
-                            key={index}
+                            key={photo.id}
                             className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer"
-                            onClick={() => handleImageClick(image.startsWith("blob:") ? image : `http://localhost:8000/storage/${image}`)}
+                           // onClick={() => handleImageClick(image.startsWith("blob:") ? image : `http://localhost:8000/storage/${image}`)}
                         >
                             <img
-                                src={image.startsWith("blob:") ? image : `http://localhost:8000/storage/${image}`}
+                                //src={image.startsWith("blob:") ? image : `http://localhost:8000/storage/${image}`}
+                                src={`${import.meta.env.VITE_BACKEND_API_URL}${photo.img_url}`}
                                 alt="Voyage"
                                 className="w-full h-60 object-cover hover:scale-105 transition-transform duration-300"
                             />

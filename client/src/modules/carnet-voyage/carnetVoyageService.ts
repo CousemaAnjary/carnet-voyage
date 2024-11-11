@@ -38,22 +38,21 @@ export const uploadContents = async (photos: FormData) => {
 // Récupérer la liste des images d'un dossier de voyage
 export const getContents = async (folderVoyageId: string) => {
     try {
-        const response = await api.get(`/travel/${folderVoyageId}/content`);
-        console.log(response.data)
-        return response.data;
-        // return response.data.images.map((content: { file_path: string }) => content.file_path);
+        const response = await api.get(`/travel/${folderVoyageId}/content`)
+        console.log(response.data.contents)
+        return response.data.contents
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.error(error)
+        throw error
     }
 }
 
 // Mettre à jour la description d'une image
 export const updateImageDescription = async (image: ImageType) => {
     try {
-        await api.put(`/folderVoyageContent/update/${image.id}`, { description: image.description });
+        await api.put(`/folderVoyageContent/update/${image.id}`, { description: image.description })
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.error(error)
+        throw error
     }
 }

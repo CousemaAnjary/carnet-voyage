@@ -22,6 +22,17 @@ export interface ImageType {
     location?: { city: string; country: string };
 }
 
+export interface Photos {
+    id: string | number;
+    img_url: string;
+    travel_id: string | number;
+    location: string | null;
+    taken_at: string;
+    description: string | null;
+    created_at: string;
+    updated_at: string | null
+}
+
 export interface ImageDetailleProps {
     image: ImageType;
     onClose: () => void;
