@@ -1,60 +1,30 @@
 import { useEffect, useState } from "react";
 import Layout from "@/components/dashboad/Layout";
-import { Input } from "@/components/ui/input";
-import { addImage, getImages } from "../carnetVoyageService";
+import { getContents } from "../carnetVoyageService";
 import { useParams } from "react-router-dom";
 import ImageDetail from "../components/ImageDetail";
 import { ImageType } from "../carnetVoyageType";
+import ContentsUploader from "../components/ContentsUploader";
 
 
 export default function Voyage() {
     const [images, setImages] = useState<string[]>([]);
     const [selectedImage, setSelectedImage] = useState<ImageType | null>(null); // State for the selected image
-    const { id } = useParams(); // Récupère l'ID du dossier de voyage depuis l'URL
+    const { id } = useParams() || null; // Récupère l'ID du dossier de voyage depuis l'URL
 
     useEffect(() => {
-        const fetchImages = async () => {
+        const fetchContent = async () => {
             try {
-                const images = await getImages(id as string);
-                setImages(images);
+                const content = await getContents(id as string);
+                setImages(content);
             } catch (err) {
                 console.error("Erreur lors de la récupération des images.", err);
             }
         };
         if (id) {
-            fetchImages();
+            fetchContent();
         }
     }, [id]);
-
-    // Gestion de l'upload d'une image
-    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            // Crée une URL pour l'aperçu
-            const imageUrl = URL.createObjectURL(file);
-            setImages((prevImages) => [...prevImages, imageUrl]);
-
-            // Clean up the object URL after it’s used
-            const cleanupUrl = () => URL.revokeObjectURL(imageUrl);
-            window.addEventListener("beforeunload", cleanupUrl);
-
-            // Prépare le fichier pour l'envoi
-            const formData = new FormData();
-            formData.append("file_path", file); // Assurez-vous que le nom "file_path" correspond à votre back-end
-            formData.append("folder_voyage_id", id as string); // Ajoutez l'ID du dossier
-
-            try {
-                // Envoie l'image au serveur en utilisant votre service
-                const response = await addImage(formData);
-                console.log("Réponse du serveur :", response);
-            } catch (err) {
-                console.error("Erreur lors de l'envoi de l'image :", err);
-            } finally {
-                // Clean up the object URL to avoid memory leaks
-                window.removeEventListener("beforeunload", cleanupUrl);
-            }
-        }
-    };
 
     // Handle image click to open the ImageDetail
     const handleImageClick = (imageSrc: string) => {
@@ -81,15 +51,7 @@ export default function Voyage() {
             <div className="px-6 py-4">
                 {/* Bouton pour ajouter des images aligné à droite */}
                 <div className="flex justify-end mb-6">
-                    <label className="cursor-pointer inline-flex items-center bg-blue-600 text-white px-6 py-2 rounded shadow hover:bg-blue-700 transition">
-                        <Input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileUpload}
-                            className="hidden"
-                        />
-                        Ajouter une image
-                    </label>
+                    <ContentsUploader voyageId={id ? id : ""} />
                 </div>
 
                 {/* Affichage des images en grille */}

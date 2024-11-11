@@ -22,28 +22,41 @@ registerRoute(new NavigationRoute(
   { allowlist },
 ))
 
-// registerRoute(
-//     ({ url, request }) =>request.method === 'POST' && url.pathname.startsWith('/api/auth'),
-//     async ({ request }) => {
-//         try {
-//         // Envoie la requête réseau normalement
-//         const networkResponse = await fetch(request)
-//         // Vérifie si la réponse est OK
-//         if (networkResponse && networkResponse.ok) {
-//             // Vous pouvez gérer la réponse ici, par exemple, l'enregistrer dans un cache
-//             return networkResponse
-//         }
-//         } catch (error) {
-//         // Optionnel : Gestion des erreurs, comme retourner une réponse en cache ou un message
-//         console.error("Failed to fetch:", error)
-//         }
-//         // Par défaut, renvoie une réponse d'erreur si la requête réseau échoue
-//         return new Response(JSON.stringify({ error: "Network error" }), {
-//         headers: { 'Content-Type': 'application/json' }
-//         })
-//     },
-//     'POST'
-// )
+self.addEventListener('fetch', (event) => {
+
+  const apiURL = import.meta.env.VITE_BACKEND_API_URL || 'http://localhost:8000' // URL de l'API
+
+  // Intercepte les requestes GET vers l'API
+  if(event.request.url.startsWith(apiURL) && event.request.method === 'GET') 
+  {
+    // On vérifie si on a une connexion internet
+    event.respondWith(
+      fetch(event.request)
+        .then((apiResponse) => {
+          const responseClone = apiResponse.clone() // On clone la réponse pour la mettre en cache
+          
+          // On met en cache la réponse
+          caches.open('api-cache').then((cache) => {
+            cache.put(event.request, responseClone)
+          })
+
+          return apiResponse // On retourne la réponse au client
+        })
+        // Si on a pas de connexion internet
+        .catch(() => {
+          return caches.match(event.request).then((cachedResponse) => {
+            return (
+              // Si on a une réponse en cache, on la retourne
+              cachedResponse || new Response(
+                JSON.stringify({message :  'Pas de connexion internet, veuillez réessayer plus tard'}),
+                { headers: { 'Content-Type': 'application/json' } }
+              )
+            )
+          })
+        })
+    )
+  }
+})
 
 
 

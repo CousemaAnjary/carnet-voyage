@@ -11,19 +11,23 @@ export default defineConfig({
     strategies: 'injectManifest',
     srcDir: 'src',  // Dossier source de ton projet
     filename: 'sw.ts',
-    injectManifest: {
-      globPatterns: ['**/*.{js,css,html,png,svg}'],  // Spécifie les fichiers à inclure dans le manifest
+
+    manifest: {
+      name: 'carnet-voyage',
+      short_name: 'carnet-voyage',
+      description: 'carnet-voyage',
+      theme_color: '#ffffff',
     },
 
     workbox: { 
-      clientsClaim: true, // Prend le contrôle des onglets ouverts si le service worker est mis à jour
+      globPatterns: ['**/*.{js,css,html,png,svg}'], // Fichiers à mettre en cache
+      clientsClaim: true, // Prend le contrôle des onglets ouverts si le service worker est mis à jour    
     },
 
     devOptions: {
       enabled: false,
       navigateFallback: 'index.html',
-      suppressWarnings: true,
-      type: 'module',
+      suppressWarnings: false,
     },
 
   })],

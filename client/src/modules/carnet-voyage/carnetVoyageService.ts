@@ -25,9 +25,9 @@ export const addFolderVoyage = async (folderVoyageData: folderVoyageType) => {
 }
 
 // Ajouter une image dans un dossier de voyage
-export const addImage = async (imageData: FormData) => {
+export const uploadContents = async (photos: FormData) => {
     try {
-        const response = await api.post('/travel/store', imageData)
+        const response = await api.post('/travel/content/upload', photos)
         return response.data
     } catch (error) {
         console.log(error)
@@ -36,10 +36,12 @@ export const addImage = async (imageData: FormData) => {
 }
 
 // Récupérer la liste des images d'un dossier de voyage
-export const getImages = async (folderVoyageId: string) => {
+export const getContents = async (folderVoyageId: string) => {
     try {
-        const response = await api.get(`/folderVoyageContent/${folderVoyageId}`);
-        return response.data.images.map((content: { file_path: string }) => content.file_path);
+        const response = await api.get(`/travel/${folderVoyageId}/content`);
+        console.log(response.data)
+        return response.data;
+        // return response.data.images.map((content: { file_path: string }) => content.file_path);
     } catch (error) {
         console.error(error);
         throw error;
