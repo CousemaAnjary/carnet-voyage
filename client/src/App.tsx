@@ -14,7 +14,7 @@ export default function App() {
   const { online} = useContext(NetworkContext);
 
   useEffect(() => {
-    console.log(online);
+    // console.log(online);
   }, [online])
 
   return (

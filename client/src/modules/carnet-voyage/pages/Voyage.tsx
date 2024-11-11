@@ -3,13 +3,13 @@ import Layout from "@/components/dashboad/Layout";
 import { getContents } from "../carnetVoyageService";
 import { useParams } from "react-router-dom";
 import ImageDetail from "../components/ImageDetail";
-import { ImageType, Photos } from "../carnetVoyageType";
+import { Photos } from "../carnetVoyageType";
 import ContentsUploader from "../components/ContentsUploader";
 
 
 export default function Voyage() {
     const [contents, setContents] = useState<Photos[]>([]);
-    const [selectedImage, setSelectedImage] = useState<ImageType | null>(null); // State for the selected image
+    const [selectedImage, setSelectedImage] = useState<Photos | null>(null); // State for the selected image
     const { id } = useParams() || null; // Récupère l'ID du dossier de voyage depuis l'URL
 
     useEffect(() => {
@@ -27,20 +27,15 @@ export default function Voyage() {
         }
     }, [id]);
 
-    // Handle image click to open the ImageDetail
-    // const handleImageClick = (imageSrc: string) => {
-    //     setSelectedImage({ src: imageSrc, alt: "Image Details" });
-    // };
-
     // Handle closing the ImageDetail
     const handleCloseDetail = () => {
         setSelectedImage(null);
     };
 
     // Handle saving the updated image details
-    const handleSaveDetail = (updatedImage: ImageType) => {
+    const handleSaveDetail = () => {
         // Update the image details in your state
-        console.log("Image mise à jour :", updatedImage);
+        console.log("Image mise à jour :");
         handleCloseDetail();
     };
 
@@ -61,13 +56,13 @@ export default function Voyage() {
                         <div
                             key={photo.id}
                             className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer"
-                           // onClick={() => handleImageClick(image.startsWith("blob:") ? image : `http://localhost:8000/storage/${image}`)}
+                            onClick={() => setSelectedImage({ ...photo })}
                         >
                             <img
-                                //src={image.startsWith("blob:") ? image : `http://localhost:8000/storage/${image}`}
+                                className="w-full h-60 object-cover hover:scale-105 transition-transform 
+                                    duration-300"
                                 src={`${import.meta.env.VITE_BACKEND_API_URL}${photo.img_url}`}
                                 alt="Voyage"
-                                className="w-full h-60 object-cover hover:scale-105 transition-transform duration-300"
                             />
                         </div>
                     ))}

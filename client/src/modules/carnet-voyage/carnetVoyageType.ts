@@ -34,7 +34,7 @@ export interface Photos {
 }
 
 export interface ImageDetailleProps {
-    image: ImageType;
+    image: Photos;
     onClose: () => void;
-    onSave: (updatedImage: ImageType) => void;
+    onSave: () => void;
 }
