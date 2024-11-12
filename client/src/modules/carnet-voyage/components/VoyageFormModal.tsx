@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { folderVoyageType } from '../carnetVoyageType';
+import { VoyageType } from '../carnetVoyageType';
 import { addFolderVoyage } from '../carnetVoyageService';
 
 // Define validation schema with Zod
@@ -24,7 +24,7 @@ export default function VoyageFormModal() {
   * ! STATE (état, données) de l'application
   */
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const form = useForm<folderVoyageType>({
+    const form = useForm<VoyageType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
@@ -39,7 +39,7 @@ export default function VoyageFormModal() {
      * ! COMPORTEMENT (méthodes, fonctions) de l'application
      */
     // Ajouter un dossier de voyage dans la base de données
-    const handleSubmit = async (data: folderVoyageType) => {
+    const handleSubmit = async (data: VoyageType) => {
         form.reset();
         
         try {

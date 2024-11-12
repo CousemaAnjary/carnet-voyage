@@ -18,7 +18,7 @@ export default function App() {
   }, [online])
 
   return (
-    <>
+    <div className="bg-gray-100">
       <PWABadge />
       <AuthProvider>
         <Routes>
@@ -36,6 +36,6 @@ export default function App() {
           </Route>
         </Routes>
       </AuthProvider>
-    </>
+    </div>
   )
 }

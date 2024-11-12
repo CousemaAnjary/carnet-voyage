@@ -1,13 +1,33 @@
 import { useEffect, useState } from "react"
 import { getFoldersVoyage } from "../carnetVoyageService"
 import VoyageFormModal from "../components/VoyageFormModal"
-import Navbar from "@/components/dashboad/Nabar"
 import { VoyageType } from "../carnetVoyageType"
 import VoyageCard from "../components/VoyageCard"
+import AlertVoyageActionModal, { VoyageAction } from "../components/AlertVoyageActionModal"
 
 export default function ListVoyages() {
     const [voyages, setVoyages] = useState<VoyageType[]|null>(null)
-    const [selectedVoyage, setSelectedVoyage] = useState<VoyageType|null>(null)
+    // Alert actions variables
+    const [voyageAction, setVoyageAction] = useState<VoyageAction | null>(null)
+    const [openActionDialog, setOpenActionDialog] = useState(false)
+    const [actingVoyageId, setActionVoyageId] = useState<number|string>('')
+    const [actingVoyageName, setActingVoyageName] = useState<string>('')
+
+    const handleClotureVoyage = (id:string | number, name:string) => {
+        setActionVoyageId(id)
+        setActingVoyageName(name)
+        setVoyageAction({action: "cloture"})
+        setOpenActionDialog(true)
+        console.log(`cloture voyage ${id} ${name}`)
+    }
+
+    const handleAnnuleVoyage = (id:string | number, name:string) => {
+        setActionVoyageId(id)
+        setActingVoyageName(name)
+        setVoyageAction({action: "annul"})
+        setOpenActionDialog(true)
+        console.log(`annule voyage ${id} ${name}`)
+    }
 
     // Récupérer la liste des dossiers de voyage
     useEffect(() => {
@@ -25,9 +45,15 @@ export default function ListVoyages() {
     }, [])
     
     return (
-        <div className="min-h-screen max-h-screen p-4 bg-gray-100">
-            <Navbar />
-            <div className="h-full">
+        <div className="h-screen flex flex-col">
+            <nav className="absolute w-full z-10 bg-white h-16 border-b 
+                    flex justify-between items-center px-4 lg:px-8"
+            >
+                <h1 className="font-medium font-mono text-lg lg:text-xl">
+                    Carnet de voyage
+                </h1>
+            </nav>
+            <main className="h-full mx-3 mt-2">
                 {voyages ? (
                     <div className="flex flex-wrap mx-auto mt-6">
                         {voyages.map((voyage) => (
@@ -35,7 +61,10 @@ export default function ListVoyages() {
                                 className="flex w-full sm:w-1/2 md:w-1/3 lg:w-1/4  
                                     justify-centers items-center space-x-5 "
                             >
-                                <VoyageCard voyage={voyage} />
+                                <VoyageCard 
+                                    voyage={voyage} 
+                                    actions={{ cloture: handleClotureVoyage, annule: handleAnnuleVoyage }} 
+                                />
                             </div>
                         ))}
                     </div>
@@ -44,8 +73,19 @@ export default function ListVoyages() {
                         Rien
                     </div>
                 )}
-            </div>   
-            <VoyageFormModal/>          
+                <VoyageFormModal/>  
+            </main>
+            {voyageAction && (
+                    <AlertVoyageActionModal
+                        action={voyageAction}
+                        dialog={
+                            {open: openActionDialog, setOpen: setOpenActionDialog}
+                        }
+                        voyage={
+                            {id: actingVoyageId, name: actingVoyageName}
+                        }
+                    />
+                )}
         </div>
     )
 }

@@ -3,12 +3,25 @@ import { VoyageType } from "../carnetVoyageType"
 import iconV from "../../../assets/images/iconV.png"
 import { Button } from "@/components/ui/button"
 
-const VoyageCard:React.FC<{ voyage: VoyageType }> = ({ voyage }) => {
+type VoyageCardActionsProps = {
+    cloture: (id:string | number, name:string) => void;
+    annule: (id:string | number, name:string) => void;
+}
+
+const VoyageCard:React.FC<{ voyage: VoyageType, actions: VoyageCardActionsProps  }> = ({ voyage, actions }) => {
     const navigate = useNavigate()
 
     // Rediriger vers la page de contenu du dossier
-    const ouvrirVoyage = (id:string|number) => {
-        navigate(`/carnet-voyage-content/${id}`)
+    const ouvrirVoyage = () => {
+        navigate(`/carnet-voyage-content/${voyage.id}?codename=${voyage.name}`)
+    }
+
+    const clotureVoyage = () => {
+        actions.cloture(voyage.id, voyage.name)
+    }
+
+    const annulerVoyage = () => {
+        actions.annule(voyage.id, voyage.name)
     }
 
     return(
@@ -37,9 +50,25 @@ const VoyageCard:React.FC<{ voyage: VoyageType }> = ({ voyage }) => {
                         <p className="text-gray-600">À venir</p>
                     )
                 )}
-                <div className="w-full flex justify-end">
-                    <Button className="bg-blue-500 hover:bg-blue-700"
-                    onClick={() => ouvrirVoyage(voyage.id)}>Ouvir</Button>
+                <div className="w-full flex space-x-4 mt-3">
+                    <div className="w-full">
+                        {voyage.ended_at ? (
+                            <span></span>
+                        ) : (
+                            Date.parse(voyage.beginning_at) < Date.now() ? (
+                                <Button className="w-full bg-red-500 hover:bg-red-700"
+                                    onClick={clotureVoyage}>Cloturer</Button>
+                            ) : (
+                                <Button className="w-full bg-red-500 hover:bg-red-700"
+                                  onClick={annulerVoyage}>Annuler</Button>
+                            )
+                        )}
+                    </div>
+                    <div className="w-full">
+                        <Button className=" w-full bg-blue-500 hover:bg-blue-700"
+                            onClick={ouvrirVoyage}
+                        >Ouvir</Button>
+                    </div>
                 </div>
             </div>
         </div>

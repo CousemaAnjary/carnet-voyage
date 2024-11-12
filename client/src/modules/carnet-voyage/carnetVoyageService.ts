@@ -56,3 +56,23 @@ export const updateImageDescription = async (id:string | number, newDescription:
         throw error
     }
 }
+
+export const closeVoyage = async (id:string | number) => {
+    try {
+        const res = await api.patch(`/travel/close/${id}`)
+        console.log(res.data)
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+export const cancelVoyage = async (id:string | number) => {
+    try {
+        const res = await api.delete(`/travel/cancel/${id}`)
+        console.log(res.data)
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}

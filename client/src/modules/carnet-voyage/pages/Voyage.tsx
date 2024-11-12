@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react"
 import { getContents } from "../carnetVoyageService"
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 import ImageDetail from "../components/ImageDetail"
 import { Photo } from "../carnetVoyageType"
 import ContentsUploader from "../components/ContentsUploader"
-import { Button } from "@/components/ui/button"
 
 
 export default function Voyage() {
     const [contents, setContents] = useState<Photo[]>([])
     const [selectedImage, setSelectedImage] = useState<Photo | null>(null) // State for the selected image
     const { id } = useParams() || null // Récupère l'ID du dossier de voyage depuis l'URL
+    // Récupère les paramètres de l'URL
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const codename = searchParams.get("codename") || "";
 
     useEffect(() => {
         const fetchContent = async () => {
@@ -48,18 +51,12 @@ export default function Voyage() {
                 className="container-fluid relative z-10 bg-white h-16 border-b 
                     flex justify-between items-center px-4 lg:px-8"
             >
-                <div className="logo">
-                    <h1 className="font-medium font-mono text-lg lg:text-xl">
-                        Nom voyage
-                    </h1>
-                </div>
-                <div className="flex justify-end items-center space-x-3">
-                    <Button id="travel-parameter" variant={"ghost"}
-                        >O</Button>
-                </div>
+                <h1 className="font-medium font-mono text-lg lg:text-xl">
+                   {codename || "Nom Voyage"}
+                </h1>
             </nav>
 
-            <div className="px-6 py-4">
+            <main className="px-6 py-4">
                 {/* Bouton pour ajouter des images aligné à droite */}
                 <div className="flex justify-end mb-6">
                     <ContentsUploader voyageId={id ? id : ""} />
@@ -90,7 +87,7 @@ export default function Voyage() {
                         onSave={handleSaveDetail}
                     />
                 )}
-            </div>
+            </main>
         </>
     )
 }
