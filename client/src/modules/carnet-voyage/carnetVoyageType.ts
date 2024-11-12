@@ -1,7 +1,7 @@
 
 // le type de données pour un carnet de voyage
-export type folderVoyageType = {
-    id: number
+export type VoyageType = {
+    id: string | number
     name: string
     city: string
     country: string
@@ -9,20 +9,7 @@ export type folderVoyageType = {
     ended_at?: string 
 }
 
-// les propriétés attendues par le composant FolderVoyage
-export type folderVoyageProps = {
-    folderVoyage: folderVoyageType
-}
-
-export interface ImageType {
-    id?: string;
-    src: string;
-    alt: string;
-    description?: string;
-    location?: { city: string; country: string };
-}
-
-export interface Photos {
+export interface Photo {
     id: string | number;
     img_url: string;
     travel_id: string | number;
@@ -34,7 +21,7 @@ export interface Photos {
 }
 
 export interface ImageDetailleProps {
-    image: Photos;
+    image: Photo;
     onClose: () => void;
     onSave: () => void;
 }

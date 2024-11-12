@@ -27,7 +27,6 @@ export default function ImageDetail({ image, onClose, onSave }: ImageDetaillePro
                     className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-2xl font-bold"
                     onClick={onClose}
                 >
-                    &times;
                 </button>
 
                 <h2 className="text-xl font-bold mb-4">Détails de l'image</h2>

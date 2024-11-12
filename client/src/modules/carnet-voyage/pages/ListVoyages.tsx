@@ -1,59 +1,51 @@
-import Layout from "@/components/dashboad/Layout";
-import { useEffect, useState } from "react";
-import { getFoldersVoyage } from "../carnetVoyageService";
-import { folderVoyageType } from "../carnetVoyageType";
-import iconV from "../../../assets/images/iconV.png"
-import { useNavigate } from "react-router-dom";
-import VoyageFormModal from "../components/VoyageFormModal";
+import { useEffect, useState } from "react"
+import { getFoldersVoyage } from "../carnetVoyageService"
+import VoyageFormModal from "../components/VoyageFormModal"
+import Navbar from "@/components/dashboad/Nabar"
+import { VoyageType } from "../carnetVoyageType"
+import VoyageCard from "../components/VoyageCard"
 
 export default function ListVoyages() {
-    const navigate = useNavigate()
-    const [voyages, setVoyages] = useState<folderVoyageType[]|null>(null)
-
-    // Rediriger vers la page de contenu du dossier
-    const openTravel = (id:number) => {
-        navigate(`/carnet-voyage-content/${id}`)
-    }
+    const [voyages, setVoyages] = useState<VoyageType[]|null>(null)
+    const [selectedVoyage, setSelectedVoyage] = useState<VoyageType|null>(null)
 
     // Récupérer la liste des dossiers de voyage
     useEffect(() => {
-        const fetchFoldersVoyage = async () => {
+        const fetchVoyages = async () => {
             try {
                 const foldersVoyage = await getFoldersVoyage()
                 setVoyages(foldersVoyage)
 
             } catch (error) {
-                console.log("Erreur lors de la récupération des dossiers de voyage.", error);
+                console.log("Erreur lors de la récupération des dossiers de voyage.", error)
             }
         }
 
-        fetchFoldersVoyage();
-    }, []);
+        fetchVoyages()
+    }, [])
     
     return (
-        <Layout>
-            {voyages ? (
-                    <div className="flex flex-wrap mx-auto  mt-6">
+        <div className="min-h-screen max-h-screen p-4 bg-gray-100">
+            <Navbar />
+            <div className="h-full">
+                {voyages ? (
+                    <div className="flex flex-wrap mx-auto mt-6">
                         {voyages.map((voyage) => (
-                            <div key={voyage.id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex justify-center">
-                            <div className="flex flex-col  items-center cursor-pointer mt-10">
-                                <div onClick={() => openTravel(voyage.id)} >
-                                    <img src={iconV} alt="Dossier" className="w-24 h-24" />
-                                </div>
-                                <p className="mt-1 text-sm text-center">
-                                    {voyage.name}
-                                </p>
+                            <div key={voyage.id} 
+                                className="flex w-full sm:w-1/2 md:w-1/3 lg:w-1/4  
+                                    justify-centers items-center space-x-5 "
+                            >
+                                <VoyageCard voyage={voyage} />
                             </div>
-                        </div>
                         ))}
                     </div>
                 ) : (
                     <div className="">
                         Rien
                     </div>
-                )
-            }
-            <VoyageFormModal/>
-        </Layout>
+                )}
+            </div>   
+            <VoyageFormModal/>          
+        </div>
     )
 }

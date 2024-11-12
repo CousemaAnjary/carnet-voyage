@@ -1,5 +1,5 @@
 import api from "@/core/services/apiConfig"
-import { folderVoyageType } from "./carnetVoyageType"
+import { VoyageType } from "./carnetVoyageType"
 
 
 // Récupérer la liste des dossiers de voyage
@@ -14,7 +14,7 @@ export const getFoldersVoyage = async () => {
 }
 
 // Ajouter un dossier de voyage dans la base de données
-export const addFolderVoyage = async (folderVoyageData: folderVoyageType) => {
+export const addFolderVoyage = async (folderVoyageData: VoyageType) => {
     try {
         const response = await api.post('/travel/create', folderVoyageData)
         return response.data
