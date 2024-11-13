@@ -24,7 +24,7 @@ export const addFolderVoyage = async (folderVoyageData: VoyageType) => {
     }
 }
 
-// Ajouter une image dans un dossier de voyage
+// Ajouter des images dans un dossier de voyage
 export const uploadContents = async (photos: FormData) => {
     try {
         const response = await api.post('/travel/content/upload', photos)
@@ -57,6 +57,7 @@ export const updateImageDescription = async (id:string | number, newDescription:
     }
 }
 
+// Termine un voygae en cours
 export const closeVoyage = async (id:string | number) => {
     try {
         const res = await api.patch(`/travel/close/${id}`)
@@ -67,6 +68,7 @@ export const closeVoyage = async (id:string | number) => {
     }
 }
 
+// Supprime un voyge à venir
 export const cancelVoyage = async (id:string | number) => {
     try {
         const res = await api.delete(`/travel/cancel/${id}`)

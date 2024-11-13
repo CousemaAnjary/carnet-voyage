@@ -4,6 +4,7 @@ import VoyageFormModal from "../components/VoyageFormModal"
 import { VoyageType } from "../carnetVoyageType"
 import VoyageCard from "../components/VoyageCard"
 import AlertVoyageActionModal, { VoyageAction } from "../components/AlertVoyageActionModal"
+import TopBar from "@/components/dashboad/TopBar"
 
 export default function ListVoyages() {
     const [voyages, setVoyages] = useState<VoyageType[]|null>(null)
@@ -29,7 +30,7 @@ export default function ListVoyages() {
         console.log(`annule voyage ${id} ${name}`)
     }
 
-    // Récupérer la liste des dossiers de voyage
+    // Récupérer la liste des voyages
     useEffect(() => {
         const fetchVoyages = async () => {
             try {
@@ -45,21 +46,17 @@ export default function ListVoyages() {
     }, [])
     
     return (
-        <div className="h-screen flex flex-col">
-            <nav className="absolute w-full z-10 bg-white h-16 border-b 
-                    flex justify-between items-center px-4 lg:px-8"
-            >
-                <h1 className="font-medium font-mono text-lg lg:text-xl">
-                    Carnet de voyage
-                </h1>
-            </nav>
-            <main className="h-full mx-3 mt-2">
-                {voyages ? (
-                    <div className="flex flex-wrap mx-auto mt-6">
+        <div id="list-voyage-container" className="h-screen flex flex-col space-y-10 overflow-hidden">
+             <div id="list-voyage-container-header" className="relative w-full">
+                <TopBar title={"Carnet De Voyage"} />
+            </div>
+            <div id="list-voyge-body" className="h-full mx-3">
+                {voyages && (
+                    <div className="h-screen sm:flex sm:space-x-3 sm:items-start overflow-y-auto">
                         {voyages.map((voyage) => (
                             <div key={voyage.id} 
                                 className="flex w-full sm:w-1/2 md:w-1/3 lg:w-1/4  
-                                    justify-centers items-center space-x-5 "
+                                    justify-centers items-center "
                             >
                                 <VoyageCard 
                                     voyage={voyage} 
@@ -68,14 +65,9 @@ export default function ListVoyages() {
                             </div>
                         ))}
                     </div>
-                ) : (
-                    <div className="">
-                        Rien
-                    </div>
                 )}
                 <VoyageFormModal/>  
-            </main>
-            {voyageAction && (
+                {voyageAction && (
                     <AlertVoyageActionModal
                         action={voyageAction}
                         dialog={
@@ -86,6 +78,7 @@ export default function ListVoyages() {
                         }
                     />
                 )}
+            </div>
         </div>
     )
 }

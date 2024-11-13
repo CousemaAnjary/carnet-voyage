@@ -4,12 +4,14 @@ import { useLocation, useParams } from "react-router-dom"
 import ImageDetail from "../components/ImageDetail"
 import { Photo } from "../carnetVoyageType"
 import ContentsUploader from "../components/ContentsUploader"
+import TopBar from "@/components/dashboad/TopBar"
 
 
 export default function Voyage() {
     const [contents, setContents] = useState<Photo[]>([])
     const [selectedImage, setSelectedImage] = useState<Photo | null>(null) // State for the selected image
     const { id } = useParams() || null // Récupère l'ID du dossier de voyage depuis l'URL
+    
     // Récupère les paramètres de l'URL
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -46,17 +48,11 @@ export default function Voyage() {
      * ! AFFICHAGE (render) de l'application
      */
     return (
-        <>
-            <nav 
-                className="container-fluid relative z-10 bg-white h-16 border-b 
-                    flex justify-between items-center px-4 lg:px-8"
-            >
-                <h1 className="font-medium font-mono text-lg lg:text-xl">
-                   {codename || "Nom Voyage"}
-                </h1>
-            </nav>
-
-            <main className="px-6 py-4">
+        <div id="voyage-content" className="h-screen flex flex-col space-y-14 overflow-hidden">
+            <div id="voyage-content-header" className="relative w-full">
+                <TopBar title={codename} />
+            </div>
+            <div id="voyage-content-body" className="px-6 py-4 overflow-y-auto">
                 {/* Bouton pour ajouter des images aligné à droite */}
                 <div className="flex justify-end mb-6">
                     <ContentsUploader voyageId={id ? id : ""} />
@@ -87,7 +83,7 @@ export default function Voyage() {
                         onSave={handleSaveDetail}
                     />
                 )}
-            </main>
-        </>
+            </div>
+        </div>
     )
 }
