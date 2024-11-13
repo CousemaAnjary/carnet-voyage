@@ -51,7 +51,9 @@ class TravelController extends Controller
         $user_id = Auth::user()->id;
         $travels =  Travel::where('user_id', $user_id)->orderByDesc('created_at')
                         ->get()->makeHidden(['user_id']);
-        return $travels;
+        return [
+            'travels' => $travels
+        ];
     }
 
     public function close(string $id) {

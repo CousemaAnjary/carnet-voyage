@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_BACKEND_API_URL
+const API_URL = import.meta.env.VITE_BACKEND_API_URL + '/api'
 
 // Configuration de l'instance axios
 const api = axios.create({
@@ -11,22 +11,22 @@ const api = axios.create({
 // Ajouter un intercepteur 
 api.interceptors.request.use((config) => {
 
-    // Récupérer le token JWT de localStorage
+    // Récupérer le token de localStorage
     const token = localStorage.getItem('token')
 
-    // Ajouter le token JWT dans les headers de la requête
+    // Ajouter le token dans les headers de la requête
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`
     }
 
-    // Ajouter les headers par défaut
-    config.headers = config.headers || {}
-
-    // Ajouter le Content-Type pour les requêtes POST avec des données JSON
-    config.headers['Content-Type'] = `multipart/form-data`
+    // Définir Content-Type en fonction des données envoyées
+    if (config.data instanceof FormData) {
+        config.headers['Content-Type'] = 'multipart/form-data'
+    } else {
+        config.headers['Content-Type'] = 'application/json'
+    }
 
     return config
-
 })
 
 export default api

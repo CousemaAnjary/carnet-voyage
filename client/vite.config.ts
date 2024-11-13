@@ -6,16 +6,11 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), VitePWA({
-    strategies: 'injectManifest',
-    srcDir: 'src',
-    filename: 'sw.ts',
-    registerType: 'autoUpdate',
-    injectRegister: false,
+    registerType: 'prompt', // Permet d'afficher un popup si le sw à été mis à jour
 
-    pwaAssets: {
-      disabled: false,
-      config: true,
-    },
+    strategies: 'injectManifest',
+    srcDir: 'src',  // Dossier source de ton projet
+    filename: 'sw.ts',
 
     manifest: {
       name: 'carnet-voyage',
@@ -24,17 +19,19 @@ export default defineConfig({
       theme_color: '#ffffff',
     },
 
-    injectManifest: {
-      globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+    workbox: { 
+      globPatterns: ['**/*.{js,css,html,png,svg}'], // Fichiers à mettre en cache
+      clientsClaim: true, // Prend le contrôle des onglets ouverts si le service worker est mis à jour    
     },
 
     devOptions: {
       enabled: false,
       navigateFallback: 'index.html',
-      suppressWarnings: true,
-      type: 'module',
+      suppressWarnings: false,
     },
+
   })],
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

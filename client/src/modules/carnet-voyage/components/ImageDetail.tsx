@@ -2,22 +2,17 @@ import { useState } from "react";
 import { updateImageDescription } from "../carnetVoyageService"; // Adjust the import path as necessary
 import { ImageDetailleProps } from "../carnetVoyageType";
 
-
-
-
-
 export default function ImageDetail({ image, onClose, onSave }: ImageDetailleProps) {
     const [description, setDescription] = useState(image.description || "");
     const location = image.location;
 
     const handleSave = async () => {
-        const updatedImage = { ...image, description };
 
         try {
             // Call the service to update the description in the database
-            await updateImageDescription(updatedImage);
+            await updateImageDescription(image.id, description);
             console.log("Description mise à jour avec succès.");
-            onSave(updatedImage);
+            onSave();
             onClose();
         } catch (error) {
             console.error("Erreur lors de la mise à jour de la description :", error);
@@ -32,13 +27,16 @@ export default function ImageDetail({ image, onClose, onSave }: ImageDetaillePro
                     className="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-2xl font-bold"
                     onClick={onClose}
                 >
-                    &times;
                 </button>
 
                 <h2 className="text-xl font-bold mb-4">Détails de l'image</h2>
 
                 {/* Image Preview */}
-                <img src={image.src} alt={image.alt} className="w-full h-48 object-cover rounded mb-4" />
+                <img 
+                    className="w-full h-48 object-cover rounded mb-4"
+                    alt="imageDetail"
+                    src={`${import.meta.env.VITE_BACKEND_API_URL}${image.img_url}`}
+                />
 
                 {/* Description Input */}
                 <div className="mb-4">
@@ -54,8 +52,7 @@ export default function ImageDetail({ image, onClose, onSave }: ImageDetaillePro
                 {/* Location Display */}
                 {location && (
                     <div className="text-sm text-gray-600 mb-4">
-                        <p><strong>Ville :</strong> {location.city}</p>
-                        <p><strong>Pays :</strong> {location.country}</p>
+                        <p><strong>Localisation :</strong> {location}</p>
                     </div>
                 )}
 
