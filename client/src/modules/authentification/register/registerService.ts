@@ -2,7 +2,6 @@ import api from "@/core/services/apiConfig"
 import { RegisterResponseType, RegisterType } from "./registerType"
 
 
-
 // Inscription d'un utilisateur
 export const register = async (dataRegister: RegisterType): Promise<RegisterResponseType> => {
     try {
