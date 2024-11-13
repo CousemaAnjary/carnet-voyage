@@ -1,12 +1,12 @@
 import api from "@/core/services/apiConfig"
-import { folderVoyageType, ImageType } from "./carnetVoyageType"
+import { VoyageType } from "./carnetVoyageType"
 
 
 // Récupérer la liste des dossiers de voyage
 export const getFoldersVoyage = async () => {
     try {
-        const response = await api.get('/folderVoyage/index')
-        return response.data.folderVoyages
+        const response = await api.get('/travel')
+        return response.data.travels
     } catch (error) {
         console.log(error)
         throw error
@@ -14,9 +14,9 @@ export const getFoldersVoyage = async () => {
 }
 
 // Ajouter un dossier de voyage dans la base de données
-export const addFolderVoyage = async (folderVoyageData: folderVoyageType) => {
+export const addFolderVoyage = async (folderVoyageData: VoyageType) => {
     try {
-        const response = await api.post('/folderVoyage/store', folderVoyageData)
+        const response = await api.post('/travel/create', folderVoyageData)
         return response.data
     } catch (error) {
         console.log(error)
@@ -24,10 +24,10 @@ export const addFolderVoyage = async (folderVoyageData: folderVoyageType) => {
     }
 }
 
-// Ajouter une image dans un dossier de voyage
-export const addImage = async (imageData: FormData) => {
+// Ajouter des images dans un dossier de voyage
+export const uploadContents = async (photos: FormData) => {
     try {
-        const response = await api.post('/folderVoyageContent/store', imageData)
+        const response = await api.post('/travel/content/upload', photos)
         return response.data
     } catch (error) {
         console.log(error)
@@ -36,22 +36,45 @@ export const addImage = async (imageData: FormData) => {
 }
 
 // Récupérer la liste des images d'un dossier de voyage
-export const getImages = async (folderVoyageId: string) => {
+export const getContents = async (folderVoyageId: string) => {
     try {
-        const response = await api.get(`/folderVoyageContent/${folderVoyageId}`);
-        return response.data.images.map((content: { file_path: string }) => content.file_path);
+        const response = await api.get(`/travel/${folderVoyageId}/content`)
+        return response.data.contents
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.error(error)
+        throw error
     }
 }
 
 // Mettre à jour la description d'une image
-export const updateImageDescription = async (image: ImageType) => {
+export const updateImageDescription = async (id:string | number, newDescription: string) => {
     try {
-        await api.put(`/folderVoyageContent/update/${image.id}`, { description: image.description });
+        const res = await api.patch(`/travel/content/edit/${id}`, { description: newDescription })
+        console.log(res.data)
     } catch (error) {
-        console.error(error);
-        throw error;
+        console.error(error)
+        throw error
+    }
+}
+
+// Termine un voygae en cours
+export const closeVoyage = async (id:string | number) => {
+    try {
+        const res = await api.patch(`/travel/close/${id}`)
+        console.log(res.data)
+    } catch (error) {
+        console.error(error)
+        throw error
+    }
+}
+
+// Supprime un voyge à venir
+export const cancelVoyage = async (id:string | number) => {
+    try {
+        const res = await api.delete(`/travel/cancel/${id}`)
+        console.log(res.data)
+    } catch (error) {
+        console.error(error)
+        throw error
     }
 }

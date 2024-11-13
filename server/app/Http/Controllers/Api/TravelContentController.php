@@ -28,7 +28,7 @@ class TravelContentController extends Controller
                     }
                 },
             ],
-            'img.*' => 'required|image|mimes:jpeg,jpg'
+            'img.*' => 'required|image|mimes:jpeg,jpg,png'
         ];
     
         try {
@@ -46,7 +46,7 @@ class TravelContentController extends Controller
                 $contents [] = [
                     'travel_id' => $travel_id,
                     'img_url' => asset("storage/{$path}"),
-                    'taken_at' => $this->getImageTakenDate($image),
+                    'taken_at' => $this->getImageTakenDate($image) ?? now(),
                 ];
             }
 
@@ -71,18 +71,20 @@ class TravelContentController extends Controller
         return null;
     }
 
-    public function getTravelContent(string $travel_id) {
+    public function getTravelContents(string $id) {
         $user_id = Auth::id();
 
-        $travel = Travel::where('travel_id', $travel_id)->where('user_id', $user_id)->first();
+        $travel = Travel::find($id)->where('user_id', $user_id)->exists();
 
         if(!$travel) {
             return response()->json(["message" => "Unauthorized operation'"], 401);
         }
 
-        $travel_contents = TravelContent::where('travel_id', $travel_id)->get();
+        $travel_contents = TravelContent::where('travel_id', $id)->get();
 
-        return $travel_contents;
+        return [
+            'contents' => $travel_contents
+        ];
     }
 
     public function delete(string $id) {
