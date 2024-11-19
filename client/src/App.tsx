@@ -9,12 +9,13 @@ import { NetworkContext } from "./core/contexts/NetworkContext"
 import PWABadge from "./components/pwa/PWABadge"
 import ListVoyages from "./modules/carnet-voyage/pages/ListVoyages"
 import Voyage from "./modules/carnet-voyage/pages/Voyage"
+import NetworkError from "./components/page/NetworkError"
 
 export default function App() {
   const { online} = useContext(NetworkContext);
 
   useEffect(() => {
-    // console.log(online);
+    console.log(online);
   }, [online])
 
   return (
@@ -23,11 +24,20 @@ export default function App() {
       <AuthProvider>
         <Routes>
           {/* Public Routes */}
-          <Route element={<PublicRoutes />}>
-            <Route path="/" element={<Login />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Route>
+            {online ? (
+              <Route element={<PublicRoutes />}>
+                <Route path="/" element={<Login />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+              </Route>
+            ):(
+              <Route element={<PublicRoutes />}>
+                <Route path="/" element={<NetworkError />} />
+                <Route path="/login" element={<NetworkError />} />
+                <Route path="/register" element={<NetworkError />} />
+              </Route>
+            )}
+          
 
           {/* Protected Routes */}
           <Route element={<PrivateRoutes />}>

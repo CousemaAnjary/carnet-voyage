@@ -4,7 +4,7 @@ import { useLocation, useParams } from "react-router-dom"
 import ImageDetail from "../components/ImageDetail"
 import { Photo } from "../carnetVoyageType"
 import ContentsUploader from "../components/ContentsUploader"
-import TopBar from "@/components/dashboad/TopBar"
+import TopBar from "@/components/TopBar"
 
 
 export default function Voyage() {

@@ -19,13 +19,12 @@ export default defineConfig({
       theme_color: '#ffffff',
     },
 
-    workbox: { 
-      globPatterns: ['**/*.{js,css,html,png,svg}'], // Fichiers à mettre en cache
-      clientsClaim: true, // Prend le contrôle des onglets ouverts si le service worker est mis à jour    
+    injectManifest: {
+      globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
     },
 
     devOptions: {
-      enabled: false,
+      enabled: true,
       navigateFallback: 'index.html',
       suppressWarnings: false,
     },

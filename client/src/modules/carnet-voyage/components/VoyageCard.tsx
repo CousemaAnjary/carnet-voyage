@@ -2,26 +2,15 @@ import { useNavigate } from "react-router-dom"
 import { VoyageType } from "../carnetVoyageType"
 import iconV from "../../../assets/images/iconV.png"
 import { Button } from "@/components/ui/button"
+import VoyageActionAlertDialog from "./AlertVoyageActionModal"
 
-type VoyageCardActionsProps = {
-    cloture: (id:string | number, name:string) => void;
-    annule: (id:string | number, name:string) => void;
-}
 
-const VoyageCard:React.FC<{ voyage: VoyageType, actions: VoyageCardActionsProps  }> = ({ voyage, actions }) => {
+const VoyageCard:React.FC<{ voyage: VoyageType  }> = ({ voyage }) => {
     const navigate = useNavigate()
 
     // Rediriger vers la page de contenu du dossier
     const ouvrirVoyage = () => {
         navigate(`/carnet-voyage-content/${voyage.id}?codename=${voyage.name}`)
-    }
-
-    const clotureVoyage = () => {
-        actions.cloture(voyage.id, voyage.name)
-    }
-
-    const annulerVoyage = () => {
-        actions.annule(voyage.id, voyage.name)
     }
 
     return(
@@ -56,11 +45,15 @@ const VoyageCard:React.FC<{ voyage: VoyageType, actions: VoyageCardActionsProps 
                             <span></span>
                         ) : (
                             Date.parse(voyage.beginning_at) < Date.now() ? (
-                                <Button className="w-full bg-red-500 hover:bg-red-700"
-                                    onClick={clotureVoyage}>Cloturer</Button>
+                                <VoyageActionAlertDialog
+                                    action={{action: "cloture"}}
+                                    voyage={{id: voyage.id, name: voyage.name}}
+                                />
                             ) : (
-                                <Button className="w-full bg-red-500 hover:bg-red-700"
-                                  onClick={annulerVoyage}>Annuler</Button>
+                                <VoyageActionAlertDialog
+                                    action={{action: "annul"}}
+                                    voyage={{id: voyage.id, name: voyage.name}}
+                                />
                             )
                         )}
                     </div>

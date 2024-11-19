@@ -19,7 +19,7 @@ const formSchema = z.object({
     beginning_at: z.string(),
 });
 
-export default function VoyageFormModal() {
+export default function VoyageFormDialog() {
     /**
   * ! STATE (état, données) de l'application
   */
@@ -58,7 +58,9 @@ export default function VoyageFormModal() {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
                 <button
-                    className="fixed bottom-5 right-5 bg-blue-600 text-white rounded-full p-4 shadow-lg focus:outline-none hover:bg-blue-600 transition"
+                    className="fixed bottom-5 right-5 bg-blue-600 text-white 
+                    rounded-full p-4 shadow-lg focus:outline-none hover:bg-blue-600 
+                    transition"
                     onClick={() => setIsDialogOpen(true)}
                 >
                     <FaPlus size={24} />

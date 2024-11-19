@@ -1,34 +1,17 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { getFoldersVoyage } from "../carnetVoyageService"
-import VoyageFormModal from "../components/VoyageFormModal"
 import { VoyageType } from "../carnetVoyageType"
 import VoyageCard from "../components/VoyageCard"
-import AlertVoyageActionModal, { VoyageAction } from "../components/AlertVoyageActionModal"
-import TopBar from "@/components/dashboad/TopBar"
+import TopBar from "@/components/TopBar"
+import VoyageFormDialog from "../components/VoyageFormDialog"
+import { NetworkContext } from "@/core/contexts/NetworkContext"
+import { FaPlus } from "react-icons/fa"
+import NoNetworkAlertDialog from "../components/NoNetworkAlertDialog"
 
 export default function ListVoyages() {
     const [voyages, setVoyages] = useState<VoyageType[]|null>(null)
-    // Alert actions variables
-    const [voyageAction, setVoyageAction] = useState<VoyageAction | null>(null)
-    const [openActionDialog, setOpenActionDialog] = useState(false)
-    const [actingVoyageId, setActionVoyageId] = useState<number|string>('')
-    const [actingVoyageName, setActingVoyageName] = useState<string>('')
-
-    const handleClotureVoyage = (id:string | number, name:string) => {
-        setActionVoyageId(id)
-        setActingVoyageName(name)
-        setVoyageAction({action: "cloture"})
-        setOpenActionDialog(true)
-        console.log(`cloture voyage ${id} ${name}`)
-    }
-
-    const handleAnnuleVoyage = (id:string | number, name:string) => {
-        setActionVoyageId(id)
-        setActingVoyageName(name)
-        setVoyageAction({action: "annul"})
-        setOpenActionDialog(true)
-        console.log(`annule voyage ${id} ${name}`)
-    }
+    // Check if the user is online
+    const { online} = useContext(NetworkContext);
 
     // Récupérer la liste des voyages
     useEffect(() => {
@@ -58,23 +41,23 @@ export default function ListVoyages() {
                                 className="flex w-full sm:w-1/2 md:w-1/3 lg:w-1/4  
                                     justify-centers items-center "
                             >
-                                <VoyageCard 
-                                    voyage={voyage} 
-                                    actions={{ cloture: handleClotureVoyage, annule: handleAnnuleVoyage }} 
-                                />
+                                <VoyageCard voyage={voyage}/>
                             </div>
                         ))}
                     </div>
                 )}
-                <VoyageFormModal/>  
-                {voyageAction && (
-                    <AlertVoyageActionModal
-                        action={voyageAction}
-                        dialog={
-                            {open: openActionDialog, setOpen: setOpenActionDialog}
-                        }
-                        voyage={
-                            {id: actingVoyageId, name: actingVoyageName}
+                {online ? (
+                    <VoyageFormDialog/>
+                ):(
+                    <NoNetworkAlertDialog
+                        triggerChild={
+                        <button
+                            className="fixed bottom-5 right-5 bg-blue-600
+                            text-white rounded-full p-4 
+                            shadow-lg focus:outline-none hover:bg-blue-600 transition"
+                        >
+                            <FaPlus size={24} />
+                        </button>
                         }
                     />
                 )}

@@ -1,36 +1,44 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogCancel,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { DialogFooter, DialogHeader } from "@/components/ui/dialog"
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@radix-ui/react-dialog"
 import { cancelVoyage, closeVoyage } from "../carnetVoyageService"
+import { NetworkContext } from "@/core/contexts/NetworkContext"
+import { useContext } from "react"
+import NoNetworkAlertDialog from "./NoNetworkAlertDialog"
 
 export type VoyageAction = {
     action: 'cloture' | 'annul'
 }
 
-interface AlertVoyageActionModalProps {
+interface VoyageActionAlertDialogProps {
     action: VoyageAction,
     voyage: {
         id: number | string,
         name: string,
-    },
-    dialog: {
-        open: boolean,
-        setOpen: (value: boolean) => void,
     }
 }
 
-const AlertVoyageActionModal: React.FC<AlertVoyageActionModalProps> = ({ action, voyage, dialog }) => {
-    console.log(action)
+const VoyageActionAlertDialog: React.FC<VoyageActionAlertDialogProps> = ({ action, voyage }) => {
+    // Check if app online
+    const { online} = useContext(NetworkContext);
+
     const terminerVoyage = async () => {
         const res = await closeVoyage(voyage.id)
         console.log(res)
-        dialog.setOpen(false)
     }  
     
     const annulerVoyage = async () => {
         const res = await cancelVoyage(voyage.id)
         console.log(res)
-        dialog.setOpen(false)
     }
 
     const handleValidateAction = () => {
@@ -49,32 +57,41 @@ const AlertVoyageActionModal: React.FC<AlertVoyageActionModalProps> = ({ action,
     
     
     return (
-            <Dialog open={dialog.open} onOpenChange={dialog.setOpen}>
-                <DialogContent className="w-full  max-w-sm bg-white shadow-md">
-                    <DialogHeader>
-                        <DialogTitle>
-                            <span className="text-red-500">! ATTENTION !</span>
-                        </DialogTitle>
-                        <DialogDescription>
-                            {action.action === "cloture" ? (
-                                <span>
-                                    Vous allez clôturer le voyage {voyage.name}. Cette action sera irréversible.
-                                </span>
-                            ) : (
-                                <span>
-                                    Vous allez annuler le voyage {voyage.name}. Cette action sera irréversible.
-                                </span>
-                            )}
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="flex justify-end mt-4 gap-2">
-                        <Button className="bg-red-500 hover:bg-red-600"
-                            onClick={handleValidateAction}
-                        >Confirmer</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+        <>{online ? (
+            <AlertDialog>
+                <AlertDialogTrigger asChild>
+                    <Button className="w-full bg-red-500 hover:bg-red-700">
+                        {action.action === "cloture" ? "Cloturer" : "Annuler"}
+                    </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Avertissement</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Vous aller {action.action === "cloture" ? "cloturer " : "annuler "} 
+                            le voyage {voyage.name}.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Annuler</AlertDialogCancel>
+                        <AlertDialogAction 
+                            className="bg-red-600"
+                            onClick={() => handleValidateAction()}
+                        >Confirmer</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        ) : (
+            <NoNetworkAlertDialog 
+                triggerChild={
+                    <Button className="w-full bg-red-500 hover:bg-red-700">
+                        {action.action === "cloture" ? "Cloturer" : "Annuler"}
+                    </Button>
+                }
+            />
+        )
+        }</>
     )
 }
 
-export default AlertVoyageActionModal
+export default VoyageActionAlertDialog

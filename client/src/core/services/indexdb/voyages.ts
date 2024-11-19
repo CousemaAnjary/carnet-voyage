@@ -1,4 +1,4 @@
-import { folderVoyageType } from "@/modules/carnet-voyage/carnetVoyageType"
+import { VoyageType } from "@/modules/carnet-voyage/carnetVoyageType"
 
 let db: IDBDatabase | null = null
 
@@ -36,7 +36,7 @@ const openDB = (): Promise<IDBDatabase> => {
 }
 
 // Fonction pour sauvegarder les voyages dans la base de données
-export const saveVoyages = async (voyages: folderVoyageType[]) => {
+export const saveVoyages = async (voyages: VoyageType[]) => {
     const db = await openDB()
 
     const transaction = db.transaction('voyages', 'readwrite')
@@ -53,14 +53,14 @@ export const saveVoyages = async (voyages: folderVoyageType[]) => {
 }
 
 // Fonction pour récupérer les voyages depuis la base de données
-export const getVoyages = async (): Promise<folderVoyageType[]> => {
+export const getVoyages = async (): Promise<VoyageType[]> => {
     const db = await openDB()
 
     const transaction = db.transaction('voyages', 'readonly')
     const voyagesStore = transaction.objectStore('voyages')
     const request = voyagesStore.getAll()
 
-    return new Promise<folderVoyageType[]>((resolve, reject) => {
+    return new Promise<VoyageType[]>((resolve, reject) => {
         request.onsuccess = () => {
             resolve(request.result)
         }
