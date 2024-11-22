@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
-import { VoyageType } from "../carnetVoyageType"
-import iconV from "../../../assets/images/iconV.png"
+import { VoyageType } from "../../carnetVoyageType"
+import iconV from "../../../../assets/images/iconV.png"
 import { Button } from "@/components/ui/button"
 import VoyageActionAlertDialog from "./AlertVoyageActionModal"
 
@@ -41,9 +41,7 @@ const VoyageCard:React.FC<{ voyage: VoyageType  }> = ({ voyage }) => {
                 )}
                 <div className="w-full flex space-x-4 mt-3">
                     <div className="w-full">
-                        {voyage.ended_at ? (
-                            <span></span>
-                        ) : (
+                        {!voyage.ended_at && (
                             Date.parse(voyage.beginning_at) < Date.now() ? (
                                 <VoyageActionAlertDialog
                                     action={{action: "cloture"}}

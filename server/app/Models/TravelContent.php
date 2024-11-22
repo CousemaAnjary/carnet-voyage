@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TravelContent extends Model
 {
@@ -17,4 +18,8 @@ class TravelContent extends Model
         'location',
         'taken_at',
     ];
+
+    public function travel(): BelongsTo {
+        return $this->belongsTo(Travel::class);
+    }
 }

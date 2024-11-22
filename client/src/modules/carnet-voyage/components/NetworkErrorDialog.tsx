@@ -5,17 +5,25 @@ import {
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
+    AlertDialogTitle
   } from "@/components/ui/alert-dialog"
-import { ReactNode } from "react"
+import { useState } from "react"
+
+interface NetworkErrorDialogProps {
+    setIsOpen: (open:boolean) => void 
+}
   
-const NoNetworkAlertDialog = ({ triggerChild }: { triggerChild: ReactNode }) => {
+const NetworkErrorDialog : React.FC<NetworkErrorDialogProps> = ({setIsOpen}) => {
+    const [open, setOpen] = useState(true)
+    setIsOpen(true)
+
+    function handleClose() {
+        setOpen(false)
+        setIsOpen(false)
+    }
+
     return (
-    <AlertDialog>
-        <AlertDialogTrigger asChild>
-            {triggerChild}
-        </AlertDialogTrigger>
+    <AlertDialog open={open}>
         <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>Problemme de connexion</AlertDialogTitle>
@@ -26,12 +34,13 @@ const NoNetworkAlertDialog = ({ triggerChild }: { triggerChild: ReactNode }) => 
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-                <AlertDialogAction className="bg-blue-500">Fermer</AlertDialogAction>
+                <AlertDialogAction onClick={handleClose} 
+                    className="bg-blue-500">Fermer</AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
     )
 }
 
-export default NoNetworkAlertDialog
+export default NetworkErrorDialog
   

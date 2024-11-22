@@ -7,6 +7,7 @@ export type VoyageType = {
     country: string
     beginning_at: string
     ended_at?: string 
+    synced?: boolean
 }
 
 export interface Photo {

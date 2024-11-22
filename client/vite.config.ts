@@ -25,15 +25,12 @@ export default defineConfig({
 
     devOptions: {
       enabled: true,
-      navigateFallback: 'index.html',
       suppressWarnings: false,
     },
-
+    
   })],
 
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+    alias: { "@": path.resolve(__dirname, "./src") },
   },
 })

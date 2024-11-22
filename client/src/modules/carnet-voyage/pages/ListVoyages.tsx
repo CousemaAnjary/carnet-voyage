@@ -1,17 +1,12 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { getFoldersVoyage } from "../carnetVoyageService"
 import { VoyageType } from "../carnetVoyageType"
-import VoyageCard from "../components/VoyageCard"
+import VoyageCard from "../components/voyage-card/VoyageCard"
 import TopBar from "@/components/TopBar"
-import VoyageFormDialog from "../components/VoyageFormDialog"
-import { NetworkContext } from "@/core/contexts/NetworkContext"
-import { FaPlus } from "react-icons/fa"
-import NoNetworkAlertDialog from "../components/NoNetworkAlertDialog"
+import CreateVoyageDialog from "../components/create-voyage/CreateVoyageDialog"
 
 export default function ListVoyages() {
     const [voyages, setVoyages] = useState<VoyageType[]|null>(null)
-    // Check if the user is online
-    const { online} = useContext(NetworkContext);
 
     // Récupérer la liste des voyages
     useEffect(() => {
@@ -46,21 +41,7 @@ export default function ListVoyages() {
                         ))}
                     </div>
                 )}
-                {online ? (
-                    <VoyageFormDialog/>
-                ):(
-                    <NoNetworkAlertDialog
-                        triggerChild={
-                        <button
-                            className="fixed bottom-5 right-5 bg-blue-600
-                            text-white rounded-full p-4 
-                            shadow-lg focus:outline-none hover:bg-blue-600 transition"
-                        >
-                            <FaPlus size={24} />
-                        </button>
-                        }
-                    />
-                )}
+                <CreateVoyageDialog/>
             </div>
         </div>
     )

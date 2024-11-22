@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 class TravelContentController extends Controller
 {
     public function upload(Request $request) {
-        $user_id = Auth::id();
+        $user_id = Auth::user()->id;
 
         $rules = [
             'travel_id' => [
@@ -30,37 +30,28 @@ class TravelContentController extends Controller
             ],
             'img.*' => 'required|image|mimes:jpeg,jpg,png'
         ];
-    
-        try {
-            $validatedData = Validator::make($request->all(), $rules)->validate();
 
-            $images = $request->file('img');
-            if (!$images || count($images) === 0) {
-                return response()->json(['error' => 'No images found in the request'], 422);
-            }
-            
-            $contents = [];
-            $travel_id = $validatedData["travel_id"];
-            foreach ($images as $image) {
-                $path = $image->store("users/{$user_id}/travel_{$travel_id}", 'public');
-                $contents [] = [
-                    'travel_id' => $travel_id,
-                    'img_url' => asset("storage/{$path}"),
-                    'taken_at' => $this->getImageTakenDate($image) ?? now(),
-                ];
-            }
+        $validatedData = Validator::make($request->all(), $rules)->validate();
 
-            TravelContent::insert($contents);
-
-            return response()->json(['message' => 'Contents saved successfully'], 201);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // Return validation errors
-            return response()->json(['errors' => $e->errors()], 422);
-        } catch (\Exception $e) {
-            // Handle any other exceptions
-            return response()->json(['error' => 'File upload failed: ' . $e->getMessage()], 500);
+        $images = $request->file('img');
+        if (!$images || count($images) === 0) {
+            return response()->json(['error' => 'No images found in the request'], 422);
         }
+        
+        $contents = [];
+        $travel_id = $validatedData["travel_id"];
+        foreach ($images as $image) {
+            $path = $image->store("users/{$user_id}/travel_{$travel_id}", 'public');
+            $contents [] = [
+                'travel_id' => $travel_id,
+                'img_url' => asset("storage/{$path}"),
+                'taken_at' => $this->getImageTakenDate($image) ?? now(),
+            ];
+        }
+
+        TravelContent::insert($contents); // save
+
+        return response()->json(['message' => 'Contents saved successfully']);
     }
 
     private function getImageTakenDate($image) {
@@ -72,15 +63,14 @@ class TravelContentController extends Controller
     }
 
     public function getTravelContents(string $id) {
-        $user_id = Auth::id();
-
-        $travel = Travel::find($id)->where('user_id', $user_id)->exists();
-
+        $travel = Travel::find($id)
+                    ->where('user_id', Auth::user()->id)->exists();
         if(!$travel) {
-            return response()->json(["message" => "Unauthorized operation'"], 401);
+            abort(401, 'Unauthorized operation');
         }
 
-        $travel_contents = TravelContent::where('travel_id', $id)->get();
+        $travel_contents = TravelContent::where('travel_id', $id)
+                            ->get();
 
         return [
             'contents' => $travel_contents
@@ -88,52 +78,37 @@ class TravelContentController extends Controller
     }
 
     public function delete(string $id) {
-        $user_id = Auth::id();
-
-        $content = TravelContent::find($id);
-
+        //
+        $content = TravelContent::find($id)->travel()
+                    ->where('user_id', Auth::user()->id)->first();
+                    
         if(!$content) {
-            return response()->json(["message" => "Content not found"], 404);
-        }
-
-        $travel = Travel::where('id', $content->travel_id)->where('user_id', $user_id)->first();
-
-        if(!$travel) {
-            return response()->json(["message" => "Unauthorized operation'"], 401);
+            abort(401,"Unauthorized operation");
         }
 
         $content->delete();
 
-        return response()->json(["message" => "Content deleted successfully"], 200);
+        return response()->json(["message" => "Content deleted successfully"]);
     }
 
     public function edit(Request $request, string $id) {
-        try {
-            $validatedData = $request->validate([
-                'description' => 'required|string|max:255',
-            ]);
-    
-            $content = TravelContent::find($id);
-    
-            if(!$content) {
-                return response()->json(["message" => "Content not found"], 404);
-            }
-    
-            $user_id = Auth::id();
-            $travel = Travel::where('id', $content->travel_id)->where('user_id', $user_id)->first();
-    
-            if(!$travel) {
-                return response()->json(["message" => "Unauthorized operation'"], 401);
-            }
-    
-            $content->description = $validatedData['description'];
+        $validatedData = $request->validate([
+            'description' => 'required|string|max:255',
+        ]);
 
-            $content->save();
+        $content = TravelContent::findOrFail($id);
 
-            return response()->json(["message" => "description saved successfully"], 200);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
+        // verifie if travel is belong to user
+        $travel = Travel::find($content->travel_id)
+                    ->where('user_id', Auth::user()->id)->exists();
+        if(!$travel) {
+            abort(401,"Unauthorized operation");
         }
+
+        $content->upadate([
+            "description" => $validatedData['description']
+        ]);
+
+        return response()->json(["message" => "description saved successfully"]);
     }
 }
