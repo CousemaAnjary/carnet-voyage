@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { VoyageType } from '../../carnetVoyageType'
+import { VoyageType } from '../../types'
 import { addFolderVoyage } from '../../carnetVoyageService'
 
 // Define validation schema with Zod
@@ -25,9 +25,10 @@ const formSchema = z.object({
 
 interface CreateVoyageFormProps {
     setNetworkError: (created: boolean) => void;
+    setDataSent: (sent: boolean) => void;
 }
 
-const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError }) => {
+const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError, setDataSent }) => {
 
     const form = useForm<VoyageType>({
         resolver: zodResolver(formSchema),
@@ -38,6 +39,10 @@ const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError }) 
             beginning_at: new Date().toISOString().split('T')[0],
         },
     })
+
+    const handleCancel = () => {
+        setDataSent(true)
+    }
 
     const handleSubmit = async (data: VoyageType) => {
         form.reset()
@@ -51,6 +56,8 @@ const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError }) 
                     console.log("Erreur lors de la récupération des dossiers de voyage.", error)
                 }
             })
+            
+        setDataSent(true)
     }
 
     return(
@@ -113,7 +120,9 @@ const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError }) 
                     />
                 </div>
                 <div className="flex justify-end mt-4 gap-2">
-                    <Button type="button" variant={'outline'}>Annuler</Button>
+                    <Button onClick={handleCancel}
+                        type="button" 
+                        variant={'outline'}>Annuler</Button>
                     <Button type="submit" className="bg-blue-600">Enregistrer</Button>
                 </div>
             </form>

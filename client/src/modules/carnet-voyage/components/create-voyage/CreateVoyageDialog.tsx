@@ -12,13 +12,15 @@ import NetworkErrorDialog from '../NetworkErrorDialog'
 
 const CreateVoyageDialog = () => {
     const [openCreateVoyageDialog, setOpenCreateVoyageDialog] = useState(false)
-    const[openNetworkErrorDialog, setOpenNetworkErrorDialog] = useState<boolean>(false)
+    const[openNetworkErrorDialog, setOpenNetworkErrorDialog] = useState(false)
+    const [dataSent, setDataSent] = useState(false)
 
     useEffect(() => {
-        if(openNetworkErrorDialog) {
+        if(dataSent) {
             setOpenCreateVoyageDialog(false)
-        }
-    },[openNetworkErrorDialog])
+            setDataSent(false)
+        }       
+    },[dataSent])
 
     return (
         <>
@@ -41,7 +43,9 @@ const CreateVoyageDialog = () => {
                         <DialogTitle>Créer un Nouveau Dossier</DialogTitle>
                         <DialogDescription>Veuillez remplir les informations du dossier ci-dessous.</DialogDescription>
                     </DialogHeader>
-                    <CreateVoyageForm setNetworkError={setOpenNetworkErrorDialog} />
+                    <CreateVoyageForm 
+                        setDataSent={setDataSent}
+                        setNetworkError={setOpenNetworkErrorDialog} />
                 </DialogContent>
             </Dialog>
         )}

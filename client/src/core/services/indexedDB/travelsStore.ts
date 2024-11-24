@@ -29,6 +29,7 @@ const openDB = (): Promise<IDBDatabase> => {
             voyagesStore.createIndex('city', 'city', { unique: false })
             voyagesStore.createIndex('beginning_at', 'beginning_at', { unique: true })
             voyagesStore.createIndex('ended_at', 'ended_at', { unique: false })
+            voyagesStore.createIndex('contents', 'contents', { unique: true })
         }
 
         request.onsuccess = () => {

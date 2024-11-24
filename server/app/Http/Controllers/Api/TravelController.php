@@ -44,9 +44,12 @@ class TravelController extends Controller
         return response()->json(['message' => 'Travel created successfully']);
     }
 
-    public function getUserTravels() {
-        $travels =  Travel::where('user_id', Auth::user()->id)->get()
+    public function get() {
+        $travels =  Travel::where('user_id', Auth::user()->id)
+                        ->with(['day.dayPhoto'])
+                        ->get()
                         ->makeHidden(['user_id']);
+
         return [
             'travels' => $travels
         ];

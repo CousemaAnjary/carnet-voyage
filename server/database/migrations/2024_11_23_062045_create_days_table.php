@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('travel_contents', function (Blueprint $table) {
+        Schema::create('days', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('travel_id')
-                ->constrained('travels')
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->string('img_url')->unique();
-            $table->string('description')->nullable();
+            $table->foreignId('travel_id')->constrained('travels')->cascadeOnDelete();
+            $table->string('legend')->nullable();
             $table->string('location')->nullable();
-            $table->dateTime('taken_at');
             $table->timestamps();
         });
     }
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('travel_contents');
+        Schema::dropIfExists('days');
     }
 };

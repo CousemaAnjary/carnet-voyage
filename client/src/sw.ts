@@ -27,22 +27,18 @@ const apiURL = import.meta.env.VITE_BACKEND_API_URL || 'http://localhost:8000' /
 
 // get resquest management
 self.addEventListener('fetch', async (event) => {
-  const toCatchedUrl = apiURL + '/api/travel'
-  // Intercepte les requestes GET vers l'API
-  if(event.request.url.match(toCatchedUrl)
+  if(event.request.url.match(apiURL + '/api/travel')
     && event.request.method === 'GET') 
   {
     event.respondWith(fetchTraverls(event))
   }
-})
 
-// self.addEventListener('fetch', async(event) => {
-//   if(event.request.url.startsWith(apiURL)
-//       && event.request.method !==  'GET')
-//   {
-//     event.respondWith(fetchApiDatabaseManagementRequest(event))
-//   }
-// })
+  if(event.request.url.match(apiURL + '/api/travel/id/content')
+    && event.request.method === 'GET')
+  {
+    //
+  }
+})
 
 self.skipWaiting()
 clientsClaim()
