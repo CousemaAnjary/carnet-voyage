@@ -62,21 +62,6 @@ class DayController extends Controller
         return response()->json(['message' => 'Contents saved successfully']);
     }
 
-    public function getDays(string $id) {
-        $travel = Travel::find($id)
-                    ->where('user_id', Auth::user()->id)->exists();
-        if(!$travel) {
-            abort(401, 'Unauthorized operation');
-        }
-
-        $travel_contents = Day::where('travel_id', $id)
-                            ->get();
-
-        return [
-            'contents' => $travel_contents
-        ];
-    }
-
     public function edit(Request $request, string $id) {
         $validatedData = $request->validate([
             'legend' => 'required|string|max:255',

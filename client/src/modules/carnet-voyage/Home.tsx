@@ -27,7 +27,7 @@ const Home = () => {
                 .then(data => {
                     const travels : VoyageType[] = data.travels
                     setVoyages(travels.reverse())
-                })
+                })  
                 .catch (error => {
                     setOpenNetworkErrorDialog(true)
                     console.log("Erreur lors de la récupération des dossiers de voyage.", error)
@@ -56,7 +56,7 @@ const Home = () => {
                     <Days 
                         travel_id={toOpenVoyageData.id} 
                         is_end={toOpenVoyageData.ended_at ? true : false} 
-                        days={toOpenVoyageData.day}
+                        days={toOpenVoyageData.days}
                     />
                 ):(
                     /* Affichage des carnets de voyage */

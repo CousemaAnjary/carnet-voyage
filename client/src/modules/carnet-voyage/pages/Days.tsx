@@ -10,6 +10,8 @@ const Days : React.FC<{days: DayType[], travel_id:number, is_end: boolean}> = (
         is_end
     }) => {
 
+    console.log("Days", days)
+
     return (
         <div id="days" className="h-screen w-full">
              {!is_end && (

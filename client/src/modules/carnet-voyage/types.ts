@@ -11,7 +11,7 @@ export interface DayType {
     travel_id: number;
     legend?: string;
     location?: string;
-    dayPhoto?: DayPhotoType[];
+    dayPhotos?: DayPhotoType[];
     created_at: string;
     updated_at: string;
 }
@@ -24,7 +24,7 @@ export interface VoyageType {
     country?: string;
     city?: string;
     beginning_at: string;
-    day: DayType[];
+    days: DayType[];
     ended_at?: string;
     created_at: string;
     updated_at: string;

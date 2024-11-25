@@ -46,7 +46,7 @@ class TravelController extends Controller
 
     public function get() {
         $travels =  Travel::where('user_id', Auth::user()->id)
-                        ->with(['day.dayPhoto'])
+                        ->with(['days.dayPhotos'])
                         ->get()
                         ->makeHidden(['user_id']);
 

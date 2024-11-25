@@ -21,7 +21,7 @@ class Travel extends Model
         'ended_at',
     ];
 
-    public function day(): HasMany {
+    public function days(): HasMany {
         return $this->hasMany(Day::class);
     }
 }
