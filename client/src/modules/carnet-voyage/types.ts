@@ -11,7 +11,7 @@ export interface DayType {
     travel_id: number;
     legend?: string;
     location?: string;
-    dayPhotos?: DayPhotoType[];
+    day_photos?: DayPhotoType[];
     created_at: string;
     updated_at: string;
 }
