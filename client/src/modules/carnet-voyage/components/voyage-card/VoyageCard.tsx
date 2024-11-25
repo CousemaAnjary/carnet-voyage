@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import iconV from "../../../../assets/images/iconV.png"
 import VoyageActionAlertDialog from "./VoyageActionAlertDialog";
 
 interface VoyagePropos {
@@ -23,9 +22,15 @@ const VoyageCard : React.FC<{
     }
 
     return (
-        <div id="voyage-card" className="flex p-5 space-x-5 w-[25rem] bg-white shadow-md">
+        <div id="voyage-card" className="flex p-5 space-x-5 w-[25rem] h-[10rem] bg-white shadow-md">
                 <div className="h-full items-center justify-center" >
-                    <img src={iconV} alt="icon" className="size-16" />
+                    <div className="size-16 text-6xl">
+                        { voyage.ended_at ?
+                            "📦"
+                            :
+                            Date.parse(voyage.beginning_at) < Date.now() ? "🎏": "🧳"
+                        }
+                    </div>
                     <p className="mt-1 text-sm text-center">{voyage.name}</p>
                 </div>
                 <div className="h-full w-full">

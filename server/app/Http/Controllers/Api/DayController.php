@@ -44,7 +44,7 @@ class DayController extends Controller
         \DB::transaction(function() use ($request_data, $images, $uid) {
             $day = Day::create([
                 'travel_id' => $request_data['travel_id'],
-                'location' => $request_data['location'],
+                'location' => $request_data['location'] ?? null,
                 'legend' => $request_data['legend']
             ]);
 

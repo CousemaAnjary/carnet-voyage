@@ -27,7 +27,6 @@ const Home = () => {
                 .then(data => {
                     const travels : VoyageType[] = data.travels
                     setVoyages(travels.reverse())
-                    console.log(travels)
                 })
                 .catch (error => {
                     setOpenNetworkErrorDialog(true)
@@ -40,7 +39,6 @@ const Home = () => {
     useEffect(() => {
         if (toOpenVoyageIndex !== -1 && voyages) {
             setToOpenVoyageData(voyages[toOpenVoyageIndex])
-            console.log(voyages[toOpenVoyageIndex].day)
             setToOpenVoyageIndex(-1)
         }
         
@@ -53,24 +51,30 @@ const Home = () => {
                     title={ toOpenVoyageData ? toOpenVoyageData.name : APP_NAME} 
                 />
             </div>
-            <main  className="h-screen sm:flex sm:space-x-3 sm:items-start overflow-y-auto">
+            <div  className="px-5">
                 {toOpenVoyageData ? (
-                    <Days travel_id={toOpenVoyageData.id} days={toOpenVoyageData.day}/>
+                    <Days 
+                        travel_id={toOpenVoyageData.id} 
+                        is_end={toOpenVoyageData.ended_at ? true : false} 
+                        days={toOpenVoyageData.day}
+                    />
                 ):(
                     /* Affichage des carnets de voyage */
-                    <>
+                    <div className="h-[90vh] overflow-y-auto sm:flex sm:space-x-3 sm:items-start">
                         {voyages && (voyages.map((voyage, index) => (
-                                <VoyageCard key={index} voyage={voyage} openCallback={() => setToOpenVoyageIndex(index)}/>
+                                <div  key={index} className="mb-5">
+                                    <VoyageCard voyage={voyage} openCallback={() => setToOpenVoyageIndex(index)}/>
+                                </div>
                             ))
                         )}
                         <CreateVoyageDialog/>
-                    </>
+                    </div>
                     
                 )}
                 {openNetworkErrorDialog &&(
                     <NetworkErrorDialog setIsOpen={setOpenNetworkErrorDialog}/>
                 )}
-            </main>
+            </div>
         </div>
     )
 }

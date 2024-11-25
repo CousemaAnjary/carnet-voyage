@@ -1,29 +1,61 @@
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { uploadContents } from "../../carnetVoyageService"
+import { 
+    Dialog, 
+    DialogContent, 
+    DialogFooter, 
+    DialogHeader, 
+    DialogTitle, 
+    DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+import { motion } from "framer-motion";
+import { PiCameraPlusBold } from "react-icons/pi";
+import { useState } from "react";
+import { postDay } from "../../carnetVoyageService";
 
 const DayUploader = ({voyageId}: {voyageId:number}) => {
+    const [images, setImages] = useState<Array<string>>([]);
+    const [legend, setLegend] = useState<string>("");
+    const [files, setFiles] = useState<File[]>([]); // Stockage des fichiers réels
 
-    const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUploadImages = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files
         if (files) {
-            // Prépare les fichiers pour l'envoi
-            const formData = new FormData()
-            Array.from(files).forEach((file) => {
-                formData.append("img[]", file) // Assurez-vous que le nom "file_path" correspond à votre back-end
-            })
-            formData.append("travel_id", voyageId.toString()) // Ajoutez l'ID du dossier
+            const fileArray = Array.from(files) // convert to array
+            const newPreviews: string[] = []
+            const newFiles: File[] = []
 
-            try {
-                // Envoie les fichiers au serveur
-                const response = await uploadContents(formData)
-                console.log("Réponse du serveur :", response)
-            } catch (err) {
-                console.error("Erreur lors de l'envoi des fichiers :", err)
-            }
+            fileArray.forEach((file) => {
+                // Créer une URL de prévisualisation
+                const previewUrl = URL.createObjectURL(file)
+                newPreviews.push(previewUrl)
+
+                // Ajouter le fichier à la liste
+                newFiles.push(file)
+            });
+
+            // Mettre à jour l'état
+            setImages((prev) => [...prev, ...newPreviews])
+            setFiles((prev) => [...prev, ...newFiles])
         }
+    }
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        const formData = new FormData()
+        formData.append("travel_id", String(voyageId))
+        formData.append("legend", legend)
+
+        // Ajouter les fichiers
+        files.forEach((file) => formData.append("img[]", file))
+
+        await postDay(formData)
+            .catch(error => {
+                if(error.message === "Network Error") {
+                    console.log("Erreur réseau lors de l'ajout de la journée.")
+                } else {
+                    console.log(error)
+                }
+            })
     }
 
     return (
@@ -31,38 +63,58 @@ const DayUploader = ({voyageId}: {voyageId:number}) => {
             <DialogTrigger asChild>
                 <Button className="bg-blue-600 hover:bg-blue-500" >Nouvelle Journée 🔖</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent>
                 <DialogHeader>
-                    <DialogTitle className="text-center">Nouvelle journée</DialogTitle>
-                    <DialogDescription className="text-center">
-                        Encore une belle journée à ajouter à votre carnet de voyage ! ✨
-                    </DialogDescription>
+                    <DialogTitle className="text-lg md:text-2xl text-neutral-600 dark:text-neutral-100 font-bold text-center mb-4">
+                        Encore une belle jouernée à ajouter 🌞
+                    </DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="name" className="text-right">
-                        Name
-                    </Label>
-                    <Input
-                        id="name"
-                        defaultValue="Pedro Duarte"
-                        className="col-span-3"
-                    />
+                <form onSubmit={handleSubmit} encType="multipart/form-data" className="flex-col space-y-5">
+                    <div className="flex justify-center items-center w-full h-[8rem] md:h-48 overflow-y-hidden overflow-x-auto">
+                        {images.map((image, idx) => (
+                            <motion.div key={"images" + idx}
+                                style={{ rotate: Math.random() * 20 - 10, }}
+                                whileHover={{ scale: 1.1, rotate: 0, zIndex: 100, }}
+                                whileTap={{ scale: 1.1, rotate: 0, zIndex: 100, }}
+                                className="rounded-xl -mx-4 p-1 bg-white border border-neutral-100 flex-shrink-0"
+                            >
+                                <img src={image} alt="day-image" width="500" height="500"
+                                    className="rounded-lg h-20 w-20 md:h-40 md:w-40 object-cover flex-shrink-0"
+                                />
+                            </motion.div>
+                        ))}
+
+                        {/* uploader */}
+                        <motion.div key="uploader"
+                            style={{ rotate: Math.random() * 20 - 10, }}
+                            whileHover={{ scale: 1.1, rotate: 0, zIndex: 100, }}
+                            whileTap={{ scale: 1.1, rotate: 0, zIndex: 100, }}
+                            className="rounded-xl -mx-4 p-1 bg-white border border-neutral-100 flex-shrink-0"
+                        >
+                            <div className="rounded-lg h-20 w-20 md:h-40 md:w-40 object-cover flex-shrink-0">
+                                <PiCameraPlusBold className="w-full h-full bg-slate-100 rounded-lg"/>
+                                <input className="cursor-pointer absolute inset-0 w-full h-full opacity-0"
+                                    type="file"
+                                    name="files[]"
+                                    multiple={true}
+                                    accept="image/png, image/jpg, image/jpeg"
+                                    onChange={handleUploadImages}
+                                />
+                            </div>
+                        </motion.div>
                     </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="username" className="text-right">
-                        Username
-                    </Label>
-                    <Input
-                        id="username"
-                        defaultValue="@peduarte"
-                        className="col-span-3"
-                    />
+                    <div className="flex justify-center items-center">
+                        <textarea className="w-full border-none h-36"
+                            placeholder="Comment ça été ? ..." 
+                            value={legend}
+                            onChange={(e) => setLegend(e.target.value)}
+                            name="day-legend" id="day-legend" maxLength={255}
+                        />
                     </div>
-                </div>
-                <DialogFooter>
-                    <Button type="submit">Save changes</Button>
-                </DialogFooter>
+                    <DialogFooter>
+                        <Button className="mt-5 w-full bg-blue-700 hover:bg-blue-500 text-md h-10" type="submit">Ajouter la journée</Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
     </Dialog>
     )

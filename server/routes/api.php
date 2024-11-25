@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/cancel/{id}', [TravelController::class, 'cancel']);
         
         Route::prefix('/day')->group(function(){
-            Route::post('/post', [DayController::class, 'post']);
+            Route::post('/post', [DayController::class, 'postDay']);
             Route::patch('/edit/{id}', [DayController::class, 'edit']);
         });
     });

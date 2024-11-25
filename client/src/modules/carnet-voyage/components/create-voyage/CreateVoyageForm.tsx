@@ -11,7 +11,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { VoyageType } from '../../types'
-import { addFolderVoyage } from '../../carnetVoyageService'
+import { createVoyage } from '../../carnetVoyageService'
 
 // Define validation schema with Zod
 const formSchema = z.object({
@@ -48,7 +48,7 @@ const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError, se
         form.reset()
         
         const folderData = { ...data }
-        await addFolderVoyage(folderData)
+        await createVoyage(folderData)
             .catch(error => {
                 if(error.message === "Network Error") {
                     setNetworkError(true)
