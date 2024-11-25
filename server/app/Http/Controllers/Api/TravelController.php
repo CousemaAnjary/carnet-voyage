@@ -11,22 +11,21 @@ use Illuminate\Support\Facades\Auth;
 class TravelController extends Controller
 {
     public function create(Request $request) {
-
         $user_id = Auth::user()->id;
 
+        // verifie if user have in progress travel
         $userHaveInProgessJourney = Travel::where('user_id', $user_id)
-                                        ->where('ended_at', null)->exists();
-        
+                                        ->whereNull('ended_at')->exists();
         if($userHaveInProgessJourney) {
-            return response()->json(['message' => 'User already have a travel in progress'],401);
+            abort(401,'User already have a travel in progress');
         }
 
+        // validation rules
         $rules = [
             'name' => 'required|string',
             'beginning_at' => 'required|date|date_format:Y-m-d|after_or_equal:today',
             'ended_at' => 'nullable|date|date_format:Y-m-d|after:beginning_at',
         ];
-
         if(!$request->input('country')) {
             $rules['city'] = 'required|string';
         } else {
@@ -34,37 +33,38 @@ class TravelController extends Controller
             $rules['city'] = 'nullable|string';
         }
 
-        try {
-            $validatedData = $request->validate($rules);
-            $validatedData['user_id'] = $user_id;
+        // rules validation
+        $validatedData = $request->validate($rules); 
 
-            Travel::create($validatedData);
+        // assing user to travel to created
+        $validatedData['user_id'] = $user_id;
 
-            return response()->json(['message' => 'Travel created successfully'], 201);
-            
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
-        }
+        Travel::create($validatedData);
+
+        return response()->json(['message' => 'Travel created successfully']);
     }
 
-    public function getUserTravels() {
-        $user_id = Auth::user()->id;
-        $travels =  Travel::where('user_id', $user_id)->orderByDesc('created_at')
-                        ->get()->makeHidden(['user_id']);
+    public function get() {
+        $travels =  Travel::where('user_id', Auth::user()->id)
+                        ->with(['days.dayPhotos'])
+                        ->get()
+                        ->makeHidden(['user_id']);
+
         return [
             'travels' => $travels
         ];
     }
 
     public function close(string $id) {
-        $user_id = Auth::user()->id;
-        $travel = Travel::where('id', $id)->where('user_id', $user_id)
-                ->where('ended_at', null)->first();
+        $travel = Travel::where('id', $id)
+                    ->where('user_id', Auth::user()->id)
+                    ->whereNull('ended_at')->first();
 
         if (!$travel) {
-            return response()->json(['message' => 'Travel not found or already closed'], 404);
+            abort(404,'Travel not found or already closed');
         }
 
+        // do closing
         $travel->ended_at = Carbon::now()->format('Y-m-d');
         $travel->save();
             
@@ -72,15 +72,15 @@ class TravelController extends Controller
     }
 
     public function cancel(string $id) {
-        $user_id = Auth::user()->id;
-        $travel = Travel::where('id', $id)->where('user_id', $user_id)
-                ->where('ended_at', null)->first();
+        $travel = Travel::where('id', $id)
+                    ->where('user_id', Auth::user()->id)
+                    ->whereNull('ended_at')->first();
 
         if (!$travel) {
-            return response()->json(['message' => 'Travel not found'], 404);
+            abort(404,'Travel not found');
         }
 
-        $travel->delete();
+        $travel->delete(); // delete
             
         return response()->json(['message' => 'Travel canceled successfully']);
     }
@@ -90,25 +90,18 @@ class TravelController extends Controller
             'new_name' => 'required|string',
         ];
 
-        try {
-            $validatedData = $request->validate($rule);
-    
-            $user_id = Auth::user()->id;
+        $validatedData = $request->validate($rule);
 
-            $travel = Travel::where('id', $id)->where('user_id', $user_id)->first();
-
-            if (!$travel) {
-                return response()->json(['message' => 'Travel not found'], 404);
-            }
-
-            $travel->name = $validatedData['new_name'];
-
-            $travel->save();
-
-            return response()->json(['message' => 'Travel renamed successfully']);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
+        $travel = Travel::find($id)
+                    ->where('user_id', Auth::user()->id)->first();
+        if (!$travel) {
+            abort(404,'Travel not found');
         }
+        
+        // rename
+        $travel->name = $validatedData['new_name'];
+        $travel->save();
+
+        return response()->json(['message' => 'Travel renamed successfully']);
     }
 }

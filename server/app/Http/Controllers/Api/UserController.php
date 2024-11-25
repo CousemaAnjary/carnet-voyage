@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function signUp(Request $request){
-
         $credentials = $request->validate([
             'name' => 'required|string|unique:users',
             'email' => 'required|string|unique:users',
@@ -32,7 +31,7 @@ class UserController extends Controller
         ]);
     
         if (!Auth::attempt($credentials)) {
-            return response()->json(['authenticationError' => 'Invalid email or password'], 401);
+            abort(401,'Invalid email or password');
         }
     
         $user = Auth::user();
