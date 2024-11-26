@@ -9,13 +9,8 @@ export default function Login() {
     const navigate = useNavigate();
 
     const handleLogin = async (data: FormType) => {
-        try {
-            const response = await login(data);
-            localStorage.setItem("success", response.messageSuccess);
-            navigate('/carnet-voyage');
-        } catch (error) {
-            console.error(error);
-        }
+        await login(data)
+            .then(() => navigate('/carnet-voyage'))
     };
 
     return (

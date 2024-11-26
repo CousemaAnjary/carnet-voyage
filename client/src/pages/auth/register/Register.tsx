@@ -8,14 +8,8 @@ export default function Register() {
     const navigate = useNavigate();
 
     const handleRegister = async (data: FormType) => {
-        try {
-            const response = await register(data);
-            if (response) {
-                navigate('/login');
-            }
-        } catch (error) {
-            console.error(error);
-        }
+        await register(data)
+            .then(() => navigate('/login'))
     };
 
     return (
