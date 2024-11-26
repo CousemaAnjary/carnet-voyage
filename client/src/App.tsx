@@ -1,13 +1,11 @@
 import { Route, Routes } from "react-router-dom"
-import { AuthProvider } from "./core/contexts/AuthContext"
-import PublicRoutes from "./routes/PublicRoutes"
-import PrivateRoutes from "./routes/PrivateRoutes"
-import Login from "./modules/auth/login/pages/Login"
-import Register from "./modules/auth/register/pages/Register"
-import PWABadge from "./components/pwa/PWABadge"
-import Home from "./modules/app/home/Home"
-import DayPhotos from "./modules/app/day_photos/DayPhotos"
-import Days from "./modules/app/days/Days"
+import { AuthProvider } from "./modules/contexts/AuthContext"
+import Home from "./pages/app/home/Home"
+import DayPhotos from "./pages/app/day_photos/DayPhotos"
+import Days from "./pages/app/days/Days"
+import { PrivateRoutes, PublicRoutes } from "./routes/routes"
+import Login from "./pages/auth/login/Login"
+import Register from "./pages/auth/register/Register"
 
 export const APP_NAME = "Carnet de Voyage"
 
@@ -15,7 +13,6 @@ export default function App() {
 
   return (
     <div className="bg-gray-100">
-      <PWABadge />
       <AuthProvider>
         <Routes>
           {/* Public Routes */}

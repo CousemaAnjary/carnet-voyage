@@ -1,4 +1,4 @@
-import { getVoyages, saveVoyages, TravelData } from "./core/services/indexedDB/travelsStore"
+import { getVoyages, saveVoyages, TravelData } from "./modules/services/indexedDB/travelsStore"
 
 export async function fetchTraverls(event: FetchEvent) {
     try {
