@@ -1,6 +1,6 @@
 import { useAuth } from "@/modules/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import LoginForm from "./components/LoginForm";
+import LoginForm from "./LoginForm";
 import { FormType } from "../components/CustomFormField";
 import { Layout, LayoutLabel } from "../Layout";
 
