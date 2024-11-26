@@ -12,14 +12,7 @@ interface VoyagePropos {
     updated_at: string;
 }
 
-const VoyageCard : React.FC<{ 
-    voyage: VoyagePropos, 
-    openCallback: () => void 
-}> = ({ voyage, openCallback }) => {
-
-    function open() {
-        openCallback()
-    }
+const VoyageCard : React.FC<{voyage: VoyagePropos, onOpen: (id:number) => void}> = ({ voyage, onOpen }) => {
 
     return (
         <div id="voyage-card" className="flex p-5 space-x-5 w-[25rem] h-[10rem] bg-white shadow-md">
@@ -71,7 +64,7 @@ const VoyageCard : React.FC<{
                         </div>
                         <div className="w-full">
                             <Button className=" w-full bg-blue-500 hover:bg-blue-700"
-                                onClick={open}
+                                onClick={() => onOpen(voyage.id)}
                             >Ouvir</Button>
                         </div>
                     </div>

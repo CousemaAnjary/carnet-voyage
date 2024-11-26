@@ -5,6 +5,10 @@ const DayCard : React.FC<{ day: DayType }> = ({ day }) => {
     const imagesCount = day.day_photos?.length ?? 0;
     const images = day.day_photos?.map(photo => import.meta.env.VITE_BACKEND_API_URL + photo.photo_url) ?? [];
 
+    const handleOpen = () => {
+        //
+    }
+
     return (
         <div id="day-card" className="shadow-md w-[24rem]">
             <section id="day-photo-preview" className="flex bg-white justify-center items-center">
@@ -37,7 +41,7 @@ const DayCard : React.FC<{ day: DayType }> = ({ day }) => {
             <section className="bg-white pt-2 px-6">
                 <h1 className="text-center text-2xl font-bold">Day {day.id}</h1>
                 <div className="h-15 overflow-hidden">{day.legend}</div>
-                <Button className="my-6 w-full bg-blue-600 hover:bg-blue-500">Voir toute les photos</Button>
+                <Button onClick={handleOpen} className="my-6 w-full bg-blue-600 hover:bg-blue-500">Voir toute les photos</Button>
             </section>
         </div>
     )

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { updateImageDescription } from "../../carnetVoyageService"; // Adjust the import path as necessary
+import { updateImageDescription } from "../../services"; // Adjust the import path as necessary
 import { ImageDetailleProps } from "../../types";
 
 export default function ImageDetail({ image, onClose, onSave }: ImageDetailleProps) {

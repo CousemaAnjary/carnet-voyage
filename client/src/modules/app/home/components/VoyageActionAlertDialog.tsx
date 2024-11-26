@@ -9,7 +9,7 @@ import {
     AlertDialogTitle
   } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { cancelVoyage, closeVoyage } from "../../carnetVoyageService"
+import { cancelVoyage, closeVoyage } from "../../services"
 import { useState } from "react"
 import NetworkErrorDialog from "../NetworkErrorDialog"
 

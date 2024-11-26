@@ -11,7 +11,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { VoyageType } from '../../types'
-import { createVoyage } from '../../carnetVoyageService'
+import { createVoyage } from '../../services'
 
 // Define validation schema with Zod
 const formSchema = z.object({
