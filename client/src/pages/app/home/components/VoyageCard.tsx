@@ -1,18 +1,8 @@
 import { Button } from "@/components/ui/button";
 import VoyageActionAlertDialog from "./VoyageActionAlertDialog";
+import { VoyageType } from "../../types";
 
-interface VoyagePropos {
-    id: number;
-    name: string;
-    country?: string;
-    city?: string;
-    beginning_at: string;
-    ended_at?: string;
-    created_at: string;
-    updated_at: string;
-}
-
-const VoyageCard : React.FC<{voyage: VoyagePropos, onOpen: (id:number) => void}> = ({ voyage, onOpen }) => {
+const VoyageCard : React.FC<{voyage: VoyageType, onOpen: (id:number) => void}> = ({ voyage, onOpen }) => {
 
     return (
         <div id="voyage-card" className="flex p-5 space-x-5 w-[25rem] h-[10rem] bg-white shadow-md">

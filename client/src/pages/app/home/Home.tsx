@@ -6,11 +6,15 @@ import NetworkErrorDialog from "../error/NetworkErrorDialog"
 import VoyageCard from "./components/VoyageCard"
 import Layout from "../Layout"
 import { useNavigate } from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "@/stores/hook"
+import { addVoyage } from "@/stores/voyageSlice"
+import { APP_NAME } from "@/App"
 
 
 const Home = () => {
     const navigate = useNavigate()
-    const [voyages, setVoyages] = useState<VoyageType[]|null>(null)
+    const voyages = useAppSelector((state) => state.voyages)
+    const dispatch = useAppDispatch()
     const[openNetworkErrorDialog, setOpenNetworkErrorDialog] = useState(false)
 
     // open day
@@ -24,7 +28,7 @@ const Home = () => {
             await getVoyages()
                 .then(data => {
                     const travels : VoyageType[] = data.travels
-                    setVoyages(travels.reverse())
+                    dispatch(addVoyage(travels.reverse()))
                 })  
                 .catch (error => {
                     setOpenNetworkErrorDialog(true)
@@ -32,16 +36,16 @@ const Home = () => {
                 }) 
         }
         fetchVoyages()
-    }, [])
+    }, [dispatch])
     
     return (
-        <Layout>
+        <Layout label={APP_NAME}>
             <div className="h-[90vh] overflow-y-auto">
-                {voyages && (voyages.map((voyage, index) => (
+                {voyages.map((voyage, index) => (
                         <div  key={index} className="mb-5">
                             <VoyageCard voyage={voyage} onOpen={openVoyage} />
                         </div>
-                    ))
+                    )
                 )}
                 <CreateVoyageDialog/>
             </div>

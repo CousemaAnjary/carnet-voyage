@@ -1,7 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
+import voyageReducer from './voyageSlice'
 
-const store = configureStore({
-    reducer: {},
+export const store = configureStore({
+    reducer: {
+        voyages: voyageReducer
+    },
 })
 
-export default store
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
