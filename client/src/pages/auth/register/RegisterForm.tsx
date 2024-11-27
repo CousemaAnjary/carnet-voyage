@@ -5,7 +5,7 @@ import { z } from "zod"
 import { Form } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { FcGoogle } from "react-icons/fc"
-import CustormFormField, { FormType } from "../../components/CustomFormField"
+import CustormFormField, { FormType } from "../components/CustomFormField"
 
 
 const formSchema = z.object({

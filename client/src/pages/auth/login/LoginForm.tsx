@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { FcGoogle } from "react-icons/fc"
-import CustormFormField, { FormType } from "../../components/CustomFormField"
+import CustormFormField, { FormType } from "../components/CustomFormField"
 
 const formSchema = z.object({
     email: z.string().email({ message: "Adresse e-mail invalide" }),

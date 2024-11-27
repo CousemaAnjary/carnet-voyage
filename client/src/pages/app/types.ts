@@ -26,6 +26,6 @@ export interface VoyageType {
     beginning_at: string;
     days: DayType[];
     ended_at?: string;
-    created_at: string;
-    updated_at: string;
+    created_at?: string;
+    updated_at?: string;
 }
