@@ -2,15 +2,16 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { BrowserRouter } from 'react-router-dom'
-import { NetworkProvider } from './core/contexts/NetworkContext.tsx'
+import { Provider } from 'react-redux'
+import { AuthProvider } from './modules/contexts/AuthContext.tsx'
+import { store } from './stores/index.ts'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-     <BrowserRouter>
-      <NetworkProvider>
-        <App />
-      </NetworkProvider>
-     </BrowserRouter>
+    <AuthProvider>
+      <Provider store={store}>
+          <App />
+      </Provider>
+    </AuthProvider>
   </React.StrictMode>,
 )

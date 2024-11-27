@@ -21,7 +21,7 @@ class UserController extends Controller
 
         User::create($credentials);
 
-        return response()->json(['message' => 'User created successfully'], 201);
+        return response()->json(['message' => 'User created successfully']);
     }
 
     public function auth(Request $request) {
@@ -39,12 +39,8 @@ class UserController extends Controller
         $token = $user->createToken('API Token')->plainTextToken;
     
         return response()->json([
-            'user' => [
-                'name' => $user->name,
-                'email' => $user->email,
-            ],
             'token' => $token,
-        ], 200);
+        ]);
     }    
 
     public function unauth() {
