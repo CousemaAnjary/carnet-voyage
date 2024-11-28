@@ -39,13 +39,14 @@ const openDB = (): Promise<IDBDatabase> => {
 }
 
 // Fonction pour sauvegarder les voyages dans la base de données
-export const storeVoyage = async (voyage: VoyageType) => {
+export const storeVoyages = async (voyages: VoyageType[]) => {
     const db = await openDB()
 
     const transaction = db.transaction('voyages', 'readwrite')
     const voyagesStore = transaction.objectStore('voyages')
-
-    voyagesStore.put(voyage)
+    voyages.forEach(voyage => {
+        voyagesStore.put(voyage)
+    });
 }
 
 // Fonction pour récupérer les voyages depuis la base de données

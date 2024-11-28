@@ -7,7 +7,7 @@ import VoyageCard from "./components/VoyageCard"
 import Layout from "../Layout"
 import { useNavigate } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "@/features/stores/hook"
-import { addVoyage } from "@/features/stores/voyageSlice"
+import { refreshVoyageState } from "@/features/stores/voyageSlice"
 import { APP_NAME } from "@/App"
 
 
@@ -28,7 +28,7 @@ const Home = () => {
             await getVoyages()
                 .then(data => {
                     const travels : VoyageType[] = data.travels
-                    dispatch(addVoyage(travels))
+                    dispatch(refreshVoyageState(travels))
                 })  
                 .catch (error => {
                     setOpenNetworkErrorDialog(true)
@@ -36,6 +36,7 @@ const Home = () => {
                 }) 
         }
         fetchVoyages()
+        console.log("Voyages récupérésd")
     }, [dispatch])
     
     return (

@@ -66,7 +66,7 @@ const DayUploader = ({voyageId}: {voyageId:number}) => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle className="text-lg md:text-2xl text-neutral-600 font-bold text-center mb-4">
-                        Encore une belle jouernée à ajouter 🌞
+                        Encore une belle journée à ajouter 🌞
                     </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} encType="multipart/form-data" className="flex-col space-y-5">
@@ -107,6 +107,7 @@ const DayUploader = ({voyageId}: {voyageId:number}) => {
                         <textarea className="w-full border-none h-36"
                             placeholder="Comment ça été ? ..." 
                             value={legend}
+                            aria-description="Un journée génial ? 🙃"
                             onChange={(e) => setLegend(e.target.value)}
                             name="day-legend" id="day-legend" maxLength={255}
                         />

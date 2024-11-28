@@ -8,16 +8,19 @@ import Error404 from "../errors/Error404"
 
 const Days = () => {
     const navigate = useNavigate()
-    const { voyageID } = useParams()
+    const { voyageID } = useParams<{ voyageID: string }>()
     const voyages = useAppSelector((state) => state.voyages)
-    const voyage = voyages.find( voyage => voyage.id === parseInt(voyageID || '-1', 10) )
+
+    const voyage = voyages.find(voyage => voyage.id === parseInt(voyageID || '-1', 10))
+
+    const label = voyage ? voyage.name : "🤯"
 
     function openDay(id:number) {
         navigate(`/carnet-voyage/${voyageID}/${id}`)
     }
 
     return (
-        <Layout label={voyage?.name || "🤯"}>
+        <Layout label={label}>
             {voyage ? (
                 <div id="days" className="h-[89vh] w-full overflow-y-auto space-y-9">
                     {!voyage.ended_at && (
@@ -26,7 +29,7 @@ const Days = () => {
                             </section>
                         )}
                     <section id="days-list" className="justify-items-center w-full grid md:grid-cols-2 xl:grid-cols-3 grid-flow-row gap-4">
-                        {voyage.days.map((day, index) => (
+                        {[...voyage.days].reverse().map((day, index) => (
                                 <DayCard key={index} day={day} onOpen={openDay}/>
                             ))
                         }

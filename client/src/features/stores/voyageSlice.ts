@@ -1,6 +1,6 @@
 import { DayType, VoyageType } from "@/features/api/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { loadVoyages, storeVoyage } from "./indexedb";
+import { loadVoyages, storeVoyages } from "./indexedb";
 
 const initialState : VoyageType[] =  await loadVoyages()
 
@@ -8,14 +8,10 @@ export const voyageSlice = createSlice({
     name: 'voyage',
     initialState,
     reducers: {
-        addVoyage: (state, action:PayloadAction<VoyageType[]>) => {
-            const newVoyages = action.payload
-            newVoyages.forEach((newVoyage) => {
-                if (!state.some((voyage) => voyage.id === newVoyage.id)) {
-                  state.push(newVoyage)
-                  storeVoyage(newVoyage)
-                }
-              })
+        refreshVoyageState: (state, action:PayloadAction<VoyageType[]>) => {
+            const voyages = action.payload
+            state = voyages
+            storeVoyages(voyages)
         },
         removeVoyage: (state, action:PayloadAction<number>) => {
             console.log(action.payload)
@@ -29,5 +25,5 @@ export const voyageSlice = createSlice({
     },
 })
 
-export const { addVoyage, removeVoyage, closeVoyage, addDay } = voyageSlice.actions
+export const { refreshVoyageState, removeVoyage, closeVoyage, addDay } = voyageSlice.actions
 export default voyageSlice.reducer
