@@ -33,7 +33,6 @@ const Days = () => {
                 </div>
             )}
         </Layout>
-        
     )
 }
 

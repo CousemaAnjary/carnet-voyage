@@ -28,7 +28,7 @@ const Home = () => {
             await getVoyages()
                 .then(data => {
                     const travels : VoyageType[] = data.travels
-                    dispatch(addVoyage(travels.reverse()))
+                    dispatch(addVoyage(travels))
                 })  
                 .catch (error => {
                     setOpenNetworkErrorDialog(true)
