@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DayPhotoType, DayType } from "../../../../features/api/types"
+import { motion } from "framer-motion";
 
 const DayCardImagesPreview = ({ photos } : { photos:  DayPhotoType[] | undefined}) => {
     const imagesCount = photos?.length ?? 0;
@@ -8,19 +9,30 @@ const DayCardImagesPreview = ({ photos } : { photos:  DayPhotoType[] | undefined
     return (
         <section id="day-photo-preview" className="flex bg-white justify-center items-center">
             {imagesCount > 1 && (
-                <div className="-rotate-12 rounded-xl -mx-4 p-1 bg-white border border-neutral-100">
+                <motion.div 
+                    style={{ rotate: -12, }}
+                    whileHover={{ scale: 1.1, rotate: 0, zIndex: 100 }}
+                    className="rounded-xl -mx-4 p-1 bg-white border border-neutral-100"
+                >
                     <img src={images?.[1]} alt="day-image" width="500" height="800"
                         className="rounded-lg h-48 w-40 object-cover flex-shrink-0"
                     />
-                </div>
+                </motion.div>
             )}
-            <div className="z-10 rounded-xl -mx-4 p-1 bg-white border border-neutral-100">
+            <motion.div 
+                whileHover={{ scale: 1.1, zIndex: 100 }}
+                className="z-10 rounded-xl -mx-4 p-1 bg-white border border-neutral-100"
+            >
                 <img src={images?.[0]} alt="day-image" width="500" height="800"
                     className="rounded-lg h-48 w-40 object-cover flex-shrink-0"
                 />
-            </div>
+            </motion.div>
             {imagesCount > 2 && (
-                <div className="rotate-12 rounded-xl -mx-4 p-1 bg-white border border-neutral-100">
+                <motion.div
+                    style={{ rotate: 12, }}
+                    whileHover={{ scale: 1.1, rotate: 0, zIndex: 100 }}
+                    className="rounded-xl -mx-4 p-1 bg-white border border-neutral-100"
+                >
                     <img src={images?.[2]} alt="day-image" width="500" height="800"
                         className="rounded-lg h-48 w-40 object-cover flex-shrink-0"
                     />
@@ -30,7 +42,7 @@ const DayCardImagesPreview = ({ photos } : { photos:  DayPhotoType[] | undefined
                             <div className="text-2xl text-slate-700">+{imagesCount - 3}</div>
                         </div>
                     )}
-                </div>
+                </motion.div>
             )}
         </section>
     )
