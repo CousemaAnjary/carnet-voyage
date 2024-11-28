@@ -26,8 +26,8 @@ export const createVoyage = async (folderVoyageData: VoyageType) => {
 }
 
 // Ajouter des images dans un dossier de voyage
-export const postDay = async (photos: FormData) => {
-    const response = await api.post('/travel/day/post', photos)
+export const postDay = async (day: FormData) => {
+    const response = await api.post('/travel/day/post', day)
     return response.data
 }
 

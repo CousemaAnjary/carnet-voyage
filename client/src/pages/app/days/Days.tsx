@@ -29,7 +29,7 @@ const Days = () => {
                             </section>
                         )}
                     <section id="days-list" className="justify-items-center w-full grid md:grid-cols-2 xl:grid-cols-3 grid-flow-row gap-4">
-                        {voyage.days.reverse().map((day, index) => (
+                        {[...voyage.days].reverse().map((day, index) => (
                                 <DayCard key={index} day={day} onOpen={openDay}/>
                             ))
                         }
