@@ -1,7 +1,8 @@
-import { DayType, VoyageType } from "@/pages/app/types";
+import { DayType, VoyageType } from "@/features/api/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { loadVoyages, storeVoyage } from "./indexedb";
 
-const initialState : VoyageType[] = []
+const initialState : VoyageType[] =  await loadVoyages()
 
 export const voyageSlice = createSlice({
     name: 'voyage',
@@ -12,6 +13,7 @@ export const voyageSlice = createSlice({
             newVoyages.forEach((newVoyage) => {
                 if (!state.some((voyage) => voyage.id === newVoyage.id)) {
                   state.push(newVoyage)
+                  storeVoyage(newVoyage)
                 }
               })
         },

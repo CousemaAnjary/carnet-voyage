@@ -7,11 +7,7 @@ import path from 'path';
 export default defineConfig({
   plugins: [react(), VitePWA({
     registerType: 'prompt', // Permet d'afficher un popup si le sw à été mis à jour
-
-    strategies: 'injectManifest',
-    srcDir: 'src',  // Dossier source de ton projet
-    filename: 'sw.ts',
-
+    
     manifest: {
       name: 'carnet-voyage',
       short_name: 'carnet-voyage',
@@ -19,7 +15,7 @@ export default defineConfig({
       theme_color: '#ffffff',
     },
 
-    injectManifest: {
+    workbox: {
       globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
     },
 

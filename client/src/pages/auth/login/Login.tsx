@@ -1,9 +1,9 @@
-import { useAuth } from "@/modules/contexts/AuthContext";
+import { useAuth } from "@/features/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import { FormType } from "../components/CustomFormField";
 import { Layout, LayoutLabel } from "../Layout";
-import { login } from "../services";
+import { login } from "../../../features/api/services";
 
 export default function Login() {
     const { setToken } = useAuth();

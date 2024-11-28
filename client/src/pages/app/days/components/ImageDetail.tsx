@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { updateImageDescription } from "../../services"; // Adjust the import path as necessary
-import { ImageDetailleProps } from "../../types";
+import { updateImageDescription } from "../../../../features/api/services"; // Adjust the import path as necessary
+import { ImageDetailleProps } from "../../../../features/api/types";
 
 export default function ImageDetail({ image, onClose, onSave }: ImageDetailleProps) {
     const [description, setDescription] = useState(image.description || "");

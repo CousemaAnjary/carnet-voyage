@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
-import { getVoyages } from "../services"
-import { VoyageType } from "../types"
+import { getVoyages } from "../../../features/api/services"
+import { VoyageType } from "../../../features/api/types"
 import CreateVoyageDialog from "./components/CreateVoyageDialog"
-import NetworkErrorDialog from "../error/NetworkErrorDialog"
+import NetworkErrorDialog from "../errors/NetworkErrorDialog"
 import VoyageCard from "./components/VoyageCard"
 import Layout from "../Layout"
 import { useNavigate } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "@/stores/hook"
-import { addVoyage } from "@/stores/voyageSlice"
+import { useAppDispatch, useAppSelector } from "@/features/stores/hook"
+import { addVoyage } from "@/features/stores/voyageSlice"
 import { APP_NAME } from "@/App"
 
 
@@ -28,7 +28,7 @@ const Home = () => {
             await getVoyages()
                 .then(data => {
                     const travels : VoyageType[] = data.travels
-                    dispatch(addVoyage(travels.reverse()))
+                    dispatch(addVoyage(travels))
                 })  
                 .catch (error => {
                     setOpenNetworkErrorDialog(true)
@@ -40,15 +40,17 @@ const Home = () => {
     
     return (
         <Layout label={APP_NAME}>
-            <div className="h-[90vh] overflow-y-auto">
-                {voyages.map((voyage, index) => (
-                        <div  key={index} className="mb-5">
-                            <VoyageCard voyage={voyage} onOpen={openVoyage} />
-                        </div>
-                    )
-                )}
-                <CreateVoyageDialog/>
+            <div className="h-[90vh] w-full overflow-y-auto justify-items-center">
+                <div className="grid md:grid-cols-2 xl:grid-cols-3 grid-flow-row gap-4">
+                    {voyages.map((voyage, index) => (
+                            <div  key={index} className="mb-5">
+                                <VoyageCard voyage={voyage} onOpen={openVoyage} />
+                            </div>
+                        )
+                    )}
+                </div>
             </div>
+            <CreateVoyageDialog/>
             {openNetworkErrorDialog &&(
                 <NetworkErrorDialog setIsOpen={setOpenNetworkErrorDialog}/>
             )}
