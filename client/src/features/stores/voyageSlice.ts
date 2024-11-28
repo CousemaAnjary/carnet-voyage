@@ -1,4 +1,4 @@
-import { DayType, VoyageType } from "@/pages/app/types";
+import { DayType, VoyageType } from "@/features/api/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { loadVoyages, storeVoyage } from "./indexedb";
 

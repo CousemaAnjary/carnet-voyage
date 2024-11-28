@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import VoyageActionAlertDialog from "./VoyageActionAlertDialog";
-import { VoyageType } from "../../types";
+import { VoyageType } from "../../../../features/api/types";
 
 const VoyageCard : React.FC<{voyage: VoyageType, onOpen: (id:number) => void}> = ({ voyage, onOpen }) => {
 

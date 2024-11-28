@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button"
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { VoyageType } from '../../types'
-import { createVoyage } from '../../services'
+import { VoyageType } from '../../../../features/api/types'
+import { createVoyage } from '../../../../features/api/services'
 
 // Define validation schema with Zod
 const formSchema = z.object({

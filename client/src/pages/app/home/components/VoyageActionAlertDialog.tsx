@@ -9,9 +9,9 @@ import {
     AlertDialogTitle
   } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { cancelVoyage, closeVoyage } from "../../services"
+import { cancelVoyage, closeVoyage } from "../../../../features/api/services"
 import { useState } from "react"
-import NetworkErrorDialog from "../../error/NetworkErrorDialog"
+import NetworkErrorDialog from "../../errors/NetworkErrorDialog"
 
 export type VoyageAction = {
     action: 'cloture' | 'annul'

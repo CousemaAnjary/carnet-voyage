@@ -1,6 +1,17 @@
-import api from "@/modules/services/apiConfig"
-import { VoyageType } from "./types"
+import api from "@/features/api/apiConfig"
+import { FormType } from "../../pages/auth/components/CustomFormField"
+import { VoyageType } from "@/features/api/types"
 
+export const login = async (dataLogin: FormType) => {
+    const response = await api.post('/auth', dataLogin)
+    return response.data // Retourner les données de la réponse de l'API
+}
+
+// Inscription d'un utilisateur
+export const register = async (dataRegister: FormType) => {
+    const response = await api.post('/signup', dataRegister)
+    return response.data
+}
 
 // Récupérer la liste des dossiers de voyage
 export const getVoyages = async () => {

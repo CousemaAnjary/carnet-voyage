@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Home from "./pages/app/home/Home"
 import DayPhotos from "./pages/app/day_photos/DayPhotos"
 import Days from "./pages/app/days/Days"
-import { PrivateRoutes, PublicRoutes } from "./routes/routes"
+import { PrivateRoutes, PublicRoutes } from "./features/router/router"
 import Login from "./pages/auth/login/Login"
 import Register from "./pages/auth/register/Register"
 

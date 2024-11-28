@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion";
 import { PiCameraPlusBold } from "react-icons/pi";
 import { useState } from "react";
-import { postDay } from "../../services";
+import { postDay } from "../../../../features/api/services";
 
 const DayUploader = ({voyageId}: {voyageId:number}) => {
     const [images, setImages] = useState<Array<string>>([]);

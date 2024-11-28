@@ -1,4 +1,4 @@
-import { VoyageType } from "@/pages/app/types"
+import { VoyageType } from "@/features/api/types"
 
 let db: IDBDatabase | null = null
 
