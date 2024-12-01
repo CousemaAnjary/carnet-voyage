@@ -9,7 +9,7 @@ import Error404 from "../errors/Error404"
 const Days = () => {
     const navigate = useNavigate()
     const { voyageID } = useParams<{ voyageID: string }>()
-    const voyages = useAppSelector((state) => state.voyages)
+    const { voyages }= useAppSelector((state) => state.voyages)
 
     const voyage = voyages.find(voyage => voyage.id === parseInt(voyageID || '-1', 10))
 
@@ -29,8 +29,8 @@ const Days = () => {
                             </section>
                         )}
                     <section id="days-list" className="justify-items-center w-full grid md:grid-cols-2 xl:grid-cols-3 grid-flow-row gap-4">
-                        {[...voyage.days].reverse().map((day, index) => (
-                                <DayCard key={index} day={day} onOpen={openDay}/>
+                        {voyage.days && [...voyage.days].reverse().map((day) => (
+                                <DayCard key={day.id} day={day} onOpen={openDay}/>
                             ))
                         }
                     </section>

@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -12,6 +14,8 @@ import { Button } from "@/components/ui/button"
 import { cancelVoyage, closeVoyage } from "../../../../features/api/services"
 import { useState } from "react"
 import NetworkErrorDialog from "../../errors/NetworkErrorDialog"
+import { useAppDispatch } from "@/features/stores/hook"
+import { stateAnnulVoyage, stateCloseVoyage } from "@/features/stores/voyageSlice"
 
 export type VoyageAction = {
     action: 'cloture' | 'annul'
@@ -20,62 +24,58 @@ export type VoyageAction = {
 interface VoyageActionAlertDialogProps {
     action: VoyageAction,
     voyage: {
-        id: number | string,
+        id: number,
         name: string,
     }
 }
 
 const VoyageActionAlertDialog: React.FC<VoyageActionAlertDialogProps> = ({ action, voyage }) => {
+    const dispatch = useAppDispatch()
+
     const[openNetworkErrorDialog, setOpenNetworkErrorDialog] = useState(false)  
     const [openAlertActionDialog, setOpenAlertActionDialog] = useState(false)
 
+    // Cloturer un voyage
     const terminerVoyage = async () => {
-        await closeVoyage(voyage.id)
-            .catch(error => {
-                if(error.message === "Network Error") {
-                    setOpenNetworkErrorDialog(true)
-                } else {
-                    console.log("Erreur lors de la fermeture du voyage.", error)
-                }
-            })
+        try {
+            const data = await closeVoyage(voyage.id);
+            dispatch(stateCloseVoyage({ id: data.id, date: data.date }));
+        } catch (error:any) {
+            if (error.message === "Network Error") {
+                setOpenNetworkErrorDialog(true);
+            } else {
+                throw error;
+            }
+        }
     }  
     
+    // Annuler un voyage -> Le supprimer
     const annulerVoyage = async () => {
-        await cancelVoyage(voyage.id)
-            .catch(error => {
-                if(error.message === "Network Error") {
-                    setOpenNetworkErrorDialog(true)
-                } else {
-                    console.log("Erreur lors de l'annulation du voyage.", error)
-                }
-            })
+        try {
+            await cancelVoyage(voyage.id);
+            dispatch(stateAnnulVoyage(voyage.id));
+        } catch (error:any) {  
+            if (error.message === "Network Error") {
+                setOpenNetworkErrorDialog(true);
+            } else {
+                throw error;
+            }
+        }
     }
 
     const handleValidateAction = () => {
-        switch(action.action){
-            case "cloture":
-                terminerVoyage()
-                break
-            case "annul":
-                annulerVoyage()
-                break
-            default:
-                console.log("non pris en compte")
-                break
-        }
+        if (action.action === "cloture") return terminerVoyage();
+        if (action.action === "annul") return annulerVoyage();
         setOpenAlertActionDialog(false)
     }
-
-    const handleOpenActionAlert = () => {
-        setOpenAlertActionDialog(true)
-    }
-    
     
     return (
         <>
-            <Button onClick={handleOpenActionAlert}
-                className="w-full bg-red-500 hover:bg-red-700">
-                {action.action === "cloture" ? "Cloturer" : "Annuler"}
+            <Button onClick={() => setOpenAlertActionDialog(true)}
+                className="w-full bg-red-500 hover:bg-red-700"
+                aria-label={action.action === "cloture" ? "Clôturer le voyage" : "Annuler le voyage"}
+            >
+                {action.action === "cloture" ? "Clôturer" : "Annuler"}
             </Button>
             {openNetworkErrorDialog ? (
                 <NetworkErrorDialog setIsOpen={setOpenNetworkErrorDialog} />

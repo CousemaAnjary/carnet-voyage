@@ -20,7 +20,7 @@ export const getVoyages = async () => {
 }
 
 // Créer un voyage
-export const createVoyage = async (folderVoyageData: VoyageType) => {
+export const postVoyage = async (folderVoyageData: VoyageType) => {
     const response = await api.post('/travel/create', folderVoyageData)
     return response.data
 }
@@ -43,7 +43,7 @@ export const getContents = async (folderVoyageId: string) => {
 }
 
 // Mettre à jour la description d'une image
-export const updateImageDescription = async (id:string | number, newDescription: string) => {
+export const updateImageDescription = async (id:number, newDescription: string) => {
     try {
         const res = await api.patch(`/travel/content/edit/${id}`, { description: newDescription })
         console.log(res.data)
@@ -54,23 +54,13 @@ export const updateImageDescription = async (id:string | number, newDescription:
 }
 
 // Termine un voygae en cours
-export const closeVoyage = async (id:string | number) => {
-    try {
-        const res = await api.patch(`/travel/close/${id}`)
-        console.log(res.data)
-    } catch (error) {
-        console.error(error)
-        throw error
-    }
+export const closeVoyage = async (id:number) => {
+    const res = await api.patch(`/travel/close/${id}`)
+    return res.data
 }
 
 // Supprime un voyge à venir
-export const cancelVoyage = async (id:string | number) => {
-    try {
-        const res = await api.delete(`/travel/cancel/${id}`)
-        console.log(res.data)
-    } catch (error) {
-        console.error(error)
-        throw error
-    }
+export const cancelVoyage = async (id:number) => {
+    const res = await api.delete(`/travel/cancel/${id}`)
+    return res.data
 }
