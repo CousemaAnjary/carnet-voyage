@@ -49,6 +49,15 @@ export const storeVoyages = async (voyages: VoyageType[]) => {
     });
 }
 
+export const storeVoyage = async (voyage: VoyageType) => {
+    const db = await openDB()
+
+    const transaction = db.transaction('voyages', 'readwrite')
+    const voyagesStore = transaction.objectStore('voyages')
+
+    voyagesStore.put(voyage)
+}
+
 // Fonction pour récupérer les voyages depuis la base de données
 export const loadVoyages = async (): Promise<VoyageType[]> => {
     const db = await openDB()
@@ -58,8 +67,18 @@ export const loadVoyages = async (): Promise<VoyageType[]> => {
     const request = voyagesStore.getAll()
 
     return new Promise<VoyageType[]>((resolve, reject) => {
-        request.onsuccess = () => resolve(request.result.reverse())
+        request.onsuccess = () => resolve(request.result)
 
         request.onerror = () => reject('Erreur lors de la récupération des voyages.')
     })
+}
+
+// Fonction pour supprimer le voyage dans la base de données
+export const deleteVoyage = async (id:number) => {
+    const db = await openDB()
+
+    const transaction = db.transaction('voyages', 'readwrite')
+    const voyagesStore = transaction.objectStore('voyages')
+
+    voyagesStore.delete(id)
 }

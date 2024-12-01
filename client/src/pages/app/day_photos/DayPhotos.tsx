@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 
 const DayPhotos = () => {
     const { voyageID, dayID } = useParams<{ voyageID: string; dayID: string }>();
-    const voyages = useAppSelector((state) => state.voyages);
+    const { voyages } = useAppSelector((state) => state.voyages);
 
     const voyage = voyages.find((voyage) => voyage.id === parseInt(voyageID || "-1", 10));
     const day = voyage?.days.find((day) => day.id === parseInt(dayID || "-1", 10));

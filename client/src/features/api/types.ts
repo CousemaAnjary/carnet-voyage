@@ -24,7 +24,7 @@ export interface VoyageType {
     country?: string;
     city?: string;
     beginning_at: string;
-    days: DayType[];
+    days?: DayType[];
     ended_at?: string;
     created_at?: string;
     updated_at?: string;

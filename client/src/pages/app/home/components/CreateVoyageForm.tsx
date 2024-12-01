@@ -1,19 +1,23 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { 
     Form, 
     FormControl, 
     FormField, 
     FormItem, 
     FormLabel, 
-    FormMessage } from '@/components/ui/form'
+    FormMessage 
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { VoyageType } from '../../../../features/api/types'
-import { createVoyage } from '../../../../features/api/services'
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { VoyageType } from "../../../../features/api/types"
+import { postVoyage } from "../../../../features/api/services"
+import { useAppDispatch } from "@/features/stores/hook"
+import { stateAddVoyage } from "@/features/stores/voyageSlice"
 
-// Define validation schema with Zod
+// Validation schema
 const formSchema = z.object({
     name: z.string().min(2, { message: "Le nom est obligatoire" }),
     city: z.string().min(2, { message: "La ville est obligatoire" }),
@@ -24,43 +28,43 @@ const formSchema = z.object({
 })
 
 interface CreateVoyageFormProps {
-    setNetworkError: (created: boolean) => void;
-    setDataSent: (sent: boolean) => void;
+    onCancel: () => void;
+    onSuccess: () => void;
+    onError: (error: string) => void;
 }
 
-const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError, setDataSent }) => {
+const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ onCancel, onSuccess, onError }) => {
+    const dispatch = useAppDispatch()
 
     const form = useForm<VoyageType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: '',
-            city: '',
-            country: '',
-            beginning_at: new Date().toISOString().split('T')[0],
+            name: "",
+            city: "",
+            country: "",
+            beginning_at: new Date().toISOString().split("T")[0],
         },
     })
 
-    const handleCancel = () => {
-        setDataSent(true)
-    }
-
     const handleSubmit = async (data: VoyageType) => {
         form.reset()
-        
-        const folderData = { ...data }
-        await createVoyage(folderData)
-            .catch(error => {
-                if(error.message === "Network Error") {
-                    setNetworkError(true)
-                } else {
-                    console.log("Erreur lors de la récupération des dossiers de voyage.", error)
-                }
-            })
-            
-        setDataSent(true)
+        try {
+            const response = await postVoyage(data)
+            console.log(data)
+            const newVoyage: VoyageType = response.travel
+            dispatch(stateAddVoyage(newVoyage))
+            onSuccess()
+        } catch (error: any) {
+            if (error.message === "Network Error") {
+                onError("Network Error")
+            } else {
+                onError(error.message || "Une erreur inconnue est survenue")
+            }
+            console.log(error)
+        }
     }
 
-    return(
+    return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}>
                 <div className="space-y-4">
@@ -70,7 +74,11 @@ const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError, se
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input {...field} placeholder="Nom du dossier" className="w-full p-2 border rounded" />
+                                    <Input {...field} 
+                                        placeholder="Nom du dossier" 
+                                        className="w-full p-2 border rounded"
+                                        aria-label="Nom du dossier" 
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -82,7 +90,11 @@ const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError, se
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input {...field} placeholder="Ville" className="w-full p-2 border rounded" />
+                                    <Input {...field}
+                                        placeholder="Ville" 
+                                        className="w-full p-2 border rounded"
+                                        aria-label="Ville" 
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -94,7 +106,11 @@ const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError, se
                         render={({ field }) => (
                             <FormItem>
                                 <FormControl>
-                                    <Input {...field} placeholder="Pays" className="w-full p-2 border rounded" />
+                                    <Input {...field} 
+                                        placeholder="Pays" 
+                                        className="w-full p-2 border rounded"
+                                        aria-label="Pays" 
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -107,11 +123,10 @@ const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError, se
                             <FormItem>
                                 <FormLabel>Date de début</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        {...field}
-                                        type="date"
+                                    <Input {...field} 
+                                        type="date" 
                                         className="w-full p-2 border rounded"
-
+                                        aria-label="Date de début"
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -120,10 +135,16 @@ const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ setNetworkError, se
                     />
                 </div>
                 <div className="flex justify-end mt-4 gap-2">
-                    <Button onClick={handleCancel}
-                        type="button" 
-                        variant={'outline'}>Annuler</Button>
-                    <Button type="submit" className="bg-blue-600">Enregistrer</Button>
+                    <Button
+                        onClick={onCancel}
+                        type="button"
+                        variant={"outline"}
+                    >
+                        Annuler
+                    </Button>
+                    <Button type="submit" className="bg-blue-600">
+                        Enregistrer
+                    </Button>
                 </div>
             </form>
         </Form>

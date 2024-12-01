@@ -35,13 +35,12 @@ class TravelController extends Controller
 
         // rules validation
         $validatedData = $request->validate($rules); 
-
         // assing user to travel to created
         $validatedData['user_id'] = $user_id;
 
-        Travel::create($validatedData);
-
-        return response()->json(['message' => 'Travel created successfully']);
+        $created_travel = Travel::create($validatedData);
+                            
+        return response()->json(['travel' => $created_travel]);
     }
 
     public function get() {
@@ -65,10 +64,14 @@ class TravelController extends Controller
         }
 
         // do closing
-        $travel->ended_at = Carbon::now()->format('Y-m-d');
+        $ending_date = Carbon::now()->format('Y-m-d');
+        $travel->ended_at = $ending_date;
         $travel->save();
             
-        return response()->json(['message' => 'Travel closed successfully']);
+        return response()->json([
+            'id' => $travel->id,
+            'date' => $ending_date
+        ]);
     }
 
     public function cancel(string $id) {
