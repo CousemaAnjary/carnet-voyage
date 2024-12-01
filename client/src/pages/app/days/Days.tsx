@@ -33,9 +33,12 @@ const Days = () => {
                                 <DayUploader voyageId={voyage.id} />
                             </section>)
                     )}
-                    <section id="days-list" className="justify-items-center w-full grid md:grid-cols-2 xl:grid-cols-3 grid-flow-row gap-4">
+                    <section id="days-list" className={isUpcomming ? "h-[85vh] flex flex-col items-center justify-center" : "justify-items-center w-full grid md:grid-cols-2 xl:grid-cols-3 grid-flow-row gap-4"}>
                         {isUpcomming ? (
-                            <div>Upcomming</div>
+                            <>
+                                <h1>🌈</h1>
+                                <h1>Voyage à venir.</h1>
+                            </>
                         ):(
                             [...days].reverse().map((day) => (
                                 <DayCard key={day.id} day={day} onOpen={openDay}/>
