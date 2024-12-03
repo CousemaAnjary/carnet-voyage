@@ -19,9 +19,7 @@ const Days = () => {
     const isClosed = voyage?.ended_at ? true : false
     const isUpcomming = Date.parse(voyage?.beginning_at || '') > Date.now()
 
-    function openDay(id:number) {
-        navigate(`/carnet-voyage/${voyageID}/${id}`)
-    }
+    const openDay = (id:number) => navigate(`/carnet-voyage/${voyageID}/${id}`)
 
     const reversedDays = [...days].reverse()
 
