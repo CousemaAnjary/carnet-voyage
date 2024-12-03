@@ -16,7 +16,7 @@ class Day extends Model
         'location',
     ];
 
-    public function DayPhotos(): HasMany
+    public function dayPhotos(): HasMany
     {
         return $this->hasMany(DayPhoto::class);
     }

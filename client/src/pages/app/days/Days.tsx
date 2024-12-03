@@ -23,6 +23,8 @@ const Days = () => {
         navigate(`/carnet-voyage/${voyageID}/${id}`)
     }
 
+    const reversedDays = [...days].reverse()
+
     return (
         <Layout label={label}>
             {voyage ? (
@@ -40,7 +42,7 @@ const Days = () => {
                                 <h1>Voyage à venir.</h1>
                             </>
                         ):(
-                            [...days].reverse().map((day) => (
+                            reversedDays.map((day) => (
                                 <DayCard key={day.id} day={day} onOpen={openDay}/>
                             ))
                         )}

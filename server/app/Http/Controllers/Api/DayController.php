@@ -58,7 +58,7 @@ class DayController extends Controller
             }
             $day_photos = DayPhoto::insert($day_photos);
 
-            return [...$day->toArray(), "day_photos" => $day_photos];
+            return [...$day->toArray(), "day_photos" => [...$day->dayPhotos()->get()->toArray()]];
         });
     
         return response()->json(['day' => $created_day]);
