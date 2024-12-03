@@ -8,7 +8,7 @@ const VoyageCard: React.FC<{ voyage: VoyageType }> = ({ voyage }) => {
     const navigate = useNavigate()
 
     const open = () => {
-        navigate(`/carnet-voyage/${voyage.id}`)
+        navigate(`/carnet-voyage/voyage/${voyage.id}`)
     }
     
     const voyageStatus = voyage.ended_at

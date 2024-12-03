@@ -23,8 +23,8 @@ export default function App() {
             {/* Protected Routes */}
             <Route element={<PrivateRoutes />}>
               <Route path="/carnet-voyage" element={<Home />} />
-              <Route path="/carnet-voyage/:voyageID" element={<Days/>} />
-              <Route path="/carnet-voyage/:voyageID/:dayID" element={<DayPhotos/>} />
+              <Route path="/carnet-voyage/voyage/:id" element={<Days/>} />
+              <Route path="/carnet-voyage/day/:id" element={<DayPhotos/>} />
             </Route>
           </Routes>
         </BrowserRouter>
