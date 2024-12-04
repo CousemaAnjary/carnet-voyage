@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { ReactNode, useEffect, useState } from "react"
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 
 const LayoutNavigationBar : React.FC<{ title : string}> = ({ title }) =>  {
     const navigate = useNavigate()
-    const { voyageID, dayID } = useParams()
+    const { pathname } = useLocation()
     const [activateReturnBtn, setActivateReturnBtn] = useState(false)
 
     const goBack = () => {
@@ -14,13 +14,10 @@ const LayoutNavigationBar : React.FC<{ title : string}> = ({ title }) =>  {
     }
 
     useEffect(() => {
-        if(voyageID || dayID) {
+        if(pathname.match(/\/voyage\/\d+/) || pathname.match(/\/day\/\d+/)) {
             setActivateReturnBtn(true)
         }
-        else {
-            activateReturnBtn ?? setActivateReturnBtn(false)
-        }
-    }, [voyageID, dayID, activateReturnBtn])
+    }, [pathname])
 
     return (
         <nav className="absolute w-full z-10 bg-white h-16 border-b 

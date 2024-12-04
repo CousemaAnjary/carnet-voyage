@@ -53,7 +53,7 @@ const VoyageActionAlertDialog: React.FC<VoyageActionAlertDialogProps> = ({ actio
     const annulerVoyage = async () => {
         try {
             await cancelVoyage(voyage.id);
-            dispatch(stateAnnulVoyage(voyage.id));
+            dispatch(stateAnnulVoyage({id: voyage.id}));
         } catch (error:any) {  
             if (error.message === "Network Error") {
                 setOpenNetworkErrorDialog(true);
