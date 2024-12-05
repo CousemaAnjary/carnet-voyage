@@ -50,7 +50,6 @@ const CreateVoyageForm: React.FC<CreateVoyageFormProps> = ({ onCancel, onSuccess
         form.reset()
         try {
             const response = await postVoyage(data)
-            console.log(data)
             const newVoyage: VoyageType = response.travel
             dispatch(stateAddVoyage(newVoyage))
             onSuccess()

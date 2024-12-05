@@ -13,7 +13,7 @@ export default function Login() {
         await login(formData)
             .then((data) => {
                 setToken(data.token)
-                navigate('/carnet-voyage')
+                navigate('/home')
             })
         
     };

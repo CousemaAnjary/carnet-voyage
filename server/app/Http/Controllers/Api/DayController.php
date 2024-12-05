@@ -41,7 +41,7 @@ class DayController extends Controller
             abort(422,'No images found in the request');
         }
 
-        \DB::transaction(function() use ($request_data, $images, $uid) {
+        $created_day = \DB::transaction(function() use ($request_data, $images, $uid) {
             $day = Day::create([
                 'travel_id' => $request_data['travel_id'],
                 'location' => $request_data['location'] ?? null,
@@ -56,10 +56,12 @@ class DayController extends Controller
                     'photo_url' => asset("storage/{$path}")
                 ];
             }
-            DayPhoto::insert($day_photos);
+            $day_photos = DayPhoto::insert($day_photos);
+
+            return [...$day->toArray(), "day_photos" => [...$day->dayPhotos()->get()->toArray()]];
         });
     
-        return response()->json(['message' => 'Contents saved successfully']);
+        return response()->json(['day' => $created_day]);
     }
 
     public function edit(Request $request, string $id) {

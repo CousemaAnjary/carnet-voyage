@@ -4,33 +4,49 @@ import Layout from "../Layout"
 import { useAppSelector } from "@/features/stores/hook"
 import { useNavigate, useParams } from "react-router-dom"
 import Error404 from "../errors/Error404"
+import { useEffect, useState } from "react"
+import { DayType } from "@/features/api/types"
 
 
 const Days = () => {
     const navigate = useNavigate()
-    const { voyageID } = useParams<{ voyageID: string }>()
+    const { id } = useParams<{ id: string }>()
     const { voyages }= useAppSelector((state) => state.voyages)
+    
+    const [days, setDays] = useState<DayType[]>([])
+    const [label, setLabel] = useState<string>("🤯")
+    const [isClosed, setIsClosed] = useState<boolean>(false)
+    const [isUpcomming, setIsUpcomming] = useState<boolean>(false)
 
-    const voyage = voyages.find(voyage => voyage.id === parseInt(voyageID || '-1', 10))
-    const days = voyage?.days || []
+    const [exist, setExist] = useState<boolean>(true)
 
-    const label = voyage ? voyage.name : "🤯"
+    useEffect(() => {
+        if (id && voyages) {
+            const voyage = voyages.find(voyage => voyage.id === parseInt(id, 10))
 
-    const isClosed = voyage?.ended_at ? true : false
-    const isUpcomming = Date.parse(voyage?.beginning_at || '') > Date.now()
+            if(!voyage) {
+                setExist(false)
+                return
+            }
 
-    function openDay(id:number) {
-        navigate(`/carnet-voyage/${voyageID}/${id}`)
-    }
+            if(voyage.days) setDays([...voyage.days].reverse())
+
+            setLabel(voyage.name)
+            setIsClosed(Boolean(voyage?.ended_at))
+            setIsUpcomming(Date.parse(voyage.beginning_at) > Date.now())
+        }
+    }, [id, voyages])
+
+    const openDay = (id:number) => navigate(`/day/${id}`)
 
     return (
         <Layout label={label}>
-            {voyage ? (
+            {exist ? (
                 <div id="days" className="h-[89vh] w-full overflow-y-auto space-y-9">
                     {!isClosed  && 
                     (!isUpcomming && 
                             (<section id="uploader" className="flex justify-end">
-                                <DayUploader voyageId={voyage.id} />
+                                <DayUploader voyageId={parseInt(id || '-1',10)} />
                             </section>)
                     )}
                     <section id="days-list" className={isUpcomming ? "h-[85vh] flex flex-col items-center justify-center" : "justify-items-center w-full grid md:grid-cols-2 xl:grid-cols-3 grid-flow-row gap-4"}>
@@ -40,7 +56,7 @@ const Days = () => {
                                 <h1>Voyage à venir.</h1>
                             </>
                         ):(
-                            [...days].reverse().map((day) => (
+                            days.map((day) => (
                                 <DayCard key={day.id} day={day} onOpen={openDay}/>
                             ))
                         )}

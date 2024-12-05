@@ -1,4 +1,4 @@
-import { VoyageType } from "@/features/api/types"
+import { DayType, VoyageType } from "@/features/api/types"
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { getVoyages } from "../api/services"
 
@@ -26,8 +26,15 @@ export const voyageSlice = createSlice({
         stateAddVoyage: (state, action: PayloadAction<VoyageType>) => {
             state.voyages.push(action.payload)
         },
-        stateAnnulVoyage: (state, action: PayloadAction<number>) => {
-            state.voyages = state.voyages.filter(voyage => voyage.id !== action.payload)
+        stateAddDay: (state, action: PayloadAction<{ voyage_id: number, day:DayType }>) => {
+            state.voyages.forEach((voyage) => {
+                if(voyage.id === action.payload.voyage_id) {
+                    voyage.days ? voyage.days.push(action.payload.day) : voyage.days = [action.payload.day]
+                }
+            })
+        },
+        stateAnnulVoyage: (state, action: PayloadAction<{ id: number }>) => {
+            state.voyages = state.voyages.filter(voyage => voyage.id !== action.payload.id)
         },
         stateCloseVoyage: (state, action: PayloadAction<{ id: number; date: string }>) => {
             const voyage = state.voyages.find(voyage => voyage.id === action.payload.id)
@@ -54,6 +61,7 @@ export const voyageSlice = createSlice({
 
 export const {
     stateAddVoyage,
+    stateAddDay,
     stateAnnulVoyage,
     stateCloseVoyage
 } = voyageSlice.actions

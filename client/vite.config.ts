@@ -6,7 +6,13 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), VitePWA({
-    registerType: 'prompt', // Permet d'afficher un popup si le sw à été mis à jour
+    strategies: 'injectManifest',
+    srcDir: 'src',  // Dossier source de ton projet
+    filename: 'sw.ts',
+    
+    injectManifest: {
+      globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+    },
     
     manifest: {
       name: 'carnet-voyage',
@@ -15,13 +21,8 @@ export default defineConfig({
       theme_color: '#ffffff',
     },
 
-    workbox: {
-      globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
-    },
-
     devOptions: {
-      enabled: false,
-      suppressWarnings: false,
+      enabled: false
     },
     
   })],

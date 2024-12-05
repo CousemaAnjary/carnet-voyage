@@ -9,5 +9,5 @@ export function PrivateRoutes() {
 
 export function PublicRoutes() {
     const { authenticated } = useAuth()
-    return authenticated ? <Navigate to="/carnet-voyage" /> : <Outlet />
+    return authenticated ? <Navigate to="/home" /> : <Outlet />
 }
