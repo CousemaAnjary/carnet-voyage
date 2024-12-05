@@ -7,6 +7,12 @@ import path from 'path';
 export default defineConfig({
   plugins: [react(), VitePWA({
     registerType: 'prompt', // Permet d'afficher un popup si le sw à été mis à jour
+    strategies: 'injectManifest',
+    
+    injectManifest: {
+      swSrc: path.resolve(__dirname, 'src/sw.ts'),
+      swDest: 'sw.js',
+    },
     
     manifest: {
       name: 'carnet-voyage',
@@ -34,8 +40,7 @@ export default defineConfig({
     },
 
     devOptions: {
-      enabled: false,
-      suppressWarnings: false,
+      enabled: true
     },
     
   })],
