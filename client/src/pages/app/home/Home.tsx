@@ -15,7 +15,7 @@ const Home = () => {
     }, [dispatch])
 
     const reversedVoyages = [...voyages].reverse()
-    
+
     return (
         <Layout label={APP_NAME}>
             <div className="h-[90vh] w-full overflow-y-auto justify-items-center">

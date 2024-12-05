@@ -24,3 +24,5 @@ registerRoute(new NavigationRoute(
 
 self.skipWaiting()
 clientsClaim()
+
+

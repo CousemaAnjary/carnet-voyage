@@ -17,6 +17,20 @@ export default defineConfig({
 
     workbox: {
       globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+      runtimeCaching: [{
+        urlPattern: new RegExp(`^${process.env.API_URL}/?.*`),
+        handler: "NetworkFirst",
+        options: {
+          cacheName: 'api-responses-caches',
+          expiration: {
+            maxEntries: 1,
+            maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+          },
+          cacheableResponse: {
+            statuses: [0, 200]
+          }
+        }
+      }]
     },
 
     devOptions: {
