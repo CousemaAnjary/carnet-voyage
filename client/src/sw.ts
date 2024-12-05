@@ -3,6 +3,8 @@ import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from
 import { clientsClaim } from 'workbox-core'
 import { NavigationRoute, registerRoute } from 'workbox-routing'
 
+const apiURL = import.meta.env.VITE_BACKEND_API_URL || 'http://localhost:8000';
+
 declare let self: ServiceWorkerGlobalScope;
 
 // self.__WB_MANIFEST is the default injection point
@@ -16,7 +18,6 @@ let allowlist: RegExp[] | undefined;
 if (import.meta.env.DEV) {
   allowlist = [/^\/$/];
 }
-  
 
 // to allow work offline
 registerRoute(
@@ -34,11 +35,18 @@ self.addEventListener('activate', () => {
 });
 
 self.addEventListener('fetch', (event) => {
-  console.log('Service Worker intercepte une requête', event.request.url);
-  event.respondWith(fetch(event.request));
-})
-
-
-
-
-
+  if(event.request.url.startsWith(apiURL) && event.request.method === 'GET') {
+    event.respondWith(fetch(event.request)
+      .then((apiResponse) => {
+        const responseClone = apiResponse.clone();
+        caches.open('api-res-cache').then(cache => cache.put(event.request, responseClone));
+        return apiResponse;
+      })
+      .catch((error) => {
+        return caches.match(event.request).then(cachedResponse => {
+          return (cachedResponse || error)
+        });
+      })
+    );
+  }
+});
