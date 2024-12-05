@@ -13,24 +13,30 @@ cleanupOutdatedCaches();
 
 let allowlist: RegExp[] | undefined;
 // in dev mode, we disable precaching to avoid caching issues
-if (import.meta.env.DEV)
+if (import.meta.env.DEV) {
   allowlist = [/^\/$/];
+}
+  
 
 // to allow work offline
-registerRoute(new NavigationRoute(
-  createHandlerBoundToURL('index.html'),
-  { allowlist },
-));
+registerRoute(
+  new NavigationRoute(createHandlerBoundToURL('index.html'),{ allowlist },)
+);
 
-self.addEventListener('install', () => {
-  console.log('Service worker installed')
-  self.skipWaiting() // Activate worker immediately
+self.addEventListener('install', (event) => {
+  console.log('Service Worker installé');
+  event.waitUntil(self.skipWaiting()); 
 });
 
 self.addEventListener('activate', () => {
-  console.log('Service worker activated')
-  clientsClaim() // Become available to all pages
+  console.log('Service Worker activé');
+  clientsClaim(); 
 });
+
+self.addEventListener('fetch', (event) => {
+  console.log('Service Worker intercepte une requête', event.request.url);
+  event.respondWith(fetch(event.request));
+})
 
 
 
