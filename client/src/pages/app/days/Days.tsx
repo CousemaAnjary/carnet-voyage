@@ -37,7 +37,7 @@ const Days = () => {
         }
     }, [id, voyages])
 
-    const openDay = (id:number) => navigate(`/carnet-voyage/day/${id}`)
+    const openDay = (id:number) => navigate(`/day/${id}`)
 
     return (
         <Layout label={label}>

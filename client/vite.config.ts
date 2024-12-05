@@ -7,11 +7,11 @@ import path from 'path';
 export default defineConfig({
   plugins: [react(), VitePWA({
     strategies: 'injectManifest',
+    srcDir: 'src',  // Dossier source de ton projet
+    filename: 'sw.ts',
     
     injectManifest: {
       globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
-      swSrc: path.resolve(__dirname, 'src/sw.ts'),
-      swDest: 'sw.js',
     },
     
     manifest: {

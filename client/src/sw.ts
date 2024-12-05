@@ -26,6 +26,7 @@ self.addEventListener('install', () => {
   console.log('Service worker installed')
   self.skipWaiting() // Activate worker immediately
 });
+
 self.addEventListener('activate', () => {
   console.log('Service worker activated')
   clientsClaim() // Become available to all pages
