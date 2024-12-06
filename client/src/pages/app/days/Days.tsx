@@ -37,7 +37,7 @@ const Days = () => {
         }
     }, [id, voyages])
 
-    const openDay = (id:number) => navigate(`/day/${id}`)
+    const openDayGallery = (id:number) => navigate(`/gallery/${id}`)
 
     return (
         <Layout label={label}>
@@ -57,7 +57,7 @@ const Days = () => {
                             </>
                         ):(
                             days.map((day) => (
-                                <DayCard key={day.id} day={day} onOpen={openDay}/>
+                                <DayCard key={day.id} day={day} onOpen={openDayGallery}/>
                             ))
                         )}
                     </section>
