@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/features/stores/hook"
 import { useParams } from "react-router-dom"
 import Layout from "../Layout"
-import Error404 from "../errors/Error404"
+import Error404 from "../../../components/errors/Error404"
 import { motion } from "framer-motion"
 import { DayPhotoType, DayType } from "@/features/api/types"
 import { useEffect, useMemo, useState } from "react"

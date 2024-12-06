@@ -10,9 +10,9 @@ import { useEffect } from "react"
 export const APP_NAME = "Carnet de Voyage"
 
 export default function App() {
-  const { authenticated } = useAuth()
-  const { pathname } = useLocation()
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const { authenticated } = useAuth()
 
   useEffect(() => {
     if(!authenticated && pathname !== '/login' && pathname !== '/register')

@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { cancelVoyage, closeVoyage } from "../../../../features/api/services"
 import { useState } from "react"
-import NetworkErrorDialog from "../../errors/NetworkErrorDialog"
+import NetworkErrorDialog from "../../../../components/errors/NetworkErrorDialog"
 import { useAppDispatch } from "@/features/stores/hook"
 import { stateAnnulVoyage, stateCloseVoyage } from "@/features/stores/voyageSlice"
 

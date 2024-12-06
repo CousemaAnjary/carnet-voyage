@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import CreateVoyageForm from "./CreateVoyageForm";
-import NetworkErrorDialog from "../../errors/NetworkErrorDialog";
+import NetworkErrorDialog from "../../../../components/errors/NetworkErrorDialog";
 
 const CreateVoyageDialog = () => {
   const [openCreateVoyageDialog, setOpenCreateVoyageDialog] = useState(false);

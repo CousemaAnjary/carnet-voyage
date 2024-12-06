@@ -13,7 +13,7 @@ import { postDay } from "../../../../features/api/services"
 import { useAppDispatch } from "@/features/stores/hook"
 import { DayType } from "@/features/api/types"
 import { stateAddDay } from "@/features/stores/voyageSlice"
-import NetworkErrorDialog from "../../errors/NetworkErrorDialog"
+import NetworkErrorDialog from "../../../../components/errors/NetworkErrorDialog"
 
 const DayUploader = ({voyageId}: {voyageId:number}) => {
     const dispatch = useAppDispatch()
