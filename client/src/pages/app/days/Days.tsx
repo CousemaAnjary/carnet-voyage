@@ -3,7 +3,7 @@ import DayUploader from "./components/DayUploader"
 import Layout from "../Layout"
 import { useAppSelector } from "@/features/stores/hook"
 import { useNavigate, useParams } from "react-router-dom"
-import Error404 from "../errors/Error404"
+import Error404 from "../../../components/errors/Error404"
 import { useEffect, useState } from "react"
 import { DayType } from "@/features/api/types"
 
