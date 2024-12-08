@@ -17,7 +17,7 @@ export default function Login() {
         try {
             const response_data = await login(formData);
             setToken(response_data.token);
-            navigate('/home');
+            navigate('/');
         } catch (error: any) {
             if (error.message === "Network Error") {
                 setOpenNetworkErrorDialog(true);

@@ -20,10 +20,10 @@ export default function App() {
       navigate('/login');
 
     if(authenticated && (pathname === '/login' || pathname === '/register'))
-      navigate('/home');
+      navigate('/');
 
-    if(authenticated && pathname === '/')
-      navigate('/home');
+    if(authenticated && pathname === '/home')
+      navigate('/');
 
   }, [pathname, authenticated,navigate])
 
@@ -35,7 +35,7 @@ export default function App() {
           <Route path="/register" Component={Register} />
 
           {/* When auth */}
-          <Route path="/home" Component={Home} />
+          <Route path="/" Component={Home} />
           <Route path="/voyage/:id" Component={Days} />
           <Route path="/gallery/:id" Component={Gallery} />
           <Route path="/photo" Component={Photo} />
