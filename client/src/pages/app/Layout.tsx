@@ -14,7 +14,7 @@ const LayoutNavigationBar : React.FC<{ title : string}> = ({ title }) =>  {
     }
 
     useEffect(() => {
-        if(pathname.match(/\/voyage\/\d+/) || pathname.match(/\/day\/\d+/)) {
+        if(pathname.match(/\/voyage\/\d+/) || pathname.match(/\/gallery\/\d+/)) {
             setActivateReturnBtn(true)
         }
     }, [pathname])
