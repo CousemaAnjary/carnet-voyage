@@ -1,23 +1,23 @@
-import { Button } from "@/components/ui/button"
-import { ReactNode, useEffect, useState } from "react"
+import { Button } from "@/components/ui/button";
+import { ReactNode, useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 const LayoutNavigationBar : React.FC<{ title : string}> = ({ title }) =>  {
-    const navigate = useNavigate()
-    const { pathname } = useLocation()
-    const [activateReturnBtn, setActivateReturnBtn] = useState(false)
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+    const [activateReturnBtn, setActivateReturnBtn] = useState(false);
 
     const goBack = () => {
-        navigate(-1)
-    }
+        navigate(-1);
+    };
 
     useEffect(() => {
-        if(pathname.match(/\/voyage\/\d+/) || pathname.match(/\/day\/\d+/)) {
-            setActivateReturnBtn(true)
+        if(pathname.match(/\/voyage\/\d+/) || pathname.match(/\/gallery\/\d+/)) {
+            setActivateReturnBtn(true);
         }
-    }, [pathname])
+    }, [pathname]);
 
     return (
         <nav className="absolute w-full z-10 bg-white h-16 border-b 

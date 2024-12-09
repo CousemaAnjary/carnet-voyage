@@ -27,30 +27,8 @@ export const postVoyage = async (folderVoyageData: VoyageType) => {
 
 // Ajouter des images dans un dossier de voyage
 export const postDay = async (day: FormData) => {
-    const response = await api.post('/travel/day/post', day)
+    const response = await api.post('/day/post', day)
     return response.data
-}
-
-// Récupérer la liste des images d'un dossier de voyage
-export const getContents = async (folderVoyageId: string) => {
-    try {
-        const response = await api.get(`/travel/${folderVoyageId}/content`)
-        return response.data.contents
-    } catch (error) {
-        console.error(error)
-        throw error
-    }
-}
-
-// Mettre à jour la description d'une image
-export const updateImageDescription = async (id:number, newDescription: string) => {
-    try {
-        const res = await api.patch(`/travel/content/edit/${id}`, { description: newDescription })
-        console.log(res.data)
-    } catch (error) {
-        console.error(error)
-        throw error
-    }
 }
 
 // Termine un voygae en cours

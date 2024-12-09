@@ -1,40 +1,42 @@
 import { useAppSelector } from "@/features/stores/hook"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Layout from "../Layout"
-import Error404 from "../errors/Error404"
+import Error404 from "../../../components/errors/Error404"
 import { motion } from "framer-motion"
 import { DayPhotoType, DayType } from "@/features/api/types"
 import { useEffect, useMemo, useState } from "react"
 
 
-const DayPhotos = () => {
-    const { id } = useParams<{ id: string }>()
+const Gallery = () => {
+    const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
+    const { voyages } = useAppSelector((state) => state.voyages);
 
-    const { voyages } = useAppSelector((state) => state.voyages)
+    const [day, setDay] = useState<DayType | null>(null);
+    const [label, setLabel] = useState<string>("🤯");
+    const [photos, setPhotos] = useState<DayPhotoType[]>([]);
 
-    const [day, setDay] = useState<DayType | null>(null)
-    const [label, setLabel] = useState<string>("🤯")
-    const [photos, setPhotos] = useState<DayPhotoType[]>([])
+    const handlePhotoClick = (id: number) => {
+        navigate(`/photo`, { state: { 
+            photoId: id,
+            dayId: day?.id,
+            voyageId: day?.travel_id
+        } });
+    }
 
-    
     useEffect(() => {
         if (voyages && id) {
             for (const voyage of voyages) {
-                const matchedDay = voyage.days?.find(
-                    (day) => day.id === parseInt(id, 10)
-                )
+                const matchedDay = voyage.days?.find(day => day.id === parseInt(id, 10));
                 if (matchedDay) {
-                    setLabel(`${voyage.name} / Jour ${matchedDay.id} / Photos`)
-                    setDay(matchedDay)
-
-                    if(matchedDay.day_photos) 
-                        setPhotos([...matchedDay.day_photos].reverse())
-
+                    setLabel(`${voyage.name} / Jour ${matchedDay.id} / Photos`);
+                    setDay(matchedDay);
+                    if(matchedDay.day_photos) setPhotos([...matchedDay.day_photos].reverse());
                     break
                 }
             }
         }
-    }, [voyages, id])
+    }, [voyages, id]);
 
     const renderedPhotos = useMemo(
         () =>
@@ -48,11 +50,12 @@ const DayPhotos = () => {
                         src={`${import.meta.env.VITE_BACKEND_API_URL}${photo.photo_url}`}
                         alt={`photo-${photo.id}`}
                         className="w-64 h-72 object-cover rounded-lg"
+                        onClick={() => handlePhotoClick(photo.id)}
                     />
                 </motion.div>
             )),
         [photos]
-    )
+    );
 
     return (
         <Layout label={label}>
@@ -69,4 +72,4 @@ const DayPhotos = () => {
     )
 }
 
-export default DayPhotos
+export default Gallery

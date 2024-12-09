@@ -3,7 +3,7 @@ import DayUploader from "./components/DayUploader"
 import Layout from "../Layout"
 import { useAppSelector } from "@/features/stores/hook"
 import { useNavigate, useParams } from "react-router-dom"
-import Error404 from "../errors/Error404"
+import Error404 from "../../../components/errors/Error404"
 import { useEffect, useState } from "react"
 import { DayType } from "@/features/api/types"
 
@@ -37,7 +37,7 @@ const Days = () => {
         }
     }, [id, voyages])
 
-    const openDay = (id:number) => navigate(`/day/${id}`)
+    const openDayGallery = (id:number) => navigate(`/gallery/${id}`)
 
     return (
         <Layout label={label}>
@@ -57,7 +57,7 @@ const Days = () => {
                             </>
                         ):(
                             days.map((day) => (
-                                <DayCard key={day.id} day={day} onOpen={openDay}/>
+                                <DayCard key={day.id} day={day} onOpen={openDayGallery}/>
                             ))
                         )}
                     </section>

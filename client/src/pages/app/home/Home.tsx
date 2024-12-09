@@ -7,14 +7,14 @@ import { fetchVoyages } from "@/features/stores/voyageSlice"
 import { useEffect } from "react"
 
 const Home = () => {
-    const dispatch = useAppDispatch()
-    const { voyages, loading, error } = useAppSelector((state) => state.voyages)
+    const dispatch = useAppDispatch();
+    const { voyages, loading, error } = useAppSelector((state) => state.voyages);
 
     useEffect(() => {
         dispatch(fetchVoyages())
-    }, [dispatch])
+    }, [dispatch]);
 
-    const reversedVoyages = [...voyages].reverse()
+    const reversedVoyages = [...voyages].reverse();
 
     return (
         <Layout label={APP_NAME}>
