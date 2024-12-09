@@ -16,8 +16,12 @@ const Gallery = () => {
     const [label, setLabel] = useState<string>("🤯");
     const [photos, setPhotos] = useState<DayPhotoType[]>([]);
 
-    const displayPhoto = (photo: DayPhotoType) => {
-        navigate(`/photo?vid=${day?.travel_id}&did=${day?.id}&pid=${photo.id}`);
+    const handlePhotoClick = (id: number) => {
+        navigate(`/photo`, { state: { 
+            photoId: id,
+            dayId: day?.id,
+            voyageId: day?.travel_id
+        } });
     }
 
     useEffect(() => {
@@ -46,7 +50,7 @@ const Gallery = () => {
                         src={`${import.meta.env.VITE_BACKEND_API_URL}${photo.photo_url}`}
                         alt={`photo-${photo.id}`}
                         className="w-64 h-72 object-cover rounded-lg"
-                        onClick={() => displayPhoto(photo)}
+                        onClick={() => handlePhotoClick(photo.id)}
                     />
                 </motion.div>
             )),

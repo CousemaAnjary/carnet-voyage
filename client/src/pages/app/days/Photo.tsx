@@ -3,54 +3,66 @@ import { useAppSelector } from "@/features/stores/hook";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { DayPhotoType } from "@/features/api/types";
+import { useEffect, useState } from "react";
 
-const useQuery = () => {
-    return new URLSearchParams(useLocation().search);
-}
 
 const Photo  = () => {
-    const query = useQuery();
+    const location = useLocation();
     const navigate = useNavigate();
-    const pathname = useLocation().pathname
     const { voyages } = useAppSelector((state) => state.voyages);
 
-    const vid = query.get('vid');
-    const did = query.get('did');
-    const pid = query.get('pid');
+    const { photoId, dayId, voyageId } = location.state as { photoId: number, dayId: number, voyageId: number };
 
-    const photos = voyages.find(voyage => voyage.id === parseInt(vid || '-1', 10))
-                    ?.days?.find(day => day.id === parseInt(did || '-1', 10))
-                    ?.day_photos;
+    console.log(voyageId);
+
+    const [photos, setPhotos] = useState<DayPhotoType[]>([]);
+    const [nextPhoto, setNextPhoto] = useState<DayPhotoType|undefined>(undefined);
+    const [prevPhoto, setPrevPhoto] = useState<DayPhotoType|undefined>(undefined);
+    const [currentPhoto, setCurrentPhoto] = useState<DayPhotoType|undefined>(undefined);
 
     const selectPhoto = (id:number) => {
-        return photos?.find(photo => photo.id === id);
-    };
-
-    const photo = pid ? selectPhoto(parseInt(pid, 10)) : undefined;
-    const nextPhoto = photo ? selectPhoto(photo.id - 1) : undefined;
-    const prevPhoto = photo ? selectPhoto(photo.id + 1) : undefined;
-
-    const navigateToPhoto = (photoId:number) => {
-        navigate(`${pathname}?vid=${vid}&did=${did}&pid=${photoId}`)
+        return photos.find(photo => photo.id === id);
     };
     
     const next = () => {
-        if(!nextPhoto) return
-        navigateToPhoto(nextPhoto.id)
+        if(!nextPhoto) return;
+        setCurrentPhoto(nextPhoto);
     };
 
     const prev = () => {
         if(!prevPhoto) return
-        navigateToPhoto(prevPhoto.id)
+        setCurrentPhoto(prevPhoto);
     };
 
     const exit = () => {
-        navigate(`/gallery/${photo?.day_id}`)
+        navigate(-1);
     }
+
+    useEffect(() => {
+        const photosFormDay = voyages.find(voyage => voyage.id === voyageId)
+                    ?.days?.find(day => day.id === dayId)
+                    ?.day_photos 
+                    || []
+        setPhotos(photosFormDay);
+    }, [voyages, voyageId, dayId]);
+
+    useEffect(() => {
+        if(photos.length > 0 && photoId) {
+            setCurrentPhoto(selectPhoto(photoId));
+        }
+    }, [photos, photoId]);
+
+    useEffect(() => {
+        if(currentPhoto) {
+            setNextPhoto(selectPhoto(currentPhoto.id - 1));
+            setPrevPhoto(selectPhoto(currentPhoto.id + 1));
+        }
+    }, [currentPhoto])
     
     return (
         <>
-            {!photo ? (
+            {!currentPhoto ? (
                 <Error404 />
             ): (
                 <div className="w-full bg-black h-screen flex flex-col items-center justify-center">
@@ -69,8 +81,8 @@ const Photo  = () => {
                         )}
                         <img
                             className="max-w-[90%]"
-                            src={`${import.meta.env.VITE_BACKEND_API_URL}${photo.photo_url}`}
-                            alt={`photo-${photo.id}`}
+                            src={`${import.meta.env.VITE_BACKEND_API_URL}${currentPhoto.photo_url}`}
+                            alt={`photo-${currentPhoto.id}`}
                         />
                         {nextPhoto && (
                             <button
