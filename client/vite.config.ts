@@ -13,12 +13,43 @@ export default defineConfig({
     injectManifest: {
       globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
     },
-    
+
     manifest: {
-      name: 'carnet-voyage',
-      short_name: 'carnet-voyage',
-      description: 'carnet-voyage',
-      theme_color: '#ffffff',
+      "name": "Carnet de voyage",
+      "short_name": "Carnet de voyage",
+      "description": "",
+      "theme_color": "#ffffff",
+      "background_color": "#ffffff",
+      "display":"fullscreen",
+      "icons": [
+        {
+          "src": "icons/64x64.png",
+          "sizes": "64x64",
+          "type": "image/png"
+        },
+        {
+          "src": "180x180.png",
+          "sizes": "180x180",
+          "type": "image/png"
+        },
+        {
+          "src": "192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "512x512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any"
+        },
+        {
+          "src": "512x512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "maskable"
+        }
+      ]
     },
 
     devOptions: {
