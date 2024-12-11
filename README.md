@@ -1,5 +1,7 @@
 # Carnet Voyage
 
+![App Icon](./public/64x64.png)
+
 ## Project Overview
 
 Carnet Voyage is a travel diary application that allows users to document their travel experiences. Users can add new travel entries, update existing ones, and view their travel history. The application leverages modern web technologies to provide a seamless and interactive user experience.
