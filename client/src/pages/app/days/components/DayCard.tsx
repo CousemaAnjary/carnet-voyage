@@ -49,14 +49,14 @@ const DayCardImagesPreview = ({ photos } : { photos:  DayPhotoType[] | undefined
 }
 
 const DayCard : React.FC<{ 
-    day: DayType, onOpen: (id:number) => void
- }> = ({ day, onOpen }) => {
+    day: DayType, dayNum:number, onOpen: (id:number) => void
+ }> = ({ day, dayNum, onOpen }) => {
 
     return (
         <div id="day-card" className="shadow-md w-[24rem]">
             <DayCardImagesPreview  photos={day.day_photos}/>
             <section className="bg-white pt-2 px-6">
-                <h1 className="text-center text-2xl font-bold">Day {day.id}</h1>
+                <h1 className="text-center text-2xl font-bold">Jour {dayNum}</h1>
                 <div className="h-15 overflow-hidden">{day.legend}</div>
                 <Button onClick={() => onOpen(day.id)} className="my-6 w-full bg-blue-600 hover:bg-blue-500">Voir toute les photos</Button>
             </section>
