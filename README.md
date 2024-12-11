@@ -16,7 +16,7 @@ Carnet Voyage is a travel diary application that allows users to document their 
 
 ## Technologies Used
 
-- **Frontend**: React, Vite, TypeScript
+- **Frontend**: React, Vite, Vite PWA, TypeScript
 - **Backend**: Laravel 10
 - **Database**: MySQL for backend storage
 
