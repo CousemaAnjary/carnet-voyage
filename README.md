@@ -1,6 +1,4 @@
-# Carnet Voyage
-
-![App Icon](./client/public/64x64.png)
+# ![App Icon](./client/public/64x64.png) Carnet Voyage
 
 ## Project Overview
 
