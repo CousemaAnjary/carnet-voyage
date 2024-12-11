@@ -9,35 +9,39 @@ import { DayType } from "@/features/api/types"
 
 
 const Days = () => {
-    const navigate = useNavigate()
-    const { id } = useParams<{ id: string }>()
-    const { voyages }= useAppSelector((state) => state.voyages)
+    const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
+    const { voyages }= useAppSelector((state) => state.voyages);
     
-    const [days, setDays] = useState<DayType[]>([])
+    const [days, setDays] = useState<DayType[]>([]);
     const [label, setLabel] = useState<string>("🤯")
-    const [isClosed, setIsClosed] = useState<boolean>(false)
-    const [isUpcomming, setIsUpcomming] = useState<boolean>(false)
+    const [isClosed, setIsClosed] = useState<boolean>(false);
+    const [isUpcomming, setIsUpcomming] = useState<boolean>(false);
+    const [daysLength, setDaysLength] = useState<number>(0);
 
-    const [exist, setExist] = useState<boolean>(true)
+    const [exist, setExist] = useState<boolean>(true);
 
     useEffect(() => {
         if (id && voyages) {
-            const voyage = voyages.find(voyage => voyage.id === parseInt(id, 10))
+            const voyage = voyages.find(voyage => voyage.id === parseInt(id, 10));
 
             if(!voyage) {
-                setExist(false)
-                return
+                setExist(false);
+                return;
             }
 
-            if(voyage.days) setDays([...voyage.days].reverse())
+            if(voyage.days) {
+                setDays([...voyage.days].reverse());
+                setDaysLength(voyage.days.length);
+            }
 
-            setLabel(voyage.name)
-            setIsClosed(Boolean(voyage?.ended_at))
-            setIsUpcomming(Date.parse(voyage.beginning_at) > Date.now())
+            setLabel(voyage.name);
+            setIsClosed(Boolean(voyage?.ended_at));
+            setIsUpcomming(Date.parse(voyage.beginning_at) > Date.now());
         }
-    }, [id, voyages])
+    }, [id, voyages]);
 
-    const openDayGallery = (id:number) => navigate(`/gallery/${id}`)
+    const openDayGallery = (id:number) => navigate(`/gallery/${id}`);
 
     return (
         <Layout label={label}>
@@ -56,8 +60,11 @@ const Days = () => {
                                 <h1>Voyage à venir.</h1>
                             </>
                         ):(
-                            days.map((day) => (
-                                <DayCard key={day.id} day={day} onOpen={openDayGallery}/>
+                            days.map((day, index) => (
+                                <DayCard key={day.id} 
+                                    day={day}  dayNum={daysLength - index}
+                                    onOpen={openDayGallery}
+                                />
                             ))
                         )}
                     </section>
