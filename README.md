@@ -34,29 +34,29 @@ Carnet Voyage is a travel diary application that allows users to document their 
 
 1. Clone the repository:
 ```bash
-   git clone https://github.com/CousemaAnjary/carnet-voyage
+git clone https://github.com/CousemaAnjary/carnet-voyage
 ```
 
 2. Navigate to the project directory:
 ```bash
-    cd carnet-voyage
+cd carnet-voyage
 ```
 
 ### Frontend Intialization
 
 1. Navigate to the frontend directory:
 ```bash
-    cd client
+cd client
 ```
 
 2. Install the dependencies:
 ```bash
-    npm install
+npm install
 ```
 
 3. Start the developpement server:
 ```bash
-    npm run dev
+npm run dev
 ```
 4. Open your browser and navigate to http://localhost:3000 to view the application.
 
@@ -64,37 +64,37 @@ Carnet Voyage is a travel diary application that allows users to document their 
 
 1. Navigate to the backend directory:
 ```bash
-    cd server
+cd server
 ```
 
 2. Install the dependencies:
 ```bash
-    composer install
+composer install
 ```
 
 3. Copy the .env.example file to .env:
 ```bash
-    cp .env.example .env
+cp .env.example .env
 ```
 
 4. Configure your database settings in the .env file:
 ```markdown
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=your_database_name
-    DB_USERNAME=your_database_user
-    DB_PASSWORD=your_database_password
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=your_database_user
+DB_PASSWORD=your_database_password
 ```
 
 5. Run the database migrations:
 ```bash
-    php artisan migrate
+php artisan migrate
 ```
 
 6. Start the backend server:
 ```bash
-    php artisan serve
+php artisan serve
 ```
 
 8. The backend server will run on http://localhost:8000.
@@ -103,11 +103,14 @@ Carnet Voyage is a travel diary application that allows users to document their 
 
 1. To buid the application for production run:
 ```bash
-    npm run build
+npm run build
 ```
 The production-ready files will be generated in the dist directory
 
 2. To run production build run:
 ```bash 
-    npm run preview
+npm run preview
 ```
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
