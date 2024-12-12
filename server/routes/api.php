@@ -34,3 +34,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/edit/{id}', [DayController::class, 'edit']);
     });
 });
+
+Route::get('/storage/{path}', function (string $path) {
+    $file = Storage::disk('public')->path($path);
+
+    if(!file_exists($file)) {
+        abort(404);
+    }
+
+    return Response::file($file);
+})->where('path', '.*');

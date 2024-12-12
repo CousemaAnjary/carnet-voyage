@@ -58,7 +58,6 @@ const DayUploader = ({voyageId}: {voyageId:number}) => {
 
         await postDay(formData)
             .then(response => {
-                console.log(response)
                 const newDay : DayType = response.day
                 dispatch(stateAddDay({ voyage_id: voyageId, day: newDay }))
             })

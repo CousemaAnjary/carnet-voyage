@@ -14,8 +14,6 @@ const Photo  = () => {
 
     const { photoId, dayId, voyageId } = location.state as { photoId: number, dayId: number, voyageId: number };
 
-    console.log(voyageId);
-
     const [photos, setPhotos] = useState<DayPhotoType[]>([]);
     const [nextPhoto, setNextPhoto] = useState<DayPhotoType|undefined>(undefined);
     const [prevPhoto, setPrevPhoto] = useState<DayPhotoType|undefined>(undefined);
@@ -39,12 +37,16 @@ const Photo  = () => {
         navigate(-1);
     }
 
+    // Set Photos
     useEffect(() => {
-        const photosFormDay = voyages.find(voyage => voyage.id === voyageId)
+        if(voyages && voyageId && dayId) {
+            const photosFormDay = voyages.find(voyage => voyage.id === voyageId)
                     ?.days?.find(day => day.id === dayId)
                     ?.day_photos 
                     || []
-        setPhotos(photosFormDay);
+            setPhotos(photosFormDay);
+        }
+        
     }, [voyages, voyageId, dayId]);
 
     useEffect(() => {

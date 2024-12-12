@@ -40,7 +40,7 @@ const Gallery = () => {
 
     const renderedPhotos = useMemo(
         () =>
-            photos.map((photo) => (
+            photos.map( photo => (
                 <motion.div
                     key={photo.id}
                     whileHover={{ scale: 1.1, zIndex: 100 }}

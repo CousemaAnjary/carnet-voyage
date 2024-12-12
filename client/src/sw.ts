@@ -1,12 +1,12 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 /// <reference lib="webworker" />
-import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
-import { clientsClaim } from 'workbox-core'
-import { NavigationRoute, registerRoute } from 'workbox-routing'
+import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
+import { clientsClaim } from 'workbox-core';
+import { NavigationRoute, registerRoute } from 'workbox-routing';
 import { VoyageType } from './features/api/types';
 
 const cacheName = 'api-res-cache';
-const apiURL = import.meta.env.VITE_BACKEND_API_URL || 'http://localhost:8000';
+const apiURL = import.meta.env.VITE_BACKEND_API_URL;
 
 declare let self: ServiceWorkerGlobalScope;
 
@@ -28,22 +28,58 @@ registerRoute(
 );
 
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installé');
+  console.log('Service worker installé');
   event.waitUntil(self.skipWaiting()); 
 });
 
 self.addEventListener('activate', () => {
   console.log('Service Worker activé');
-  clientsClaim(); 
+  clientsClaim();
 });
+
+const putInCahe = async (request: Request, response: Response) => {
+  const cache = await caches.open(cacheName);
+  await cache.put(request, response);
+}
+
+async function addInCahePhotos(response: Response) {
+  const data = await response.json();
+
+  if(!data.travels) {
+    return;
+  }
+
+  const cache = await caches.open(cacheName);
+
+  const travels = data.travels as VoyageType[];
+
+  travels.reverse().forEach(travel => {
+    travel.days?.reverse().forEach(day => {
+      day.day_photos?.reverse().forEach(async photo => {
+        const photoUrl = apiURL+photo.photo_url;
+        
+        const cachedPhotoUrl = await cache.match(photoUrl);
+
+        if (!cachedPhotoUrl) {
+          cache.add(photoUrl);
+        }
+
+      })  
+    });
+  });
+}
 
 self.addEventListener('fetch', (event) => {
   if(event.request.url.startsWith(apiURL) && event.request.method === 'GET') {
     event.respondWith(fetch(event.request)
-      .then((apiResponse) => {
-        caches.open(cacheName).then(cache => cache.put(event.request, apiResponse.clone()));
-        saveTravelPhotosToCache(apiResponse.clone());
-        return apiResponse;
+      .then(async(responseFromNetword) => {
+        const responseFromNetwordCopy = responseFromNetword.clone();
+
+        putInCahe(event.request, responseFromNetwordCopy.clone());
+
+        addInCahePhotos(responseFromNetwordCopy.clone());
+        
+        return responseFromNetword;
       })
       .catch((error) => {
         return caches.match(event.request).then(cachedResponse => {
@@ -53,24 +89,3 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
-
-async function saveTravelPhotosToCache(response: Response) {
-  const responseClone = response.clone();
-  const data : any = await responseClone.json();
-
-  if (!data || !Array.isArray(data.travel)) return;
-  const travels : VoyageType[] = data.travel;
-
-  const cache = await caches.open(cacheName);
-
-  travels.reverse().forEach(travel => {
-    travel.days?.reverse().forEach(day => {
-      day.day_photos?.forEach(async photo => {
-        const cachedResponse = await cache.match(photo.photo_url);
-
-        if (!cachedResponse) 
-          await cache.add(photo.photo_url);
-        });
-    });
-  });
-}
